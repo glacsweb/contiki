@@ -35,7 +35,10 @@
 #ifndef __SERIAL_H
 #define __SERIAL_H
 
-void serial_init(uint32_t UART0_baudrate, uint32_t UART1_baudrate, uint32_t UART2_baudrate);		/* Initialise Serial port(s).	*/
+void serial_init(uint32_t UART0_baudrate, uint32_t UART1_baudrate, uint32_t UART2_baudrate);		/* Initialise all Serial port(s).	*/
+void UART0_init(uint32_t baudrate);					/* Initialise UART0 ONLY. */
+void UART1_init(uint32_t baudrate);					/* Initialise UART1 ONLY. */
+void UART2_init(uint32_t baudrate);					/* Initialise UART2 ONLY. */
 
 void UART0_reg_callback(void* UART0_Callback_Ptr);	/* Register a callback function for use in UART0_IRQHandler.	*/
 void UART1_reg_callback(void* UART1_Callback_Ptr);	/* Register a callback function for use in UART1_IRQHandler.	*/

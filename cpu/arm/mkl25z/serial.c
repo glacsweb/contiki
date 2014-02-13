@@ -92,9 +92,7 @@
 static void (*UART0_callback)(char);
 static void (*UART1_callback)(char);
 static void (*UART2_callback)(char);
-void UART0_init(uint32_t baudrate);
-void UART1_init(uint32_t baudrate);
-void UART2_init(uint32_t baudrate);
+
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* Initialisation Functions */
@@ -177,9 +175,13 @@ void UART1_init(uint32_t baudrate) 		/* Initialise UART1.			*/
 		PORTE_PCR0 |= 0x300; 
 		
 		/* Configure Interrupt Controller for UART1		*/
-		NVIC_IPR3 = (uint32_t)((NVIC_IPR3 & (uint32_t)~(uint32_t)(NVIC_IP_PRI_13(0x7F))) | (uint32_t)(NVIC_IP_PRI_13(0x80)));                                                  
-		NVIC_ISER |= 0x2000;  
-		UART1_callback = NULL;													/* Set Callback to NULL */
+		NVIC_Set_Priority(IRQ_UART1, 0x80);					/* Set UART1 priority to 2. */
+		NVIC_ENABLE_INT(IRQ_UART1);							/* Enable UART1 NVIC Interrupt. */	
+		UART1_callback = NULL;								/* Set Callback to NULL */
+		
+		//NVIC_IPR3 = (uint32_t)((NVIC_IPR3 & (uint32_t)~(uint32_t)(NVIC_IP_PRI_13(0x7F))) | (uint32_t)(NVIC_IP_PRI_13(0x80)));                                                  
+		//NVIC_ISER |= 0x2000;  
+		
 		
 		/* Configure UART1 Registers					*/
 		//Clear control registers to ensure reset state.
@@ -219,9 +221,12 @@ void UART2_init(uint32_t baudrate) 		/* Initialise UART1.			*/
 		PORTE_PCR22 |= 0x400; 
 		
 		/* Configure Interrupt Controller for UART2		*/
-		NVIC_IPR3 = (uint32_t)((NVIC_IPR3 & (uint32_t)~(uint32_t)(NVIC_IP_PRI_14(0x7F))) | (uint32_t)(NVIC_IP_PRI_14(0x80)));
-		NVIC_ISER |= 0x4000;  
-		UART2_callback = NULL;													/* Set Callback to NULL */
+		NVIC_Set_Priority(IRQ_UART2, 0x80);					/* Set UART2 priority to 2. */
+		NVIC_ENABLE_INT(IRQ_UART2);							/* Enable UART2 NVIC Interrupt. */	
+		UART2_callback = NULL;								/* Set Callback to NULL */
+		
+		//NVIC_IPR3 = (uint32_t)((NVIC_IPR3 & (uint32_t)~(uint32_t)(NVIC_IP_PRI_14(0x7F))) | (uint32_t)(NVIC_IP_PRI_14(0x80)));
+		//NVIC_ISER |= 0x4000;  
 		
 		/* Configure UART1 Registers					*/
 		//Clear control registers to ensure reset state.
