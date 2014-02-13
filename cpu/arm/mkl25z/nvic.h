@@ -40,9 +40,8 @@
 #ifndef NVIC_H_MKL25z__
 #define NVIC_H_MKL25Z__
 
-#include "MKL25Z4.h"
-#include "contiki.h"
-#include "contiki-net.h"
+#include <MKL25Z4.h>
+
 
 #define IRQ_DMA_Channel0		0
 #define IRQ_DMA_Channel1		1
