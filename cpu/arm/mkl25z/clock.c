@@ -1,9 +1,11 @@
-#include <MKL25Z4.h>
-#include <nvic.h>
 #include <sys/clock.h>
 #include <sys/cc.h>
 #include <sys/etimer.h>
-#include <debug-uart.h>
+#include <MKL25Z4.h>
+
+#include "cpu.h"
+#include "nvic.h"
+#include "debug-uart.h"
 
 static volatile clock_time_t current_clock = 0;
 static volatile unsigned long current_seconds = 0;
@@ -34,7 +36,7 @@ void
 clock_init()
 {
   NVIC_SET_SYSTICK_PRI(8);				/* Set Systick priority. */
-  SYST_RVR = MCK/16/CLOCK_SECOND;		/* Set reload value.  SysTick->LOAD in CMSIS. */
+  SYST_RVR = CORECLK/16/CLOCK_SECOND;		/* Set reload value.  SysTick->LOAD in CMSIS. */
   SYST_CSR = 	SYST_SysTick_CSR_ENABLE_MASK | 	/* Enable SysTick. */
 				SysTick_CSR_TICKINT_MASK; 		/* Enable tick interrupt. */	
   /* Leave clock source as "external" clock.  This is core clock / 16, so 48/16 = 3MHz. */
@@ -51,7 +53,7 @@ clock_time(void)
 /* The inner loop takes 4 cycles. The outer 5+SPIN_COUNT*4. */
 
 #define SPIN_TIME 2 /* us */
-#define SPIN_COUNT (((MCK*SPIN_TIME/1000000)-5)/4)
+#define SPIN_COUNT (((CORECLK*SPIN_TIME/1000000)-5)/4)
 
 #ifndef __MAKING_DEPS__
 
