@@ -59,8 +59,11 @@ void port_enable(uint8_t PortMask)		/* Enable clock to used ports.  This is requ
 
 void cpu_init(void)
 {
+	/* These two functions happen in 
 	//SCB_VTOR = (uint32_t)(&__vect_table); 		/* Set the interrupt vector table position */
-	SIM_COPC = 0x00;							/* disable watchdog. */
+	//SIM_COPC = 0x00;							/* disable watchdog. */
+	
+	
 	port_enable(0);								/* Enable clocks to Port A. */
 	
 
