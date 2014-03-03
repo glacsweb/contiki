@@ -54,7 +54,6 @@ co-cw_base.lnt
 // ## which produces a header file with the needed information.
 // We are an EPPC compiler
 -d__COLDFIRE__=1
--d__MWERKS__=1
 -d__CWCC__=1
 -d__ide_target()=1
 -d__attribute__()

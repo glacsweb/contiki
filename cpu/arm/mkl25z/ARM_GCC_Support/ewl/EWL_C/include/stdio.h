@@ -1,8 +1,8 @@
 /* EWL
  * Copyright © 1995-2009 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2010/03/25 12:37:52 $
- * $Revision: 1.2 $
+ * $Date: 2012/06/01 15:39:39 $
+ * $Revision: 1.1 $
  */
 
 #ifndef _EWL_STDIO_H
@@ -10,8 +10,8 @@
 
 #include <ansi_parms.h>
 
-#if !_EWL_USING_MW_C_HEADERS
-	#error You must have the non-MSL C header file access path before the MSL access path
+#if !_EWL_USING_CW_C_HEADERS_
+	#error You must have the non-EWL C header file access path before the EWL access path
 #else
 
 #include <cstdio>
@@ -108,6 +108,6 @@
 #endif /* __STDC_WANT_LIB_EXT1__ */
 #endif /* defined(__cplusplus) && defined(_EWL_USING_NAMESPACE) */
 
-#endif /* _EWL_USING_MW_C_HEADERS */
+#endif /* _EWL_USING_CW_C_HEADERS_ */
 
 #endif /* _EWL_STDIO_H */

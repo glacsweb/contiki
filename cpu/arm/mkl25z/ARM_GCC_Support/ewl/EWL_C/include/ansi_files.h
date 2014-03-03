@@ -1,8 +1,8 @@
 /* EWL
  * Copyright © 1995-2009 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2010/04/22 13:55:12 $
- * $Revision: 1.4 $
+ * $Date: 2012/07/06 09:57:10 $
+ * $Revision: 1.2 $
  */
 
 #ifndef _EWL_ANSI_FILES_H
@@ -35,13 +35,17 @@ while (0)
 
 	#define console_buff_mode	_IOLBF
 
-	#define console_buff_size	256
+	#ifndef _EWL_BUFFERED_CONSOLE_SIZE
+		#define _EWL_BUFFERED_CONSOLE_SIZE 256
+	#endif
+
+	#define console_buff_size	_EWL_BUFFERED_CONSOLE_SIZE
 
 	typedef unsigned char	console_buff[console_buff_size];
 
-	static console_buff	stdin_buff;
-	static console_buff	stdout_buff;
-	static console_buff	stderr_buff;
+	extern console_buff	stdin_buff;
+	extern console_buff	stdout_buff;
+	extern console_buff	stderr_buff;
 
 #else
 

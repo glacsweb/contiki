@@ -1,8 +1,8 @@
 /* EWL
  * Copyright © 1995-2007 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2010/01/06 13:37:21 $
- * $Revision: 1.1 $
+ * $Date: 2012/06/28 06:38:53 $
+ * $Revision: 1.2 $
  */
 
 #ifndef _EWL_EXTRAS_WCHAR_WIN32_H

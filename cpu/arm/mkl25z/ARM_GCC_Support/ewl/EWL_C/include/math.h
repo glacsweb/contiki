@@ -1,8 +1,8 @@
 /* EWL
  * Copyright © 1995-2009 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2010/04/15 10:36:41 $
- * $Revision: 1.5 $
+ * $Date: 2012/06/01 15:39:38 $
+ * $Revision: 1.1 $
  */
 
 #ifndef _EWL_MATH_H
@@ -10,8 +10,8 @@
 
 #include <ansi_parms.h>
 
-#if !_EWL_USING_MW_C_HEADERS
-	#error You must have the non-MSL C header file access path before the MSL access path
+#if !_EWL_USING_CW_C_HEADERS_
+	#error You must have the non-EWL C header file access path before the EWL access path
 #else
 
 #include <cmath>
@@ -40,7 +40,6 @@
 	using std::tan;
 	using std::tanh;
 
-#if _EWL_C99 || _EWL_C_HAS_CPP_EXTENSIONS
 	using std::acosf;
 	using std::asinf;
 	using std::atanf;
@@ -63,9 +62,6 @@
 	using std::sqrtf;
 	using std::tanf;
 	using std::tanhf;
-#endif /* #if _EWL_C99 || _EWL_C_HAS_CPP_EXTENSIONS */
-
-#if _EWL_C99 || _EWL_C_HAS_CPP_EXTENSIONS
 	using std::acosl;
 	using std::asinl;
 	using std::atanl;
@@ -88,23 +84,19 @@
 	using std::sqrtl;
 	using std::tanl;
 	using std::tanhl;
-#endif /* _EWL_C99 || _EWL_C_HAS_CPP_EXTENSIONS */
 
-#if _EWL_C99 || _EWL_USES_SUN_MATH_LIB
 	using std::copysign;
 	using std::expm1;
 	using std::rint;
 	using std::scalbn;
-#endif	/* _EWL_C99 || _EWL_USES_SUN_MATH_LIB */
 
-#if _EWL_C99 || _EWL_C99_MATH_LEAK || (_EWL_USES_SUN_SP_MATH_LIB && _EWL_ONLY_SINGLE_PRECISION_MATH_LIB)
+#if _EWL_USES_SUN_SP_MATH_LIB
 	using std::copysignf;
 	using std::expm1f;
 	using std::rintf;
 	using std::scalbnf;
 #endif
 
-#if _EWL_C99 || _EWL_C99_MATH_LEAK
 	using std::acosh;
 	using std::acoshf;
 	using std::acoshl;
@@ -221,7 +213,11 @@
 	using std::islessgreater;
 	using std::isunordered;
 
-#endif /* _EWL_C99 */
+	using std::__float_huge;
+	using std::__double_huge;
+	using std::__extended_huge;
+
+
 #endif /* __cplusplus && _EWL_USING_NAMESPACE && _EWL_CMATH_DEFINED_MATH_ITEMS */
-#endif /* _EWL_USING_MW_C_HEADERS */
+#endif /* _EWL_USING_CW_C_HEADERS_ */
 #endif /* _EWL_MATH_H */

@@ -1,11 +1,11 @@
 /* EWL
  * Copyright © 1995-2007 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2010/05/28 07:52:11 $
- * $Revision: 1.3 $
+ * $Date: 2012/06/01 15:47:06 $
+ * $Revision: 1.1 $
  */
 
-/* $Id: fenv_arm_ms.c,v 1.3 2010/05/28 07:52:11 mviisor1 Exp $ */
+/* $Id: fenv_arm_ms.c,v 1.1 2012/06/01 15:47:06 b11883 Exp $ */
 #include <float.h>
 #include <fenv.h>
 #include <ewl_misra_types.h>
@@ -45,17 +45,17 @@ uint_t _controlfp(uint_t newCtrlBits, uint_t mask)
   {  
   mask <<= 8u;
   newCtrlBits = (newCtrlBits << 8u) & mask;
-  return __ieee_status(newCtrlBits, mask) >> 8u;
+  return PREFIX(__ieee_status)(newCtrlBits, mask) >> 8u;
   }
 
 uint_t _clearfp(void)
   {
-  return __ieee_status(FE_IEEE_ALL_EXCEPT, 0u) & _MCW_EM;
+  return PREFIX(__ieee_status)(FE_IEEE_ALL_EXCEPT, 0u) & _MCW_EM;
   }
 
 uint_t _statusfp(void)
   {
-  return __ieee_status(0u,0u) & _MCW_EM;
+  return PREFIX(__ieee_status)(0u,0u) & _MCW_EM;
   }
 
 _EWL_END_EXTERN_C

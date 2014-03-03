@@ -1,11 +1,11 @@
 /* EWL
  * Copyright © 1995-2007 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2010/05/28 07:52:09 $
- * $Revision: 1.2 $
+ * $Date: 2012/06/01 15:40:17 $
+ * $Revision: 1.1 $
  */
 
-/* $Id: fenv.ARM.h,v 1.2 2010/05/28 07:52:09 mviisor1 Exp $ */
+/* $Id: fenv.ARM.h,v 1.1 2012/06/01 15:40:17 b11883 Exp $ */
 
 #ifndef _EWL_FENV_ARM_H
 #define _EWL_FENV_ARM_H
@@ -20,9 +20,15 @@ _EWL_BEGIN_EXTERN_C
  * Implementation-specific: ARM's own optimal status word access
  * function, and the macros that go with it.
  */
-#if (!_USE_AEABI_PRIVATE_) || _lint
-extern unsigned __ieee_status(unsigned /*mask*/, unsigned /*flags*/);
+
+#if _USE_AEABI_PRIVATE_
+#define PREFIX(s) __FSL ## s
+#else
+#define PREFIX(s) s
 #endif
+
+extern unsigned PREFIX(__ieee_status)(unsigned /*mask*/, unsigned /*flags*/);
+
    /*
     * "mask" and "flags" are bit-fields which correspond directly to the VFP 
     *  floating point status register.  

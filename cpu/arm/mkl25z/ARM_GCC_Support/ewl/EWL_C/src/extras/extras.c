@@ -1,8 +1,8 @@
 /* EWL
  * Copyright © 1995-2007 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2010/03/24 10:18:27 $
- * $Revision: 1.5 $
+ * $Date: 2012/06/01 15:47:58 $
+ * $Revision: 1.1 $
  */
 
 #define __STDC_WANT_LIB_EXT1__ 1

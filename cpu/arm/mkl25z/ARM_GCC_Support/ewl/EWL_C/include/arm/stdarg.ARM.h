@@ -1,8 +1,8 @@
 /* EWL
  * Copyright © 1995-2007 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2010/06/14 09:45:16 $
- * $Revision: 1.4 $
+ * $Date: 2012/06/01 15:40:17 $
+ * $Revision: 1.1 $
  */
 
 #ifndef _EWL_STDARG_ARM_H
@@ -10,6 +10,14 @@
 
 _EWL_BEGIN_EXTERN_C
 
+#if defined(__GNUC__)
+
+	#define va_start(v,l)	__builtin_va_start(v,l)
+	#define va_end(v)		__builtin_va_end(v)
+	#define va_arg(v,l)		__builtin_va_arg(v,l)
+	#define va_copy(d,s)	__builtin_va_copy(d,s)
+	
+#else
 	/*	NB: It is safe to ignore endian in these macros. The standard requires that scalar	*/
 	/*	types smaller than 'int' (including enum types) be extracted via va_arg(ap,int).	*/
 	
@@ -24,6 +32,7 @@ _EWL_BEGIN_EXTERN_C
 #if _EWL_C99
 	#define va_copy(dest, src)		dest = src
 #endif
+#endif /* defined(__GNUC__) */
 
 _EWL_END_EXTERN_C
 

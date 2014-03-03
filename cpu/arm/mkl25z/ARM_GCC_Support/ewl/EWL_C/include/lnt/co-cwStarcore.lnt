@@ -50,7 +50,6 @@ co-cw_base.lnt
 -d_SC3850_=0
 -d_SC8156_=1
 -d_MSC8156_=1
--d__MWERKS__=1
 -d__CWCC__=1
 -d__STDC__=1
 -d__STARCORE__=1

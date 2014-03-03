@@ -1,11 +1,11 @@
 /* EWL
  * Copyright © 1995-2007 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2010/05/28 07:52:11 $
- * $Revision: 1.4 $
+ * $Date: 2012/06/01 15:47:06 $
+ * $Revision: 1.1 $
  */
 
-/* $Id: float_exceptions.c,v 1.4 2010/05/28 07:52:11 mviisor1 Exp $ */
+/* $Id: float_exceptions.c,v 1.1 2012/06/01 15:47:06 b11883 Exp $ */
 #include <fenv.h>
 #include <signal.h>
 #include <ewl_misra_types.h>

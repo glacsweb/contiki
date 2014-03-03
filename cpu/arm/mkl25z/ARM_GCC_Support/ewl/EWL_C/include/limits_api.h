@@ -1,8 +1,8 @@
 /* EWL
  * Copyright © 1995-2009 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2010/05/04 08:03:12 $
- * $Revision: 1.6 $
+ * $Date: 2012/07/06 06:32:33 $
+ * $Revision: 1.2 $
  */
 
 #ifndef _EWL_LIMITS_API_H
@@ -41,6 +41,12 @@
 #ifndef _EWL_UNSIGNED_CHAR
 	#ifdef __CWCC__
 		#if __option(unsigned_char)
+			#define _EWL_UNSIGNED_CHAR	1
+		#else
+			#define _EWL_UNSIGNED_CHAR	0
+		#endif
+	#elif defined(__GNUC__)
+		#if __CHAR_UNSIGNED__
 			#define _EWL_UNSIGNED_CHAR	1
 		#else
 			#define _EWL_UNSIGNED_CHAR	0

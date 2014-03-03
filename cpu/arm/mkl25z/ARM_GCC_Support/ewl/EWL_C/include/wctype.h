@@ -1,7 +1,7 @@
 /* EWL
  * Copyright © 1995-2009 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2009/05/14 16:55:33 $
+ * $Date: 2012/06/01 15:39:39 $
  * $Revision: 1.1 $
  */
 
@@ -10,9 +10,9 @@
 
 #include <ansi_parms.h>
 
-#if !_EWL_USING_MW_C_HEADERS
+#if !_EWL_USING_CW_C_HEADERS_
 	#if !__MACH__
-	#error You must have the non-MSL C header file access path before the MSL access path
+	#error You must have the non-EWL C header file access path before the EWL access path
 	#endif
 #else
 
@@ -46,6 +46,6 @@
 #endif /* _EWL_WIDE_CHAR */
 #endif /* defined(__cplusplus) && defined(_EWL_USING_NAMESPACE) */
 
-#endif /* _EWL_USING_MW_C_HEADERS */
+#endif /* _EWL_USING_CW_C_HEADERS_ */
 
 #endif /* _EWL_WCTYPE_H */

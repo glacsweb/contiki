@@ -1,1 +1,0 @@
-Build Number: $Name: C_C++_Component_ARM_CORTEXM_b0052 $

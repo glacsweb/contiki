@@ -1,8 +1,8 @@
 /* EWL
  * Copyright © 1995-2009 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2010/04/01 13:30:44 $
- * $Revision: 1.3 $
+ * $Date: 2012/06/01 15:39:39 $
+ * $Revision: 1.1 $
  */
 
 #ifndef _EWL_WCHAR_T_H
@@ -10,12 +10,20 @@
 
 #include <ansi_parms.h>
 
+#if _EWL_WIDE_CHAR
+
 #ifndef _EWL_WCHAR_T_TYPE
-	#define _EWL_WCHAR_T_TYPE unsigned short
-#endif
+	#if defined(__GNUC__) 
+		#define _EWL_WCHAR_T_TYPE __WCHAR_TYPE__
+	#elif defined(_GHSPORT_) 
+		#define _EWL_WCHAR_T_TYPE long
+	#else
+		#define _EWL_WCHAR_T_TYPE unsigned short
+	#endif /*  __GNUC__ */
+#endif /* _EWL_WCHAR_T_TYPE */
 
 
-#ifdef __CWCC__
+#if defined(__CWCC__)
 	#if (!defined(__cplusplus)|| !__option(wchar_type))
 		#ifdef __cplusplus
 			extern "C" {
@@ -29,7 +37,9 @@
 	#endif /* (!defined(__cplusplus)|| !__option(wchar_type)) */
 #endif /* __CWCC__ */
 
-#if _EWL_WIDE_CHAR
+#if defined(__GNUC__) && !defined(__cplusplus) 
+	typedef _EWL_WCHAR_T_TYPE wchar_t;
+#endif /* defined(__GNUC__)  && !defined(__cplusplus) */
 
 #ifdef __cplusplus
 	#ifdef _EWL_USING_NAMESPACE
@@ -59,12 +69,20 @@
 
 typedef wchar_t Wint_t;
 
-#ifndef _EWL_WCHAR_MIN
-	#define _EWL_WCHAR_MIN 0
+#ifndef _EWL_WCHAR_MAX
+	#ifdef __GNUC__
+		#define _EWL_WCHAR_MAX __WCHAR_MAX__
+	#else
+		#define _EWL_WCHAR_MAX 0xffffU
+	#endif
 #endif
 
-#ifndef _EWL_WCHAR_MAX
-	#define _EWL_WCHAR_MAX 0xffffU
+#ifndef _EWL_WCHAR_MIN
+	#ifdef __GNUC__
+		#define _EWL_WCHAR_MIN (-__WCHAR_MAX__-1)
+	#else
+		#define _EWL_WCHAR_MIN 0
+	#endif
 #endif
 
 #ifndef WCHAR_MIN

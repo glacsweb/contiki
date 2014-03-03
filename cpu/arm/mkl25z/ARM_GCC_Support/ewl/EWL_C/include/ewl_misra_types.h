@@ -160,8 +160,8 @@ typedef long double     ldbl_t;			/* long double */
 											/* 929: * MISRA 2004 Rule 11.4: Cast from pointer to pointer */
 											/* 960: * MISRA 2004 Rule 10.1: Cast/conversion of complex integer expression */
 											/* 970: * MISRA 2004 Rule 6.3: Use of modifier or type outside of a typedef */
-#define _MISRA_EXCEPTION_MATHAPI_MACROS()	/*lint -emacro(929, __HI, __UHI, __LO, __ULO) */
-											/* Used to implement __HI, __UHI, __LO, __ULO macros (to access double hi/lo words). */
+#define _MISRA_EXCEPTION_MATHAPI_MACROS()	/*lint -emacro(929, GET_DOUBLE_HI_WORD, GET_DOUBLE_UHI_WORD, GET_DOUBLE_LO_WORD, GET_DOUBLE_ULO_WORD) */
+											/* Used to implement GET_DOUBLE_HI_WORD, GET_DOUBLE_UHI_WORD, GET_DOUBLE_LO_WORD, GET_DOUBLE_ULO_WORD macros (to access double hi/lo words). */
 											/* 929: * MISRA 2004 Rule 11.4: Cast from pointer to pointer */
 #define _MISRA_EXCEPTION_MATHAPISP_MACROS()	/*lint -emacro(929, GET_FLOAT_WORD, GET_FLOAT_UWORD, SET_FLOAT_WORD, SET_FLOAT_UWORD) */
 											/* Used to implement GET_FLOAT_WORD, GET_FLOAT_UWORD, SET_FLOAT_WORD, SET_FLOAT_UWORD macros (to access floats as words). */

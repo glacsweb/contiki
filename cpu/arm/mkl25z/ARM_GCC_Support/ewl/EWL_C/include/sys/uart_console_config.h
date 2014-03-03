@@ -1,8 +1,8 @@
 /* EWL
  * Copyright © 1995-2009 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2009/12/21 12:33:37 $
- * $Revision: 1.2 $
+ * $Date: 2012/06/01 15:44:21 $
+ * $Revision: 1.1 $
  */
  
 /*
@@ -22,7 +22,7 @@
 	#include <pa/uart_console_config.h>	/* Embedded Power Architecture */
 #elif defined(__m56800E__) || defined(__m56800__)
     #include <dsp/uart_console_config.h>			/* Hawk DSP */
-#elif defined (__arm)
+#elif defined (__arm) || defined(__arm__)
 	#include <arm/uart_console_config.h>			/* ARM */
 #elif defined (__STARCORE__)
 	#include <sc/uart_console_config.h>		/* StarCore */

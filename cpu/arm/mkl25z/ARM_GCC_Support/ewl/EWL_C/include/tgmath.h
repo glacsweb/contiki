@@ -1,8 +1,8 @@
 /* EWL
  * Copyright © 1995-2009 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2010/03/15 11:05:36 $
- * $Revision: 1.4 $
+ * $Date: 2012/06/01 15:39:39 $
+ * $Revision: 1.1 $
  */
 
 /*************************************************************************
@@ -19,16 +19,16 @@
 
 #if _EWL_C99
 
-	#if !_EWL_USING_MW_C_HEADERS
+	#if !_EWL_USING_CW_C_HEADERS_
 		#if !__MACH__
-		#error You must have the non-MSL C header file access path before the MSL access path
+		#error You must have the non-EWL C header file access path before the EWL access path
 		#endif
 	#else
 
 		#include <cmath>    /* has float overloads with same name as standard double version(e.g. float cos) */
 		#include <complex.h> /* in C++ mode includes <complex> as per C++ standard section 26.2 */
 
-		#ifndef __cplusplus
+		#if defined(__CWCC__) && !defined(__cplusplus)
 		
 			#pragma cplusplus on
 
@@ -596,9 +596,145 @@
 
 			#pragma cplusplus reset
 
-		#endif /* __cplusplus */
+		#elif defined(__GNUC__)
 
-	#endif /* _EWL_USING_MW_C_HEADERS */
+			/** Use of the macro invokes a function whose generic parameters have the corresponding
+			 *	real type determined as follows:
+			 *		- First, if any argument for generic parameters has type long double, the type
+			 *			determined is long double.
+			 *		- Otherwise, if any argument for generic parameters has type double or is of integer
+             *           type, the type determined is double.
+			 *		- Otherwise, the type determined is float.
+			 */
+
+			#if _EWL_COMPLEX_SUPPORT
+				#define __ewl_is_cplx_flt(expr)  (__builtin_types_compatible_p(__typeof__(expr), float complex))
+				#define __ewl_is_cplx_dbl(expr)  (__builtin_types_compatible_p(__typeof__(expr), double complex))
+				#define __ewl_is_cplx_ldbl(expr) (__builtin_types_compatible_p(__typeof__(expr), long double complex))
+				#define __ewl_is_cplx(expr)      (__ewl_is_cplx_flt(expr) || __ewl_is_cplx_dbl(expr) || __ewl_is_cplx_ldbl(expr))
+			#else
+				#define __ewl_is_cplx_flt(expr)  0
+				#define __ewl_is_cplx_dbl(expr)  0
+				#define __ewl_is_cplx_ldbl(expr) 0
+				#define __ewl_is_cplx(expr)      0
+			#endif /* _EWL_COMPLEX_SUPPORT */
+
+			#if _EWL_FLOATING_POINT
+				#define __ewl_is_dbl(expr)       (__builtin_types_compatible_p(__typeof__(expr), double))
+				#define __ewl_is_ldbl(expr)      (__builtin_types_compatible_p(__typeof__(expr), long double))
+			#else
+				#define __ewl_is_dbl(expr)       0
+				#define __ewl_is_ldbl(expr)      0
+			#endif /* _EWL_FLOATING_POINT */
+
+			#define __ewl_select_math(x,y,z,f,d,l)                                                           \
+			             __builtin_choose_expr(__ewl_is_ldbl(x) || __ewl_is_ldbl(y) || __ewl_is_ldbl(z), l,  \
+			             __builtin_choose_expr(__ewl_is_dbl(x)  || __ewl_is_dbl(y)  || __ewl_is_dbl(z), d, f))
+
+			#define __ewl_select_cplx(x,y,z,f,d,l)                                                                          \
+			             __builtin_choose_expr(__ewl_is_cplx_ldbl(x) || __ewl_is_cplx_ldbl(y) || __ewl_is_cplx_ldbl(z), l,  \
+			             __builtin_choose_expr(__ewl_is_cplx_dbl(x)  || __ewl_is_cplx_dbl(y)  || __ewl_is_cplx_dbl(z), d, f))
+
+			#define __ewl_math_n_complex(z,M,C)  __builtin_choose_expr (__ewl_is_cplx(z),                             \
+						                         __ewl_select_cplx (z, 0, 0, C##f(z), (C)(z), C##l(z)),               \
+						                         __ewl_select_math (z, 0, 0, M##f(z), (R)(z), M##l(z)))
+
+			#define __ewl_math_n_complex_2(z1,z2,M,C) __builtin_choose_expr (__ewl_is_cplx(z1) || __ewl_is_cplx(z2),  \
+						                         __ewl_select_cplx (z1, z2, 0, C##f(z1,z2), (C)(z1,z2), C##l(z1,z2)), \
+						                         __ewl_select_math (z1, z2, 0, M##f(z1,z2), (R)(z1,z2), M##l(z1,z2)))
+
+			
+			/** For each unsuffixed function in <math.h> for which there is a function in
+			 *	<complex.h> with the same name except for a c prefix, the corresponding typegeneric
+			 *	macro (for both functions) has the same name as the function in <math.h>.
+			 *  If at least one argument for a generic parameter is complex, then use of the macro invokes
+			 *	a complex function; otherwise, use of the macro invokes a real function.
+			 */
+
+			#define acos(z)          __ewl_math_n_complex(z, acos, cacos)
+			#define asin(z)          __ewl_math_n_complex(z, asin, casin)
+			#define atan(z)          __ewl_math_n_complex(z, atan, catan)
+			#define acosh(z)         __ewl_math_n_complex(z, acosh, cacosh)
+			#define asinh(z)         __ewl_math_n_complex(z, asinh, casinh)
+			#define atanh(z)         __ewl_math_n_complex(z, atanh, catanh)
+			#define cos(z)           __ewl_math_n_complex(z, cos, ccos)
+			#define sin(z)           __ewl_math_n_complex(z, sin, csin)
+			#define tan(z)           __ewl_math_n_complex(z, tan, ctan)
+			#define cosh(z)          __ewl_math_n_complex(z, cosh, ccosh)
+			#define sinh(z)          __ewl_math_n_complex(z, sinh, csinh)
+			#define tanh(z)          __ewl_math_n_complex(z, tanh, ctanh)
+			#define exp(z)           __ewl_math_n_complex(z, exp, cexp)
+			#define log(z)           __ewl_math_n_complex(z, log, clog)
+			#define pow(z1,z2)       __ewl_math_n_complex_2(z1, z2, pow, cpow)
+			#define sqrt(z)          __ewl_math_n_complex(z, sqrt, csqrt)
+			#define fabs(z)          __ewl_math_n_complex(z, fabs, cabs)
+
+			/** For each unsuffixed function in <math.h> without a c-prefixed counterpart in <complex.h>,
+			 *	the corresponding type-generic macro has the same name as the function.
+			 */
+
+			#define __ewl_math(x,M)         __ewl_select_math (x, 0, 0, M##f(x),    (M)(x),    M##l(x))
+			#define __ewl_math_2(x,y,M)     __ewl_select_math (x, y, 0, M##f(x,y),  (M)(x,y),  M##l(x,y))
+			#define __ewl_math_3(x,y,z,M)   __ewl_select_math (x, y, z, M##f(x,y,z),(M)(x,y,z),M##l(x,y,z))
+			#define __ewl_math_1_2(x,y,M)   __ewl_select_math (x, 0, 0, M##f(x,y),  (M)(x,y),  M##l(x,y))
+			#define __ewl_math_2_3(x,y,z,M) __ewl_select_math (x, y, 0, M##f(x,y,z),(M)(x,y,z),M##l(x,y,z))
+
+			#define atan2(x,y)       __ewl_math_2(x, y, atan2)
+			#define cbrt(x)          __ewl_math(x, cbrt)
+			#define ceil(x)          __ewl_math(x, ceil)
+			#define copysign(x,y)    __ewl_math_2(x, y, copysign)
+			#define erf(x)           __ewl_math(x, erf)
+			#define erfc(x)          __ewl_math(x, erfc)
+			#define exp2(x)          __ewl_math(x, exp2)
+			#define expm1(x)         __ewl_math(x, expm1)
+			#define fdim(x,y)        __ewl_math_2(x, y, fdim)
+			#define floor(x)         __ewl_math(x, floor)
+			#define fma(x,y,z)       __ewl_math_3(x, y, z, fma)
+			#define fmax(x,y)        __ewl_math_2(x, y, fmax)
+			#define fmin(x,y)        __ewl_math_2(x, y, fmin)
+			#define fmod(x,y)        __ewl_math_2(x, y, fmod)
+			#define frexp(x,y)       __ewl_math_1_2(x, y, frexp)
+			#define hypot(x,y)       __ewl_math_2(x, y, hypot)
+			#define ilogb(x)         __ewl_math(x, ilogb)
+			#define ldexp(x,y)       __ewl_math_1_2(x, y, ldexp)
+			#define lgamma(x)        __ewl_math(x, lgamma)
+			#define llrint(x)        __ewl_math(x, llrint)
+			#define llround(x)       __ewl_math(x, llround)
+			#define log10(x)         __ewl_math(x, log10)
+			#define log1p(x)         __ewl_math(x, log1p)
+			#define log2(x)          __ewl_math(x, log2)
+			#define logb(x)          __ewl_math(x, logb)
+			#define lrint(x)         __ewl_math(x, lrint)
+			#define lround(x)        __ewl_math(x, lround)
+			#define nearbyint(x)     __ewl_math(x, nearbyint)
+			#define nextafter(x,y)   __ewl_math_2(x, y, nextafter)
+			#define nexttoward(x,y)  __ewl_math_1_2(x, y, nexttoward)
+			#define remainder(x,y)   __ewl_math_2(x, y, remainder)
+			#define remquo(x,y,z)    __ewl_math_2_3(x, y, z, remquo)
+			#define rint(x)          __ewl_math(x, rint)
+			#define round(x)         __ewl_math(x, round)
+			#define scalbn(x,y)      __ewl_math_1_2(x, y, scalbn)
+			#define scalbln(x,y)     __ewl_math_1_2(x, y, scalbln)
+			#define tgamma(x)        __ewl_math(x, tgamma)
+			#define trunc(x)         __ewl_math(x, trunc)
+
+			/** For each unsuffixed function in <complex.h> that is not a c-prefixed counterpart to a
+			 *	function in <math.h>, the corresponding type-generic macro has the same name as the function.
+			 */
+
+			#if _EWL_COMPLEX_SUPPORT
+				#define __ewl_complex(z,C)    __ewl_select_cplx (z, 0, 0, C##f(z), (C)(z), C##l(z))
+
+				#define carg(z)          __ewl_complex(z, carg)
+				#define cimag(z)         __ewl_complex(z, cimag)
+				#define conj(z)          __ewl_complex(z, conj)
+				#define cproj(z)         __ewl_complex(z, cproj)
+				#define creal(z)         __ewl_complex(z, creal)
+			#endif /* _EWL_COMPLEX_SUPPORT */
+
+		#endif /*  defined(__CWCC__) && !defined(__cplusplus) */
+
+	#endif /* _EWL_USING_CW_C_HEADERS_ */
 
 #endif /* _EWL_C99 */
 

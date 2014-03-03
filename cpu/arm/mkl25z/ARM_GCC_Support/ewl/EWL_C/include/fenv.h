@@ -1,8 +1,8 @@
 /* EWL
  * Copyright © 1995-2009 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2010/05/21 12:43:38 $
- * $Revision: 1.10 $
+ * $Date: 2012/07/12 22:31:13 $
+ * $Revision: 1.2 $
  */
 
 /********************************************************************************
@@ -23,17 +23,13 @@
 #define _EWL_FENV_H
 
 #ifndef __FENV__
-#define __FENV__	/* JWW - Keep the Apple Universal Interfaces happy */
+#define __FENV__
 
 #include <ansi_parms.h>
 #include <ewl_thread_local_data.h>
 
-#if !_EWL_USING_MW_C_HEADERS
-	#if !__MACH__
+#if !_EWL_USING_CW_C_HEADERS_
 	#error You must have the non-EWL C header file access path before the EWL access path
-	#else
-	#include <CarbonCore/fenv.h>
-	#endif
 #else
 
 #if _EWL_C99 || _EWL_C99_MATH_LEAK
@@ -138,7 +134,7 @@ _EWL_BEGIN_NAMESPACE_STD
 
 #endif /* __COLDFIRE__ */
 
-#ifdef __arm
+#if defined(__arm) || defined(__arm__)
 	/* FP TYPES */
 	typedef unsigned int __ieee_edata_t;     /* exception flags passed to traps */
 
@@ -167,25 +163,27 @@ _EWL_BEGIN_NAMESPACE_STD
 	    __ieee_handler_t inexact_handler;
 	    } fenv_t, fexcept_t;
 
+    #include <arm/fenv.ARM.h>
+
 	/* FP EXCEPTION FLAGS */
 	/* NOTE: These are the FPSCR exception status bits, not the exception enable bits */
-	#define FE_INVALID		0x00000001u	/* bit 0 of FPSCR */
-	#define FE_DIVBYZERO	0x00000002u	/* bit 1 */
-	#define FE_OVERFLOW		0x00000004u	/* bit 2 */
-	#define FE_UNDERFLOW	0x00000008u	/* bit 3 */
-	#define FE_INEXACT		0x00000010u	/* bit 4 */
+	#define FE_INVALID		FE_IEEE_INVALID		/* bit 0 of FPSCR */
+	#define FE_DIVBYZERO	FE_IEEE_DIVBYZERO	/* bit 1 */
+	#define FE_OVERFLOW		FE_IEEE_OVERFLOW	/* bit 2 */
+	#define FE_UNDERFLOW	FE_IEEE_UNDERFLOW	/* bit 3 */
+	#define FE_INEXACT		FE_IEEE_INEXACT		/* bit 4 */
 	/* ROUNDING MODES */
-	#define FE_TONEAREST	0x00000000u	/* FPSCR bits[23:22] = 0b00 */
-	#define FE_TOWARDZERO	0x00C00000u	/* FPSCR bits[23:22] = 0b11 */
-	#define FE_UPWARD		0x00400000u	/* FPSCR bits[23:22] = 0b01 */
-	#define FE_DOWNWARD		0x00800000u	/* FPSCR bits[23:22] = 0b10 */
+	#define FE_TONEAREST	FE_EX_ROUND_NEAREST	/* FPSCR bits[23:22] = 0b00 */
+	#define FE_TOWARDZERO	FE_EX_ROUND_ZERO	/* FPSCR bits[23:22] = 0b11 */
+	#define FE_UPWARD		FE_EX_ROUND_PLUSINF	/* FPSCR bits[23:22] = 0b01 */
+	#define FE_DOWNWARD		FE_EX_ROUND_MINUSINF/* FPSCR bits[23:22] = 0b10 */
 
 	extern fenv_t _FE_DFL_ENV;
 	#define FE_DFL_ENV &_FE_DFL_ENV				/* pointer to default environment */
 
 #endif /* __arm */
 
-#if __STARCORE__
+#if defined(__STARCORE__)
 
 	typedef struct {
 		unsigned long Round_Mode;
@@ -258,61 +256,170 @@ _EWL_BEGIN_EXTERN_C
 
 #if _EWL_C99_TC2_FENV
 
+	/** The feclearexcept function attempts to clear the supported floating-point exceptions
+	 *  represented by its argument.
+	 *  Returns zero if the excepts argument is zero or if all the specified exceptions were
+	 *  successfully cleared. Otherwise, it returns a nonzero value.
+     */
 _EWL_IMP_EXP_C int _EWL_MATH_CDECL feclearexcept ( int excepts ) _EWL_CANT_THROW;
+
+	/** The fegetexceptflag function attempts to store an implementation-defined
+	 *  representation of the states of the floating-point status flags indicated by the argument
+	 *  excepts in the object pointed to by the argument flagp.
+	 *  Returns zero if the representation was successfully stored. Otherwise, it returns a nonzero value.
+     */
 _EWL_IMP_EXP_C int _EWL_MATH_CDECL fegetexceptflag ( fexcept_t * flagp, int excepts ) _EWL_CANT_THROW;
+
+	/** The fesetexceptflag function attempts to set the floating-point status flags
+	 *  indicated by the argument excepts to the states stored in the object pointed to by
+	 *  flagp. The value of *flagp shall have been set by a previous call to
+	 *  fegetexceptflag whose second argument represented at least those floating-point
+	 *  exceptions represented by the argument excepts. This function does not raise floatingpoint
+	 *  exceptions, but only sets the state of the flags.
+	 *  Returns zero if the excepts argument is zero or if all the specified flags were successfully
+	 *  set to the appropriate state. Otherwise, it returns a nonzero value.
+	 */
 _EWL_IMP_EXP_C int _EWL_MATH_CDECL fesetexceptflag ( const fexcept_t * flagp, int excepts ) _EWL_CANT_THROW;
-#if defined(__arm)
-	#define fegetexcept fegetexceptflag
-	#define fesetexcept fesetexceptflag
-#elif ! __COLDFIRE__
-	_EWL_IMP_EXP_C int _EWL_MATH_CDECL fegetexcept ( fexcept_t * flagp, int excepts ) _EWL_CANT_THROW;
-	_EWL_IMP_EXP_C int _EWL_MATH_CDECL fesetexcept ( const fexcept_t * flagp, int excepts ) _EWL_CANT_THROW;
-#endif
+
+	/** The feraiseexcept function attempts to raise the supported floating-point exceptions
+	 *  represented by its argument.The order in which these floating-point exceptions are
+	 *  raised is unspecified, except as stated in F.7.6. Whether the feraiseexcept function
+     *  additionally raises the ‘‘inexact’’ floating-point exception whenever it raises the
+     *  ‘‘overflow’’ or ‘‘underflow’’ floating-point exception is implementation-defined.
+	 *  Returns zero if the excepts argument is zero or if all the specified exceptions were
+	 *  successfully raised. Otherwise, it returns a nonzero value.
+	 */
 _EWL_IMP_EXP_C int _EWL_MATH_CDECL feraiseexcept ( int excepts ) _EWL_CANT_THROW;
-_EWL_IMP_EXP_C int  _EWL_MATH_CDECL fetestexcept ( int excepts ) _EWL_CANT_THROW;
-_EWL_IMP_EXP_C int  _EWL_MATH_CDECL fegetround ( void ) _EWL_CANT_THROW;
-_EWL_IMP_EXP_C int  _EWL_MATH_CDECL fesetround ( int rnd ) _EWL_CANT_THROW;
+
+	/** The fegetenv function attempts to store the current floating-point environment
+	 *	in the object pointed to by envp.
+	 *  Returns zero if the environment was successfully stored. Otherwise, it returns a nonzero value.
+	 */
 _EWL_IMP_EXP_C int _EWL_MATH_CDECL fegetenv ( fenv_t * envp ) _EWL_CANT_THROW;
-_EWL_IMP_EXP_C int  _EWL_MATH_CDECL feholdexcept ( fenv_t * envp ) _EWL_CANT_THROW;
+
+	/** The fesetenv function establishes the floating-point environment represented
+	 *	by the object pointed to by envp.  The argument envp shall point to an object
+	 *	set by a call to fegetenv or feholdenv, or equal a floating-point macro. Note
+	 *	that fesetenv merely installs the state of the floating-point status flags
+	 *	represented through its argument, and does not raise these floating-point exceptions.
+	 *	Returns zero if the environment was successfully established. Otherwise, it
+	 *  returns a nonzero value.
+	 */
 _EWL_IMP_EXP_C int _EWL_MATH_CDECL fesetenv ( const fenv_t * envp ) _EWL_CANT_THROW;
+
+	/** The feupdateenv function saves the currently raised floating-point exceptions
+	 *	in its automatic storage, installs the floating-point environment represented
+	 *	by the object pointed to by envp, and then raises the saved floating-point
+	 *	exceptions. The argument envp shall point to an object set by a call to
+	 *	feholdexcept or fegetenv, or equal a floating-point macro.
+	 *  Returns zero if all the actions were successfully carried out. Otherwise,
+	 *	it returns a nonzero value.
+	 */
 _EWL_IMP_EXP_C int _EWL_MATH_CDECL feupdateenv ( const fenv_t * envp ) _EWL_CANT_THROW;
-#if (defined(__COLDFIRE__) || defined(__INTEL__))
-	_EWL_IMP_EXP_C int _EWL_MATH_CDECL fegetprec ( void ) _EWL_CANT_THROW;
-	_EWL_IMP_EXP_C int _EWL_MATH_CDECL fesetprec ( int prec ) _EWL_CANT_THROW;
-#endif  /* defined(__COLDFIRE__) || defined(__INTEL__) */
 
 #else
 
+	/** The feclearexcept function attempts to clear the supported floating-point exceptions
+	 *  represented by its argument.
+     */
 _EWL_IMP_EXP_C void _EWL_MATH_CDECL feclearexcept ( int excepts ) _EWL_CANT_THROW;
+
+	/**
+	 *  The fegetexceptflag function attempts to store an implementation-defined
+	 *  representation of the states of the floating-point status flags indicated by the argument
+	 *  excepts in the object pointed to by the argument flagp.
+     */
 _EWL_IMP_EXP_C void _EWL_MATH_CDECL fegetexceptflag ( fexcept_t * flagp, int excepts ) _EWL_CANT_THROW;
+
+	/** The fesetexceptflag function attempts to set the floating-point status flags
+	 *  indicated by the argument excepts to the states stored in the object pointed to by
+	 *  flagp. The value of *flagp shall have been set by a previous call to
+	 *  fegetexceptflag whose second argument represented at least those floating-point
+	 *  exceptions represented by the argument excepts. This function does not raise floatingpoint
+	 *  exceptions, but only sets the state of the flags.
+	 */
 _EWL_IMP_EXP_C void _EWL_MATH_CDECL fesetexceptflag ( const fexcept_t * flagp, int excepts ) _EWL_CANT_THROW;
-#if defined(__arm)
-	#define fegetexcept fegetexceptflag
-	#define fesetexcept fesetexceptflag
-#elif ! __COLDFIRE__
-	_EWL_IMP_EXP_C int _EWL_MATH_CDECL fegetexcept ( fexcept_t * flagp, int excepts ) _EWL_CANT_THROW;
-	_EWL_IMP_EXP_C void _EWL_MATH_CDECL fesetexcept ( const fexcept_t * flagp, int excepts ) _EWL_CANT_THROW;
-#endif
+
+	/** The feraiseexcept function attempts to raise the supported floating-point exceptions
+	 *  represented by its argument.The order in which these floating-point exceptions are
+	 *  raised is unspecified, except as stated in F.7.6. Whether the feraiseexcept function
+     *  additionally raises the ‘‘inexact’’ floating-point exception whenever it raises the
+     *  ‘‘overflow’’ or ‘‘underflow’’ floating-point exception is implementation-defined.
+	 */
 _EWL_IMP_EXP_C void _EWL_MATH_CDECL feraiseexcept ( int excepts ) _EWL_CANT_THROW;
-_EWL_IMP_EXP_C int  _EWL_MATH_CDECL fetestexcept ( int excepts ) _EWL_CANT_THROW;
-_EWL_IMP_EXP_C int  _EWL_MATH_CDECL fegetround ( void ) _EWL_CANT_THROW;
-_EWL_IMP_EXP_C int  _EWL_MATH_CDECL fesetround ( int rnd ) _EWL_CANT_THROW;
+
+	/** The fegetenv function attempts to store the current floating-point environment
+	 *	in the object pointed to by envp.
+	 */
 _EWL_IMP_EXP_C void _EWL_MATH_CDECL fegetenv ( fenv_t * envp ) _EWL_CANT_THROW;
-_EWL_IMP_EXP_C int  _EWL_MATH_CDECL feholdexcept ( fenv_t * envp ) _EWL_CANT_THROW;
+
+	/** The fesetenv function establishes the floating-point environment represented
+	 *	by the object pointed to by envp.  The argument envp shall point to an object
+	 *	set by a call to fegetenv or feholdenv, or equal a floating-point macro. Note
+	 *	that fesetenv merely installs the state of the floating-point status flags
+	 *	represented through its argument, and does not raise these floating-point exceptions.
+	 */
 _EWL_IMP_EXP_C void _EWL_MATH_CDECL fesetenv ( const fenv_t * envp ) _EWL_CANT_THROW;
+
+	/** The feupdateenv function saves the currently raised floating-point exceptions
+	 *	in its automatic storage, installs the floating-point environment represented
+	 *	by the object pointed to by envp, and then raises the saved floating-point
+	 *	exceptions. The argument envp shall point to an object set by a call to
+	 *	feholdexcept or fegetenv, or equal a floating-point macro.
+	 */
 _EWL_IMP_EXP_C void _EWL_MATH_CDECL feupdateenv ( const fenv_t * envp ) _EWL_CANT_THROW;
-#if defined(__COLDFIRE__)
-	_EWL_IMP_EXP_C int _EWL_MATH_CDECL fegetprec ( void ) _EWL_CANT_THROW;
-	_EWL_IMP_EXP_C int _EWL_MATH_CDECL fesetprec ( int prec ) _EWL_CANT_THROW;
-#endif  /* __COLDFIRE__ */
 
 #endif /* _EWL_C99_TC2_FENV */
+
+	/** The fetestexcept function determines which of a specified subset of the floatingpoint
+	 *  exception flags are currently set. The excepts argument specifies the floatingpoint
+	 *  status flags to be queried.
+	 *  Returns the value of the bitwise OR of the floating-point exception macros corresponding
+	 *  to the currently set floating-point exceptions included in excepts.
+	 */
+_EWL_IMP_EXP_C int _EWL_MATH_CDECL fetestexcept ( int excepts ) _EWL_CANT_THROW;
+
+	/** The fegetround function gets the current rounding direction.
+	 */
+_EWL_IMP_EXP_C int _EWL_MATH_CDECL fegetround ( void ) _EWL_CANT_THROW;
+
+	/** The fesetround function establishes the rounding direction represented by its
+	 *  argument round. If the argument is not equal to the value of a rounding direction macro,
+	 *  the rounding direction is not changed.
+	 */
+_EWL_IMP_EXP_C int _EWL_MATH_CDECL fesetround ( int rnd ) _EWL_CANT_THROW;
+
+	/** The feholdexcept function saves the current floating-point environment
+	 *	in the object pointed to by envp, clears the floating-point status flags,
+	 *	and then installs a non-stop (continues on floating-point exceptions) mode,
+	 *	if available, for all floating-point exceptions.
+	 *	Returns zero if and only if non-stop floating-point exception handling was
+	 *	successfully installed.
+	 */
+_EWL_IMP_EXP_C int _EWL_MATH_CDECL feholdexcept ( fenv_t * envp ) _EWL_CANT_THROW;
+
+#if defined(__arm) || defined(__arm__)
+	#define fegetexcept fegetexceptflag
+	#define fesetexcept fesetexceptflag
+#endif
+
+#if defined(__COLDFIRE__)
+	/** The fegetprec function returns the current precision.
+	 */
+	_EWL_IMP_EXP_C int _EWL_MATH_CDECL fegetprec ( void ) _EWL_CANT_THROW;
+
+	/** The fesetprec function establishes the precision represented by its
+	 *  argument. If the argument is not equal to the value of a precision macro,
+	 *  the precision is not changed.
+	 */
+	_EWL_IMP_EXP_C int _EWL_MATH_CDECL fesetprec ( int prec ) _EWL_CANT_THROW;
+#endif  /* __COLDFIRE__ */
 
 _EWL_END_EXTERN_C
 
 #if defined(__INTEL__)
 	#include <x86/fenv_x87.h>
-#elif defined(__arm)
+#elif defined(__arm) || defined(__arm__)
     #include <arm/fenv.ARM.h>
 #endif
 
@@ -320,6 +427,6 @@ _EWL_END_NAMESPACE_STD
 
 #endif /* __FENV__ */
 #endif /* _EWL_C99 */
-#endif /* _EWL_USING_MW_C_HEADERS */
+#endif /* _EWL_USING_CW_C_HEADERS_ */
 #endif /* _EWL_FENV_H */
 

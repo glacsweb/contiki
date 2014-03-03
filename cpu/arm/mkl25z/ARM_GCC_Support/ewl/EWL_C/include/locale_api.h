@@ -1,8 +1,8 @@
 /* EWL
  * Copyright © 1995-2009 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2010/04/08 08:54:50 $
- * $Revision: 1.3 $
+ * $Date: 2012/06/01 15:39:38 $
+ * $Revision: 1.1 $
  */
 
 #ifndef _EWL_LOCALE_API_H
@@ -24,8 +24,7 @@
 #define _COMPONENT_NAME_LEN  8
 #define _LOCALE_CMPT_COUNT   5
 
-#pragma options align=native
-#pragma warn_padding off
+#pragma pack(push,4)
 
 #if _EMBEDDED_WARRIOR_HAS_NO_LOCALE
 
@@ -206,7 +205,6 @@ _EWL_END_EXTERN_C
 
 #endif /* _EMBEDDED_WARRIOR_HAS_NO_LOCALE */
 
-#pragma warn_padding reset
-#pragma options align=reset
+#pragma pack(push,4)
 
 #endif /* _EWL_LOCALE_API_H */

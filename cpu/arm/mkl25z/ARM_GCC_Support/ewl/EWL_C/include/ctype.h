@@ -1,7 +1,7 @@
 /* EWL
  * Copyright © 1995-2009 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2009/05/14 16:55:14 $
+ * $Date: 2012/06/01 15:39:37 $
  * $Revision: 1.1 $
  */
 
@@ -10,8 +10,8 @@
 
 #include <ansi_parms.h>
 
-#if !_EWL_USING_MW_C_HEADERS
-	#error You must have the non-MSL C header file access path before the MSL access path
+#if !_EWL_USING_CW_C_HEADERS_
+	#error You must have the non-EWL C header file access path before the EWL access path
 #else
 
 #include <cctype>
@@ -20,9 +20,14 @@
 	using std::isalnum;
 	using std::isalpha;
 
-#if _EWL_C99 && !_EMBEDDED_WARRIOR_CTYPE
+#if _EWL_C99 || _EMBEDDED_WARRIOR_CTYPE
 	using std::isblank;
-#endif /* _EWL_C99 */
+#endif /* _EWL_C99 || _EMBEDDED_WARRIOR_CTYPE */
+
+#if _EMBEDDED_WARRIOR_CTYPE
+	using std::isascii;
+	using std::toascii;
+#endif /* _EMBEDDED_WARRIOR_CTYPE */
 
 	using std::iscntrl;
 	using std::isdigit;
@@ -37,6 +42,6 @@
 	using std::toupper;
 #endif /* defined(__cplusplus) && defined(_EWL_USING_NAMESPACE) */
 
-#endif /* _EWL_USING_MW_C_HEADERS */
+#endif /* _EWL_USING_CW_C_HEADERS_ */
 
 #endif /* _EWL_CTYPE_H */

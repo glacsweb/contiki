@@ -1,8 +1,8 @@
 /* EWL
  * Copyright © 1995-2009 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2010/03/23 10:56:11 $
- * $Revision: 1.3 $
+ * $Date: 2012/06/28 06:39:01 $
+ * $Revision: 1.2 $
  */
 
 #pragma ANSI_strict off

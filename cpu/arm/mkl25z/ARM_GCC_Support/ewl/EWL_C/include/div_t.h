@@ -1,14 +1,12 @@
 /* EWL
  * Copyright © 1995-2009 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2009/05/14 16:55:15 $
+ * $Date: 2012/06/01 15:39:37 $
  * $Revision: 1.1 $
  */
 
 #ifndef _EWL_DIV_T_H
 #define _EWL_DIV_T_H
-
-#pragma options align=native
 
 _EWL_BEGIN_NAMESPACE_STD
 _EWL_BEGIN_EXTERN_C
@@ -37,7 +35,5 @@ _EWL_BEGIN_EXTERN_C
 
 _EWL_END_EXTERN_C
 _EWL_END_NAMESPACE_STD
-
-#pragma options align=reset
 
 #endif /* _EWL_DIV_T_H */

@@ -1,8 +1,8 @@
 /* EWL
  * Copyright © 1995-2009 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2009/12/21 12:33:28 $
- * $Revision: 1.2 $
+ * $Date: 2012/06/01 15:39:37 $
+ * $Revision: 1.1 $
  */
 
 #ifndef _EWL_ANSI_FP_H
@@ -12,7 +12,7 @@
 
 #include <cmath>
 
-#pragma options align=native
+#pragma pack(push,4)
 
 #include <ewl_misra_types.h>
 
@@ -56,6 +56,6 @@ _EWL_BEGIN_EXTERN_C
 
 _EWL_END_EXTERN_C
 
-#pragma options align=reset
+#pragma pack(pop)
 
 #endif /* _EWL_ANSI_FP_H */

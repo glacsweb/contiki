@@ -1,8 +1,8 @@
 /* EWL
  * Copyright © 1995-2007 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2010/04/20 09:07:31 $
- * $Revision: 1.3 $
+ * $Date: 2012/06/01 15:46:51 $
+ * $Revision: 1.1 $
  */
 
 #include <ansi_parms.h>

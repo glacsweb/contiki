@@ -3,7 +3,7 @@
 
 #include <ansi_parms.h>
 
-#if !_EWL_USING_MW_C_HEADERS
+#if !_EWL_USING_CW_C_HEADERS_
 	#error You must have the non-EWL C header file access path before the EWL access path
 #else
 
@@ -12,6 +12,6 @@
 #define _AEABI_PORTABLE 1
 #endif
 
-#endif /*end of _EWL_USING_MW_C_HEADERS */ 
+#endif /*end of _EWL_USING_CW_C_HEADERS_ */ 
 
 #endif /* end of _EWL_STDIO_AEABI*/

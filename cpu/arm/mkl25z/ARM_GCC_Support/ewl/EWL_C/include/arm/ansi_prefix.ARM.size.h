@@ -3,7 +3,7 @@
  *
  * ansi_prefix.ARM.size.h - EWL settings to minimize size
  *
- * $Date: 2009/12/16 18:23:58 $
+ * $Date: 2012/06/01 15:40:17 $
  * $Revision: 1.1 $
  */
 

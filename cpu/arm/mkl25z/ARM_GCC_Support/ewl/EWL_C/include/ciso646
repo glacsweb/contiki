@@ -1,8 +1,8 @@
 /* EWL
  * Copyright © 1995-2009 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2009/11/05 19:15:37 $
- * $Revision: 1.2 $
+ * $Date: 2012/06/01 15:39:37 $
+ * $Revision: 1.1 $
  */
 
 #ifndef _EWL_CISO646
@@ -10,7 +10,7 @@
 
 #include <ansi_parms.h>
 
-#if !_EWL_USING_MW_C_HEADERS
+#if !_EWL_USING_CW_C_HEADERS_
 	#error You must have the non-MSL C header file access path before the MSL access path
 #else
 
@@ -34,6 +34,6 @@
 #include <iso646.h>
 #endif /*  defined(_EWL_EXPORT_CNAMES) && defined(__cplusplus) && defined(_EWL_USING_NAMESPACE) */
 
-#endif /* _EWL_USING_MW_C_HEADERS */
+#endif /* _EWL_USING_CW_C_HEADERS_ */
 
 #endif /* _EWL_CISO646 */

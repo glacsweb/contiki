@@ -1,8 +1,8 @@
 /* EWL
  * Copyright © 1995-2009 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2010/04/08 08:54:50 $
- * $Revision: 1.4 $
+ * $Date: 2012/06/01 15:39:37 $
+ * $Revision: 1.1 $
  */
 
 #ifndef _EWL_CTYPE_API_H
@@ -21,10 +21,10 @@
 
 _EWL_BEGIN_EXTERN_C
 
-	extern const unsigned char _ctypes_[];
-
 _EWL_END_EXTERN_C
 
+	/** _EMBEDDED_WARRIOR_CTYPE supports 127 ASCII values */
+	
 	#define _UC_   0x01U          /* UPPER CASE      */
 	#define _LC_   0x02U          /* LOWER CASE      */
 	#define _NM_   0x04U          /* NUMERICAL       */
@@ -37,49 +37,58 @@ _EWL_END_EXTERN_C
 
 	/* abbreviations for combinations of flags */
 
-	#define _CS_ (_CL_ | _SP_)    /* control or blankspace */
-	#define _HN_ (_NM_ | _HX_)    /* number or hex digit */
-	#define _HU_ (_UC_ | _HX_)    /* upper case or hex digit */
-	#define _HL_ (_LC_ | _HX_)    /* lower case or hex digit */
+	#define _CS_ (_CL_ | _SP_)    /* control or blankspace    */
+	#define _HN_ (_NM_ | _HX_)    /* number or hex digit      */
+	#define _HU_ (_UC_ | _HX_)    /* upper case or hex digit  */
+	#define _HL_ (_LC_ | _HX_)    /* lower case or hex digit  */
 	#define _SS_ (_SP_ | _BL_)    /* the REAL blank character */
+
+	/** _ctypes_ stores flags for the isXXXXX ctype routines  */
+	extern const unsigned char _ctypes_[];
+
+	#if (_EWL_C_LOCALE_ONLY || _EMBEDDED_WARRIOR_HAS_NO_LOCALE)
+		#define _EWL_CMAP_ACCESS   _ctypes_
+	#else
+		#error sanity check
+	#endif /* _EWL_C_LOCALE_ONLY */
 
 #else
 
 _EWL_BEGIN_EXTERN_C
 
+	/** C99 ctype supports other locale when defined */
 	#if !_EWL_C_LOCALE_ONLY
 		#define __ewl_cmap_size 256
 	#else
 		#define __ewl_cmap_size 128
 	#endif
 
-	#if !_EWL_C_LOCALE_ONLY
+	#if !_EWL_C_LOCALE_ONLY && !_EMBEDDED_WARRIOR_HAS_NO_LOCALE
 		extern _EWL_IMP_EXP_C const unsigned short __ewl_ctype_map[__ewl_cmap_size];
-		extern _EWL_IMP_EXP_C const unsigned char __lower_map[__ewl_cmap_size];
-		extern _EWL_IMP_EXP_C const unsigned char __upper_map[__ewl_cmap_size];
+		extern _EWL_IMP_EXP_C const unsigned char  __lower_map[__ewl_cmap_size];
+		extern _EWL_IMP_EXP_C const unsigned char  __upper_map[__ewl_cmap_size];
 	#endif /* _EWL_C_LOCALE_ONLY */
 
+	/** __ctype_mapC holds the flags for isXXXX ctype routines */
 	extern _EWL_IMP_EXP_C const unsigned short __ctype_mapC[__ewl_cmap_size];
-	extern _EWL_IMP_EXP_C const unsigned char __lower_mapC[__ewl_cmap_size];
-	extern _EWL_IMP_EXP_C const unsigned char __upper_mapC[__ewl_cmap_size];
+	/** __lower_mapC holds the values for ctype tolower */
+	extern _EWL_IMP_EXP_C const unsigned char  __lower_mapC[__ewl_cmap_size];
+	/** __upper_mapC holds the values for ctype toupper */
+	extern _EWL_IMP_EXP_C const unsigned char  __upper_mapC[__ewl_cmap_size];
 
 _EWL_END_EXTERN_C
 
 _EWL_BEGIN_NAMESPACE_STD
 
-	#if _EWL_USE_INLINE
-
 	#if (_EWL_C_LOCALE_ONLY || _EMBEDDED_WARRIOR_HAS_NO_LOCALE)
-		#define _EWL_CMAP_ACCESS __ctype_mapC
+		#define _EWL_CMAP_ACCESS   __ctype_mapC
 		#define _EWL_CLOWER_ACCESS __lower_mapC
 		#define _EWL_CUPPER_ACCESS __upper_mapC
 	#else
-		#define _EWL_CMAP_ACCESS _EWL_LOCALDATA(_current_locale).ctype_cmpt_ptr->ctype_map_ptr
+		#define _EWL_CMAP_ACCESS   _EWL_LOCALDATA(_current_locale).ctype_cmpt_ptr->ctype_map_ptr
 		#define _EWL_CLOWER_ACCESS _EWL_LOCALDATA(_current_locale).ctype_cmpt_ptr->lower_map_ptr
 		#define _EWL_CUPPER_ACCESS _EWL_LOCALDATA(_current_locale).ctype_cmpt_ptr->upper_map_ptr
 	#endif /* _EWL_C_LOCALE_ONLY || _EMBEDDED_WARRIOR_HAS_NO_LOCALE */
-
-	#endif /* _EWL_USE_INLINE */
 
 _EWL_END_NAMESPACE_STD
 

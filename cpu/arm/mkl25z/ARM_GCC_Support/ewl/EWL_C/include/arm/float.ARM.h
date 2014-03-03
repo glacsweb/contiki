@@ -1,11 +1,11 @@
 /* EWL
  * Copyright © 1995-2007 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2010/05/28 07:52:10 $
- * $Revision: 1.3 $
+ * $Date: 2012/06/01 15:40:17 $
+ * $Revision: 1.1 $
  */
 
-/* $Id: float.ARM.h,v 1.3 2010/05/28 07:52:10 mviisor1 Exp $ */
+/* $Id: float.ARM.h,v 1.1 2012/06/01 15:40:17 b11883 Exp $ */
 
 #ifndef _EWL_FLOAT_ARM_H
 #define _EWL_FLOAT_ARM_H
@@ -81,12 +81,12 @@ extern float PREFIX(_fflt)(int);
 extern float PREFIX(_ffltu)(unsigned int);
 extern double PREFIX(_dflt)(int);
 extern double PREFIX(_dfltu)(unsigned int);
-#if !defined(__STDC__) || (defined(__STDC_VERSION__) && 199901L <= __STDC_VERSION__)
+#if _EWL_LONGLONG
 extern float PREFIX(_ll_sto_f)(long long);
 extern float PREFIX(_ll_uto_f)(unsigned long long);
 extern double PREFIX(_ll_sto_d)(long long);
 extern double PREFIX(_ll_uto_d)(unsigned long long);
-#endif /* __STDC__ */
+#endif /* _EWL_LONGLONG */
 
 /*
  * Floating-to-integer format conversions, rounding toward zero
@@ -96,12 +96,12 @@ extern int PREFIX(_ffix)(float);
 extern unsigned int PREFIX(_ffixu)(float);
 extern int PREFIX(_dfix)(double);
 extern unsigned int PREFIX(_dfixu)(double);
-#if !defined(__STDC__) || (defined(__STDC_VERSION__) && 199901L <= __STDC_VERSION__)
+#if _EWL_LONGLONG
 extern long long PREFIX(_ll_sfrom_f)(float);
 extern unsigned long long PREFIX(_ll_ufrom_f)(float);
 extern long long PREFIX(_ll_sfrom_d)(double);
 extern unsigned long long PREFIX(_ll_ufrom_d)(double);
-#endif /* __STRICT_ANSI__ */
+#endif /* _EWL_LONGLONG */
 
 /*
  * Floating-to-integer format conversions, rounding to nearest or
@@ -111,12 +111,12 @@ extern int PREFIX(_ffix_r)(float);
 extern unsigned int PREFIX(_ffixu_r)(float);
 extern int PREFIX(_dfix_r)(double);
 extern unsigned int PREFIX(_dfixu_r)(double);
-#if !defined(__STDC__) || (defined(__STDC_VERSION__) && 199901L <= __STDC_VERSION__)
+#if _EWL_LONGLONG
 extern long long PREFIX(_ll_sfrom_f_r)(float);
 extern unsigned long long PREFIX(_ll_ufrom_f_r)(float);
 extern long long PREFIX(_ll_sfrom_d_r)(double);
 extern unsigned long long PREFIX(_ll_ufrom_d_r)(double);
-#endif /* __STDC__ */
+#endif /* _EWL_LONGLONG */
 
 /*
  * The startup code should call _fp_init before using any fplib routines.

@@ -1,8 +1,8 @@
 /* EWL
  * Copyright © 1995-2009 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2009/11/05 19:15:37 $
- * $Revision: 1.2 $
+ * $Date: 2012/06/01 15:39:37 $
+ * $Revision: 1.1 $
  */
 
 #ifndef _EWL_CWCTYPE
@@ -10,14 +10,12 @@
 
 #include <ansi_parms.h>
 
-#if !_EWL_USING_MW_C_HEADERS
+#if !_EWL_USING_CW_C_HEADERS_
 	#include <wctype.h>
 
 	#if _EWL_PUT_THIRD_PARTY_C_IN_STD
 		#include <ewl_cpp_std_wctype.h>
 	#endif
-#elif _GCCPORT_
-	#include <cwctype_gcc>
 #else
 
 #if _EWL_WIDE_CHAR
@@ -34,30 +32,28 @@
 _EWL_BEGIN_NAMESPACE_STD
 _EWL_BEGIN_EXTERN_C
 
-_EWL_IMP_EXP_C wctype_t _EWL_CDECL wctype(const char *) _EWL_CANT_THROW;
-_EWL_IMP_EXP_C int 		_EWL_CDECL iswctype(wint_t, wctype_t) _EWL_CANT_THROW;
-_EWL_IMP_EXP_C int      _EWL_CDECL iswalnum(wint_t) _EWL_CANT_THROW;
-_EWL_IMP_EXP_C int      _EWL_CDECL iswalpha(wint_t) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C wctype_t _EWL_CDECL _EWL_CANT_THROW wctype(const char *);
+_EWL_IMP_EXP_C int 	_EWL_CDECL _EWL_CANT_THROW iswctype(wint_t, wctype_t);
+_EWL_IMP_EXP_C int      _EWL_CDECL _EWL_CANT_THROW iswalnum(wint_t);
+_EWL_IMP_EXP_C int      _EWL_CDECL _EWL_CANT_THROW iswalpha(wint_t);
 #if _EWL_C99
-_EWL_IMP_EXP_C int 		_EWL_CDECL iswblank(wint_t) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C int 	_EWL_CDECL _EWL_CANT_THROW iswblank(wint_t);
 #endif /* _EWL_C99 */
-_EWL_IMP_EXP_C int 		_EWL_CDECL iswcntrl(wint_t) _EWL_CANT_THROW;
-_EWL_IMP_EXP_C int 		_EWL_CDECL iswdigit(wint_t) _EWL_CANT_THROW;
-_EWL_IMP_EXP_C int 		_EWL_CDECL iswgraph(wint_t) _EWL_CANT_THROW;
-_EWL_IMP_EXP_C int 		_EWL_CDECL iswlower(wint_t) _EWL_CANT_THROW;
-_EWL_IMP_EXP_C int 		_EWL_CDECL iswprint(wint_t) _EWL_CANT_THROW;
-_EWL_IMP_EXP_C int 		_EWL_CDECL iswpunct(wint_t) _EWL_CANT_THROW;
-_EWL_IMP_EXP_C int 		_EWL_CDECL iswspace(wint_t) _EWL_CANT_THROW;
-_EWL_IMP_EXP_C int 		_EWL_CDECL iswupper(wint_t) _EWL_CANT_THROW;
-_EWL_IMP_EXP_C int 		_EWL_CDECL iswxdigit(wint_t) _EWL_CANT_THROW;
-_EWL_IMP_EXP_C wint_t 	_EWL_CDECL towlower(wint_t) _EWL_CANT_THROW;
-_EWL_IMP_EXP_C wint_t 	_EWL_CDECL towupper(wint_t) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C int 	_EWL_CDECL _EWL_CANT_THROW iswcntrl(wint_t);
+_EWL_IMP_EXP_C int 	_EWL_CDECL _EWL_CANT_THROW iswdigit(wint_t);
+_EWL_IMP_EXP_C int 	_EWL_CDECL _EWL_CANT_THROW iswgraph(wint_t);
+_EWL_IMP_EXP_C int 	_EWL_CDECL _EWL_CANT_THROW iswlower(wint_t);
+_EWL_IMP_EXP_C int 	_EWL_CDECL _EWL_CANT_THROW iswprint(wint_t);
+_EWL_IMP_EXP_C int 	_EWL_CDECL _EWL_CANT_THROW iswpunct(wint_t);
+_EWL_IMP_EXP_C int 	_EWL_CDECL _EWL_CANT_THROW iswspace(wint_t);
+_EWL_IMP_EXP_C int 	_EWL_CDECL _EWL_CANT_THROW iswupper(wint_t);
+_EWL_IMP_EXP_C int 	_EWL_CDECL _EWL_CANT_THROW iswxdigit(wint_t);
+_EWL_IMP_EXP_C wint_t 	_EWL_CDECL _EWL_CANT_THROW towlower(wint_t);
+_EWL_IMP_EXP_C wint_t 	_EWL_CDECL _EWL_CANT_THROW towupper(wint_t);
 
 _EWL_END_EXTERN_C
 
-#if _EWL_USE_INLINE
-
-#if _EWL_C_LOCALE_ONLY || !_EWL_C99
+#if (_EWL_C_LOCALE_ONLY || !_EWL_C99  || _EMBEDDED_WARRIOR_HAS_NO_LOCALE)
 	#define _EWL_CWMAP_ACCESS __wctype_mapC
 	#define _EWL_CWLOWER_ACCESS __wlower_mapC
 	#define _EWL_CWUPPER_ACCESS __wupper_mapC
@@ -67,22 +63,24 @@ _EWL_END_EXTERN_C
 	#define _EWL_CWUPPER_ACCESS _EWL_LOCALDATA(_current_locale).ctype_cmpt_ptr->wupper_map_ptr
 #endif /* _EWL_C_LOCALE_ONLY || !_EWL_C99 */
 
-	_EWL_INLINE int _EWL_CDECL iswalnum(wint_t c) _EWL_CANT_THROW	{return ((c < 0) || (c >= __ewl_wcmap_size)) ? 0 : (int)(_EWL_CWMAP_ACCESS[c] & __ewl_walnum);}
-	_EWL_INLINE int _EWL_CDECL iswalpha(wint_t c) _EWL_CANT_THROW	{return ((c < 0) || (c >= __ewl_wcmap_size)) ? 0 : (int)(_EWL_CWMAP_ACCESS[c] & __ewl_walpha);}
+#if _EWL_USE_INLINE
+
+	_EWL_INLINE int _EWL_CDECL _EWL_CANT_THROW iswalnum(wint_t c) {return (((unsigned)c >= __ewl_wcmap_size)) ? 0 : (int)(_EWL_CWMAP_ACCESS[c] & __ewl_walnum);}
+	_EWL_INLINE int _EWL_CDECL _EWL_CANT_THROW iswalpha(wint_t c) {return (((unsigned)c >= __ewl_wcmap_size)) ? 0 : (int)(_EWL_CWMAP_ACCESS[c] & __ewl_walpha);}
 #if _EWL_C99
-	_EWL_INLINE int _EWL_CDECL iswblank(wint_t c) _EWL_CANT_THROW	{return ((c < 0) || (c >= __ewl_wcmap_size)) ? 0 : (int)(_EWL_CWMAP_ACCESS[c] & __ewl_wblank);}
+	_EWL_INLINE int _EWL_CDECL _EWL_CANT_THROW iswblank(wint_t c) {return (((unsigned)c >= __ewl_wcmap_size)) ? 0 : (int)(_EWL_CWMAP_ACCESS[c] & __ewl_wblank);}
 #endif /* _EWL_C99 */
-	_EWL_INLINE int _EWL_CDECL iswcntrl(wint_t c) _EWL_CANT_THROW	{return ((c < 0) || (c >= __ewl_wcmap_size)) ? 0 : (int)(_EWL_CWMAP_ACCESS[c] & __ewl_wcntrl);}
-	_EWL_INLINE int _EWL_CDECL iswdigit(wint_t c) _EWL_CANT_THROW	{return ((c < 0) || (c >= __ewl_wcmap_size)) ? 0 : (int)(_EWL_CWMAP_ACCESS[c] & __ewl_wdigit);}
-	_EWL_INLINE int _EWL_CDECL iswgraph(wint_t c) _EWL_CANT_THROW	{return ((c < 0) || (c >= __ewl_wcmap_size)) ? 0 : (int)(_EWL_CWMAP_ACCESS[c] & __ewl_wgraph);}
-	_EWL_INLINE int _EWL_CDECL iswlower(wint_t c) _EWL_CANT_THROW	{return ((c < 0) || (c >= __ewl_wcmap_size)) ? 0 : (int)(_EWL_CWMAP_ACCESS[c] & __ewl_wlower);}
-	_EWL_INLINE int _EWL_CDECL iswprint(wint_t c) _EWL_CANT_THROW	{return ((c < 0) || (c >= __ewl_wcmap_size)) ? 0 : (int)(_EWL_CWMAP_ACCESS[c] & __ewl_wprint);}
-	_EWL_INLINE int _EWL_CDECL iswpunct(wint_t c) _EWL_CANT_THROW	{return ((c < 0) || (c >= __ewl_wcmap_size)) ? 0 : (int)(_EWL_CWMAP_ACCESS[c] & __ewl_wpunct);}
-	_EWL_INLINE int _EWL_CDECL iswspace(wint_t c) _EWL_CANT_THROW	{return ((c < 0) || (c >= __ewl_wcmap_size)) ? 0 : (int)(_EWL_CWMAP_ACCESS[c] & __ewl_wspace);}
-	_EWL_INLINE int _EWL_CDECL iswupper(wint_t c) _EWL_CANT_THROW	{return ((c < 0) || (c >= __ewl_wcmap_size)) ? 0 : (int)(_EWL_CWMAP_ACCESS[c] & __ewl_wupper);}
-	_EWL_INLINE int _EWL_CDECL iswxdigit(wint_t c) _EWL_CANT_THROW	{return ((c < 0) || (c >= __ewl_wcmap_size)) ? 0 : (int)(_EWL_CWMAP_ACCESS[c] & __ewl_wxdigit);}
-	_EWL_INLINE wint_t _EWL_CDECL towlower(wint_t c) _EWL_CANT_THROW{return ((c < 0) || (c >= __ewl_wcmap_size)) ? c : (int)(_EWL_CWLOWER_ACCESS[c]);}
-	_EWL_INLINE wint_t _EWL_CDECL towupper(wint_t c) _EWL_CANT_THROW{return ((c < 0) || (c >= __ewl_wcmap_size)) ? c : (int)(_EWL_CWUPPER_ACCESS[c]);}
+	_EWL_INLINE int _EWL_CDECL _EWL_CANT_THROW iswcntrl(wint_t c) {return (((unsigned)c >= __ewl_wcmap_size)) ? 0 : (int)(_EWL_CWMAP_ACCESS[c] & __ewl_wcntrl);}
+	_EWL_INLINE int _EWL_CDECL _EWL_CANT_THROW iswdigit(wint_t c) {return (((unsigned)c >= __ewl_wcmap_size)) ? 0 : (int)(_EWL_CWMAP_ACCESS[c] & __ewl_wdigit);}
+	_EWL_INLINE int _EWL_CDECL _EWL_CANT_THROW iswgraph(wint_t c) {return (((unsigned)c >= __ewl_wcmap_size)) ? 0 : (int)(_EWL_CWMAP_ACCESS[c] & __ewl_wgraph);}
+	_EWL_INLINE int _EWL_CDECL _EWL_CANT_THROW iswlower(wint_t c) {return (((unsigned)c >= __ewl_wcmap_size)) ? 0 : (int)(_EWL_CWMAP_ACCESS[c] & __ewl_wlower);}
+	_EWL_INLINE int _EWL_CDECL _EWL_CANT_THROW iswprint(wint_t c) {return (((unsigned)c >= __ewl_wcmap_size)) ? 0 : (int)(_EWL_CWMAP_ACCESS[c] & __ewl_wprint);}
+	_EWL_INLINE int _EWL_CDECL _EWL_CANT_THROW iswpunct(wint_t c) {return (((unsigned)c >= __ewl_wcmap_size)) ? 0 : (int)(_EWL_CWMAP_ACCESS[c] & __ewl_wpunct);}
+	_EWL_INLINE int _EWL_CDECL _EWL_CANT_THROW iswspace(wint_t c) {return (((unsigned)c >= __ewl_wcmap_size)) ? 0 : (int)(_EWL_CWMAP_ACCESS[c] & __ewl_wspace);}
+	_EWL_INLINE int _EWL_CDECL _EWL_CANT_THROW iswupper(wint_t c) {return (((unsigned)c >= __ewl_wcmap_size)) ? 0 : (int)(_EWL_CWMAP_ACCESS[c] & __ewl_wupper);}
+	_EWL_INLINE int _EWL_CDECL _EWL_CANT_THROW iswxdigit(wint_t c) {return (((unsigned)c >= __ewl_wcmap_size)) ? 0 : (int)(_EWL_CWMAP_ACCESS[c] & __ewl_wxdigit);}
+	_EWL_INLINE wint_t _EWL_CDECL _EWL_CANT_THROW towlower(wint_t c) {return (((unsigned)c >= __ewl_wcmap_size)) ? c : (int)(_EWL_CWLOWER_ACCESS[c]);}
+	_EWL_INLINE wint_t _EWL_CDECL _EWL_CANT_THROW towupper(wint_t c) {return (((unsigned)c >= __ewl_wcmap_size)) ? c : (int)(_EWL_CWUPPER_ACCESS[c]);}
 
 #endif /* _EWL_USE_INLINE */
 
@@ -94,6 +92,6 @@ _EWL_END_NAMESPACE_STD
 
 #endif /* _EWL_WIDE_CHAR */
 
-#endif /* _EWL_USING_MW_C_HEADERS */
+#endif /* _EWL_USING_CW_C_HEADERS_ */
 
 #endif /* _EWL_CWCTYPE */

@@ -1,8 +1,8 @@
 /* EWL
  * Copyright © 1995-2009 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2010/04/16 07:40:10 $
- * $Revision: 1.7 $
+ * $Date: 2012/06/01 15:39:37 $
+ * $Revision: 1.1 $
  */
 
 #ifndef _EWL_CFLOAT
@@ -10,13 +10,13 @@
 
 #include <ansi_parms.h>
 
-#if !_EWL_USING_MW_C_HEADERS
+#if !_EWL_USING_CW_C_HEADERS_
 	#include <float.h>
 #else
 
 #include <ewl_t.h>
 
-#if (_EWL_FLOATING_POINT || _EWL_FLOATING_POINT_IO)
+#if (_EWL_FLOATING_POINT || _EWL_FLOATING_POINT_PRINTF_SCANF)
 
 #if _EWL_C99 || _EWL_C99_MATH_LEAK
 #define DECIMAL_DIG 17
@@ -208,20 +208,20 @@ _EWL_END_EXTERN_C
 
 #if !_EWL_FLOAT_HEX
 
-	#define LDBL_MAX              (_MISRA_EXCEPTION_FLOAT_CAST() *(long double *)__extended_max)
-	#define LDBL_EPSILON          (_MISRA_EXCEPTION_FLOAT_CAST() *(long double *)__extended_epsilon)
-	#define LDBL_MIN              (_MISRA_EXCEPTION_FLOAT_CAST() *(long double *)__extended_min)
+	#define LDBL_MAX              (_MISRA_EXCEPTION_FLOAT_CAST() *(long double *)&__extended_max)
+	#define LDBL_EPSILON          (_MISRA_EXCEPTION_FLOAT_CAST() *(long double *)&__extended_epsilon)
+	#define LDBL_MIN              (_MISRA_EXCEPTION_FLOAT_CAST() *(long double *)&__extended_min)
 
 #endif
 
 #if (defined(__INTEL__) && __dest_os == __win32_os)
 	#include <x86/float.win32.h>
-#elif defined(__arm)
+#elif defined(__arm) ||  defined(__arm__)
     #include <arm/float.ARM.h>
 #endif
 
 #endif /* _EWL_FLOATING_POINT */
 
-#endif /* _EWL_USING_MW_C_HEADERS */
+#endif /* _EWL_USING_CW_C_HEADERS_ */
 
 #endif /* _EWL_CFLOAT */

@@ -1,8 +1,8 @@
 /* EWL
  * Copyright © 1995-2009 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2010/04/13 16:57:08 $
- * $Revision: 1.4 $
+ * $Date: 2012/07/12 22:31:13 $
+ * $Revision: 1.2 $
  */
 
 #ifndef _EWL_FILE_IO_H
@@ -13,9 +13,8 @@
 #include <cstdio>
 
 _EWL_BEGIN_EXTERN_C
-#if _EWL_OS_DISK_FILE_SUPPORT
 
-	extern _EWL_IMP_EXP_C __std(__file_modes) __temp_file_mode;
+#if _EWL_OS_DISK_FILE_SUPPORT
 
 	int  _EWL_CDECL __open_file(const char * name, __std(__file_modes) mode, __std(__file_handle) * handle) _EWL_CANT_THROW;
 	int  _EWL_CDECL __open_temp_file(__std(__file_handle) * handle) _EWL_CANT_THROW;
@@ -47,6 +46,8 @@ _EWL_BEGIN_EXTERN_C
 	_EWL_IMP_EXP_C int _EWL_CDECL __wget_file_modes (const wchar_t * mode, __std(__file_modes) * modes) _EWL_CANT_THROW;
 #endif /* _EWL_WFILEIO_AVAILABLE */
 
+#if _EWL_EXTRA_
+
 	char * _EWL_CDECL __ewl_itoa(int, char *, int) _EWL_CANT_THROW;
 	char * _EWL_CDECL __ewl_strrev(char *) _EWL_CANT_THROW;
 	int    _EWL_CDECL __ewl_strnicmp(const char *, const char *, int ) _EWL_CANT_THROW;
@@ -56,6 +57,8 @@ _EWL_BEGIN_EXTERN_C
 #endif /* _EWL_OS_DISK_FILE_SUPPORT */
 
 	char * _EWL_CDECL __ewl_strdup(const char *) _EWL_CANT_THROW;
+
+#endif /* _EWL_EXTRA_ */
 
 _EWL_END_EXTERN_C
 

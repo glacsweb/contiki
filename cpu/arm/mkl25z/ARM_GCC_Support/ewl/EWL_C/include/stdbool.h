@@ -1,8 +1,8 @@
 /* EWL
  * Copyright © 1995-2009 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2009/05/30 14:40:33 $
- * $Revision: 1.3 $
+ * $Date: 2012/06/01 15:39:39 $
+ * $Revision: 1.1 $
  */
 
 #ifndef _EWL_STDBOOL_H
@@ -10,14 +10,14 @@
 
 #include <ansi_parms.h>
 
-#if !_EWL_USING_MW_C_HEADERS
-	#error You must have the non-MSL C header file access path before the MSL access path
+#if !_EWL_USING_CW_C_HEADERS_
+	#error You must have the non-EWL C header file access path before the EWL access path
 #else
 
 #ifndef __cplusplus
 
 #if !_EWL_C99
-	#warning "MSL support for C99 is not enabled"
+	#warning "EWL support for C99 is not enabled"
 #else
 	#if defined(__CWCC__)
 		#if !__option(c99) 
@@ -60,6 +60,6 @@
 
 #endif /* !__cplusplus */
 
-#endif /* _EWL_USING_MW_C_HEADERS */
+#endif /* _EWL_USING_CW_C_HEADERS_ */
 
 #endif /* _EWL_STDBOOL_H */

@@ -1,11 +1,11 @@
 /* EWL
  * Copyright © 1995-2007 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2010/06/03 09:08:16 $
- * $Revision: 1.4 $
+ * $Date: 2012/06/28 06:38:59 $
+ * $Revision: 1.2 $
  */
 
-/* $Id: fenv_cf.c,v 1.4 2010/06/03 09:08:16 mviisor1 Exp $ */
+/* $Id: fenv_cf.c,v 1.2 2012/06/28 06:38:59 b30506 Exp $ */
 
 #include <fenv.h>
 #include <math.h>

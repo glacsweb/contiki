@@ -66,7 +66,6 @@ co-cw_base.lnt
 //-d__SOFTFP__=1
 
 -d__CWCC__=1
--d__MWERKS__=1
 -d__ide_target()=1
 -d__attribute__()
 -d__STDC__=1

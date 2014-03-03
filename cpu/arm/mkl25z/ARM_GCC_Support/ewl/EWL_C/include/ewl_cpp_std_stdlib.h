@@ -1,8 +1,8 @@
 /* EWL
  * Copyright © 1995-2009 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2009/05/29 14:36:30 $
- * $Revision: 1.2 $
+ * $Date: 2012/06/01 15:39:38 $
+ * $Revision: 1.1 $
  */
 
 #ifndef _EWL_CPP_STD_STDLIB_H
@@ -82,7 +82,7 @@ namespace std {
 	using ::ldiv;
 	using ::srand;
 	using ::rand;
-#if 0 /* Do not include AltiVec extensions when using non-MSL C */
+#if 0 /* Do not include AltiVec extensions when using non-EWL C */
 #if __VEC__
 	using ::vec_calloc;
 	using ::vec_free;

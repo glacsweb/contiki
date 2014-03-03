@@ -1,8 +1,8 @@
 /* EWL
  * Copyright © 1995-2009 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2010/04/16 07:40:15 $
- * $Revision: 1.6 $
+ * $Date: 2012/06/28 06:39:00 $
+ * $Revision: 1.2 $
  */
 
 /*	force definitions to be generated */
@@ -20,7 +20,11 @@
 
 #define _EWL_USE_INLINE 	1
 #ifndef _lint
+#if __GNUC__
+#define _EWL_INLINE 		_EWL_IMP_EXP_C __attribute__((__noinline__))
+#else
 #define _EWL_INLINE 		_EWL_IMP_EXP_C __declspec(weak)
+#endif
 #else
 #define _EWL_INLINE
 #endif
@@ -41,14 +45,14 @@ _EWL_INLINE f64_t  _EWL_MATH_CDECL scalbln (f64_t x, int32_t n)
 	return ldexp(x,(int_t)n);
 }
 
-_EWL_IMP_EXP_C  f64_t      _EWL_MATH_CDECL log2(f64_t x) _EWL_CANT_THROW
+_EWL_IMP_EXP_C  f64_t      _EWL_MATH_CDECL log2(f64_t x)
 {
 	static const uint32_t f[2] = {0x3ff71547U, 0x652b82feU};
 
 	return log(x) * (_MISRA_EXCEPTION_FLOAT_CAST()*(f64_t *)f);
 }
 
-_EWL_IMP_EXP_C  f64_t      _EWL_MATH_CDECL nan(const char_t* x) _EWL_CANT_THROW
+_EWL_IMP_EXP_C  f64_t      _EWL_MATH_CDECL nan(const char_t* x)
 {
 	MISRA_QUIET_UNUSED_ARGS()
     f64_t res = NaN;

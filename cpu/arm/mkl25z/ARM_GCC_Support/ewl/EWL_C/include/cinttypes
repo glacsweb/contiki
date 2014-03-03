@@ -1,8 +1,8 @@
 /* EWL
  * Copyright © 1995-2009 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2009/11/05 19:15:37 $
- * $Revision: 1.3 $
+ * $Date: 2012/06/01 15:39:37 $
+ * $Revision: 1.1 $
  */
 
 #ifndef _EWL_CINTTYPES
@@ -11,19 +11,17 @@
 #include <ansi_parms.h>
 
 #if _EWL_WIDE_CHAR
-	#include <wcstoul.h>
+	#include <wchar.h>
 #endif /* _EWL_WIDE_CHAR */
 
 #if _EWL_C99
 
-#if !_EWL_USING_MW_C_HEADERS
+#if !_EWL_USING_CW_C_HEADERS_
 	#include <inttypes.h>
 
 	#if _EWL_PUT_THIRD_PARTY_C_IN_STD
 		#include <ewl_cpp_std_inttypes.h>
 	#endif
-#elif _GCCPORT_
-	#include <cinttypes_gcc>
 #else
 
 /*
@@ -39,9 +37,6 @@
 
 #include <cstdint>
 #include <cstdlib>
-#if _EWL_WIDE_CHAR
-	#include <wcstoul.h>
-#endif /* _EWL_WIDE_CHAR */
 
 /*
  * 2 It declares functions for manipulating greatest-width integers and converting numeric
@@ -310,12 +305,12 @@ _EWL_BEGIN_EXTERN_C
  */
 
 #if _EWL_LONGLONG
-	intmax_t _EWL_CDECL imaxabs(intmax_t j) _EWL_CANT_THROW;
-	_EWL_INLINE intmax_t _EWL_CDECL imaxabs(intmax_t j) _EWL_CANT_THROW
+	intmax_t _EWL_CDECL _EWL_CANT_THROW imaxabs(intmax_t j);
+	_EWL_INLINE intmax_t _EWL_CDECL _EWL_CANT_THROW imaxabs(intmax_t j)
        {return(llabs(j));}
 #else
-	intmax_t _EWL_CDECL imaxabs(intmax_t j) _EWL_CANT_THROW;
-	_EWL_INLINE intmax_t _EWL_CDECL imaxabs(intmax_t j) _EWL_CANT_THROW
+	intmax_t _EWL_CDECL _EWL_CANT_THROW imaxabs(intmax_t j);
+	_EWL_INLINE intmax_t _EWL_CDECL _EWL_CANT_THROW imaxabs(intmax_t j)
        {return(labs(j));}
 #endif /* _EWL_LONGLONG */
 
@@ -335,12 +330,12 @@ _EWL_BEGIN_EXTERN_C
  */
 
 #if _EWL_LONGLONG
-	imaxdiv_t _EWL_CDECL imaxdiv(intmax_t numer, intmax_t denom) _EWL_CANT_THROW;
-	_EWL_INLINE imaxdiv_t _EWL_CDECL imaxdiv(intmax_t numer, intmax_t denom) _EWL_CANT_THROW
+	imaxdiv_t _EWL_CDECL imaxdiv(intmax_t numer, intmax_t denom);
+	_EWL_INLINE imaxdiv_t _EWL_CDECL _EWL_CANT_THROW imaxdiv(intmax_t numer, intmax_t denom)
       	 {return(lldiv(numer, denom));}
 #else
-	imaxdiv_t _EWL_CDECL imaxdiv(intmax_t numer, intmax_t denom) _EWL_CANT_THROW;
-	_EWL_INLINE imaxdiv_t _EWL_CDECL imaxdiv(intmax_t numer, intmax_t denom) _EWL_CANT_THROW
+	imaxdiv_t _EWL_CDECL imaxdiv(intmax_t numer, intmax_t denom);
+	_EWL_INLINE imaxdiv_t _EWL_CDECL _EWL_CANT_THROW imaxdiv(intmax_t numer, intmax_t denom)
        	{return(ldiv(numer, denom));}
 #endif /* _EWL_LONGLONG */
 
@@ -365,18 +360,18 @@ _EWL_BEGIN_EXTERN_C
  */
 
 #if _EWL_LONGLONG
-	intmax_t _EWL_CDECL strtoimax(const char * _EWL_RESTRICT nptr, char ** _EWL_RESTRICT endptr, int base) _EWL_CANT_THROW;
-	_EWL_INLINE intmax_t _EWL_CDECL strtoimax(const char * _EWL_RESTRICT nptr, char ** _EWL_RESTRICT endptr, int base) _EWL_CANT_THROW
+	intmax_t _EWL_CDECL _EWL_CANT_THROW strtoimax(const char * _EWL_RESTRICT nptr, char ** _EWL_RESTRICT endptr, int base);
+	_EWL_INLINE intmax_t _EWL_CDECL strtoimax(const char * _EWL_RESTRICT nptr, char ** _EWL_RESTRICT endptr, int base)
            {return(strtoll(nptr, endptr, base));}
-    uintmax_t _EWL_CDECL strtoumax(const char * _EWL_RESTRICT nptr, char ** _EWL_RESTRICT endptr, int base) _EWL_CANT_THROW;
-    _EWL_INLINE uintmax_t _EWL_CDECL strtoumax(const char * _EWL_RESTRICT nptr, char ** _EWL_RESTRICT endptr, int base) _EWL_CANT_THROW
+    uintmax_t _EWL_CDECL _EWL_CANT_THROW strtoumax(const char * _EWL_RESTRICT nptr, char ** _EWL_RESTRICT endptr, int base);
+    _EWL_INLINE uintmax_t _EWL_CDECL _EWL_CANT_THROW strtoumax(const char * _EWL_RESTRICT nptr, char ** _EWL_RESTRICT endptr, int base)
            {return(strtoull(nptr, endptr, base));}
 #else
-	intmax_t _EWL_CDECL strtoimax(const char * _EWL_RESTRICT nptr, char ** _EWL_RESTRICT endptr, int base) _EWL_CANT_THROW;
-	_EWL_INLINE intmax_t _EWL_CDECL strtoimax(const char * _EWL_RESTRICT nptr, char ** _EWL_RESTRICT endptr, int base) _EWL_CANT_THROW
+	intmax_t _EWL_CDECL _EWL_CANT_THROW strtoimax(const char * _EWL_RESTRICT nptr, char ** _EWL_RESTRICT endptr, int base);
+	_EWL_INLINE intmax_t _EWL_CDECL _EWL_CANT_THROW strtoimax(const char * _EWL_RESTRICT nptr, char ** _EWL_RESTRICT endptr, int base)
            {return(strtol(nptr, endptr, base));}
-    uintmax_t _EWL_CDECL strtoumax(const char * _EWL_RESTRICT nptr, char ** _EWL_RESTRICT endptr, int base) _EWL_CANT_THROW;
-    _EWL_INLINE uintmax_t _EWL_CDECL strtoumax(const char * _EWL_RESTRICT nptr, char ** _EWL_RESTRICT endptr, int base) _EWL_CANT_THROW
+    uintmax_t _EWL_CDECL _EWL_CANT_THROW strtoumax(const char * _EWL_RESTRICT nptr, char ** _EWL_RESTRICT endptr, int base);
+    _EWL_INLINE uintmax_t _EWL_CDECL _EWL_CANT_THROW strtoumax(const char * _EWL_RESTRICT nptr, char ** _EWL_RESTRICT endptr, int base)
            {return(strtoul(nptr, endptr, base));}
 #endif /* _EWL_LONGLONG */
 
@@ -404,18 +399,18 @@ _EWL_BEGIN_EXTERN_C
 
 #if (_EWL_WIDE_CHAR)
 	#if _EWL_LONGLONG
-		intmax_t _EWL_CDECL wcstoimax(const wchar_t * _EWL_RESTRICT nptr, wchar_t ** _EWL_RESTRICT endptr, int base) _EWL_CANT_THROW;
-		_EWL_INLINE intmax_t _EWL_CDECL wcstoimax(const wchar_t * _EWL_RESTRICT nptr, wchar_t ** _EWL_RESTRICT endptr, int base) _EWL_CANT_THROW
+		intmax_t _EWL_CDECL _EWL_CANT_THROW wcstoimax(const wchar_t * _EWL_RESTRICT nptr, wchar_t ** _EWL_RESTRICT endptr, int base);
+		_EWL_INLINE intmax_t _EWL_CDECL wcstoimax(const wchar_t * _EWL_RESTRICT nptr, wchar_t ** _EWL_RESTRICT endptr, int base)
 	           {return(wcstoll(nptr, endptr, base));}
-	 	uintmax_t _EWL_CDECL wcstoumax(const wchar_t * _EWL_RESTRICT nptr, wchar_t ** _EWL_RESTRICT endptr, int base) _EWL_CANT_THROW;
-	 	_EWL_INLINE uintmax_t _EWL_CDECL wcstoumax(const wchar_t * _EWL_RESTRICT nptr, wchar_t ** _EWL_RESTRICT endptr, int base) _EWL_CANT_THROW
+	 	uintmax_t _EWL_CDECL _EWL_CANT_THROW wcstoumax(const wchar_t * _EWL_RESTRICT nptr, wchar_t ** _EWL_RESTRICT endptr, int base);
+	 	_EWL_INLINE uintmax_t _EWL_CDECL _EWL_CANT_THROW wcstoumax(const wchar_t * _EWL_RESTRICT nptr, wchar_t ** _EWL_RESTRICT endptr, int base)
 	           {return(wcstoull(nptr, endptr, base));}
 	#else
-	 	intmax_t _EWL_CDECL wcstoimax(const wchar_t * _EWL_RESTRICT nptr, wchar_t ** _EWL_RESTRICT endptr, int base) _EWL_CANT_THROW;
-	 	_EWL_INLINE intmax_t _EWL_CDECL wcstoimax(const wchar_t * _EWL_RESTRICT nptr, wchar_t ** _EWL_RESTRICT endptr, int base) _EWL_CANT_THROW
+	 	intmax_t _EWL_CDECL wcstoimax(const wchar_t * _EWL_RESTRICT nptr, wchar_t ** _EWL_RESTRICT endptr, int base);
+	 	_EWL_INLINE intmax_t _EWL_CDECL _EWL_CANT_THROW wcstoimax(const wchar_t * _EWL_RESTRICT nptr, wchar_t ** _EWL_RESTRICT endptr, int base)
 	           {return(wcstol(nptr, endptr, base));}
-	 	uintmax_t _EWL_CDECL wcstoumax(const wchar_t * _EWL_RESTRICT nptr, wchar_t ** _EWL_RESTRICT endptr, int base) _EWL_CANT_THROW;
-	 	_EWL_INLINE uintmax_t _EWL_CDECL wcstoumax(const wchar_t * _EWL_RESTRICT nptr, wchar_t ** _EWL_RESTRICT endptr, int base) _EWL_CANT_THROW
+	 	uintmax_t _EWL_CDECL wcstoumax(const wchar_t * _EWL_RESTRICT nptr, wchar_t ** _EWL_RESTRICT endptr, int base);
+	 	_EWL_INLINE uintmax_t _EWL_CDECL _EWL_CANT_THROW wcstoumax(const wchar_t * _EWL_RESTRICT nptr, wchar_t ** _EWL_RESTRICT endptr, int base)
 	           {return(wcstoul(nptr, endptr, base));}
 	#endif /* _EWL_LONGLONG */
 #endif /* _EWL_WIDE_CHAR */
@@ -441,12 +436,12 @@ _EWL_END_EXTERN_C
 #endif
 
 #endif
-	inline intmax_t abs(intmax_t j) _EWL_CANT_THROW
+	inline intmax_t _EWL_CANT_THROW abs(intmax_t j)
 	{
 		return imaxabs(j);
 	}
 
-	inline imaxdiv_t div(intmax_t numer, intmax_t denom) _EWL_CANT_THROW
+	inline imaxdiv_t _EWL_CANT_THROW div(intmax_t numer, intmax_t denom)
 	{
 		return imaxdiv(numer, denom);
 	}
@@ -458,7 +453,7 @@ _EWL_END_EXTERN_C
 _EWL_END_NAMESPACE_STD	
 
 
-#endif /* _EWL_USING_MW_C_HEADERS */
+#endif /* _EWL_USING_CW_C_HEADERS_ */
 #endif /* _EWL_C99 */
 
 
@@ -473,7 +468,7 @@ _EWL_BEGIN_EXTERN_C
 #if _EWL_LONGLONG
 
 
-	//intmax_t _EWL_CDECL wcstoimax(const wchar_t * _EWL_RESTRICT nptr, wchar_t ** _EWL_RESTRICT endptr, int base) _EWL_CANT_THROW;
+	//intmax_t _EWL_CDECL wcstoimax(const wchar_t * _EWL_RESTRICT nptr, wchar_t ** _EWL_RESTRICT endptr, int base);
 	#define  wcstoimax wcstoll
 	#define  wcstoumax wcstoumax
 
@@ -482,11 +477,11 @@ _EWL_BEGIN_EXTERN_C
  	#define  wcstoimax wcstol
 	#define  wcstoumax wcstoul
  
- //	intmax_t _EWL_CDECL wcstoimax(const wchar_t * _EWL_RESTRICT nptr, wchar_t ** _EWL_RESTRICT endptr, int base) _EWL_CANT_THROW;
- //	_EWL_INLINE intmax_t _EWL_CDECL wcstoimax(const wchar_t * _EWL_RESTRICT nptr, wchar_t ** _EWL_RESTRICT endptr, int base) _EWL_CANT_THROW
+ //	intmax_t _EWL_CDECL wcstoimax(const wchar_t * _EWL_RESTRICT nptr, wchar_t ** _EWL_RESTRICT endptr, int base);
+ //	_EWL_INLINE intmax_t _EWL_CDECL wcstoimax(const wchar_t * _EWL_RESTRICT nptr, wchar_t ** _EWL_RESTRICT endptr, int base)
  //          {return(wcstol(nptr, endptr, base));}
- //	uintmax_t _EWL_CDECL wcstoumax(const wchar_t * _EWL_RESTRICT nptr, wchar_t ** _EWL_RESTRICT endptr, int base) _EWL_CANT_THROW;
- //	_EWL_INLINE uintmax_t _EWL_CDECL wcstoumax(const wchar_t * _EWL_RESTRICT nptr, wchar_t ** _EWL_RESTRICT endptr, int base) _EWL_CANT_THROW
+ //	uintmax_t _EWL_CDECL wcstoumax(const wchar_t * _EWL_RESTRICT nptr, wchar_t ** _EWL_RESTRICT endptr, int base);
+ //	_EWL_INLINE uintmax_t _EWL_CDECL wcstoumax(const wchar_t * _EWL_RESTRICT nptr, wchar_t ** _EWL_RESTRICT endptr, int base)
  //         {return(wcstoul(nptr, endptr, base));}
 #endif /* _EWL_LONGLONG */
 

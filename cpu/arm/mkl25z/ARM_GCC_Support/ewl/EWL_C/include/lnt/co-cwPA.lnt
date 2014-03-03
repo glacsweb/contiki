@@ -52,7 +52,6 @@ co-cw_base.lnt
 // We are a Power Architecture compiler
 -d__POWERPC__=1
 -d__PPC_EABI__=1
--d__MWERKS__=1
 -d__CWCC__=1
 -d__VEC__=0
 -d__ide_target()=1

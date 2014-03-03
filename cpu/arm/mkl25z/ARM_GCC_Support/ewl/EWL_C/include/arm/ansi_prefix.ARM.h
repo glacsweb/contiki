@@ -1,8 +1,8 @@
 /* EWL
  * Copyright © 2009 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2012/02/17 09:43:34 $
- * $Revision: 1.12 $
+ * $Date: 2012/07/20 05:15:59 $
+ * $Revision: 1.4 $
  */
 
 #ifndef __ansi_prefix__
@@ -18,14 +18,47 @@
 /* 		OS Specific Configuration Flags		 */
 /*********************************************/
 
+#if defined(__GNUC__)
+#define __option(x)			x
+#define ANSI_strict        	__STRICT_ANSI__
+#define unsigned_char      	__CHAR_UNSIGNED__
+#define optimize_for_size  	__OPTIMIZE_SIZE__
+#define sfp_emulation	   	_SOFT_FLOAT
+#define dont_inline        	__NO_INLINE__
+#define little_endian	   	__ARMEL__
+#define double_is_4_bytes	0
+#define floatingpoint		_EWL_FLOATING_POINT
+#define __thumb			__thumb__
+#endif
+
 /* Console IO Support Configuration Flags */
 
 #ifndef _EWL_CONSOLE_SUPPORT
 	#define _EWL_CONSOLE_SUPPORT	1
 #endif
 
-#if _EWL_CONSOLE_SUPPORT
-	#define _EWL_BUFFERED_CONSOLE			0
+#ifndef _EWL_BUFFERED_CONSOLE
+#define _EWL_BUFFERED_CONSOLE			1
+#endif
+
+#ifndef _EWL_BUFFERED_CONSOLE_SIZE
+#define _EWL_BUFFERED_CONSOLE_SIZE 		64
+#endif
+
+#ifndef _EWL_CONSOLE_FILE_IS_DISK_FILE
+#define _EWL_CONSOLE_FILE_IS_DISK_FILE	0
+#endif
+
+#ifndef _EWL_FILE_CONSOLE_ROUTINES
+#define _EWL_FILE_CONSOLE_ROUTINES 		0
+#endif
+
+#ifndef _EWL_NULL_CONSOLE_ROUTINES
+	#if _EWL_CONSOLE_SUPPORT
+		#define _EWL_NULL_CONSOLE_ROUTINES 0
+	#else
+		#define _EWL_NULL_CONSOLE_ROUTINES 1
+	#endif
 #endif
 
 #if !defined(__STDC_WANT_LIB_EXT1__)
@@ -42,6 +75,13 @@
 
 #ifndef _EWL_OS_DISK_FILE_SUPPORT
 	#define _EWL_OS_DISK_FILE_SUPPORT	0
+#endif
+
+/*	File and console I/O configurations */
+
+#if !defined(TMP_MAX) && ! defined(_AEABI_PORTABILITY_LEVEL)
+
+	#define TMP_MAX						32767
 #endif
 
 /* Time Support Configuration Flags */
@@ -88,10 +128,6 @@
 	#define _EWL_OS_ALLOC_SUPPORT 		0
 #endif
 
-#ifndef _EMBEDDED_WARRIOR_MALLOC
-#define _EMBEDDED_WARRIOR_MALLOC      1
-#endif
-
 #ifndef _EWL_HEAP_EXTERN_PROTOTYPES
 	#define _EWL_HEAP_EXTERN_PROTOTYPES \
 		extern char_t __heap_addr[]; \
@@ -132,7 +168,11 @@
 #endif
 
 #ifndef _EWL_USES_SUN_MATH_LIB
-	#define _EWL_USES_SUN_MATH_LIB 1
+	#define _EWL_USES_SUN_MATH_LIB 		1
+	#define _EWL_USES_SUN_SP_MATH_LIB 	1
+	#ifndef _EWL_USES_SUN_DP_MATH_LIB
+	#define _EWL_USES_SUN_DP_MATH_LIB 	1
+	#endif
 #endif
 
 #ifndef _EWL_POSIX
@@ -143,12 +183,16 @@
 	#define _EWL_NEEDS_EXTRAS 0
 #endif
 
-#ifndef _EWL_ACCURATE_BUT_LARGE_ANSI_FP
-    #define _EWL_ACCURATE_BUT_LARGE_ANSI_FP	0
+#define _EWL_BF_ORDER
+
+#ifndef _EWL_IEC_559_ADDITIONS
+	#define _EWL_IEC_559_ADDITIONS			1
 #endif
 
-#ifndef __EWL_ROUND_DECIMAL_ANSI_FP__
-	#define __EWL_ROUND_DECIMAL_ANSI_FP__ 	1
+#if defined(__GNUC__)
+#ifndef _EWL_USE_INLINE
+	#define _EWL_USE_INLINE		0
+#endif
 #endif
 
 /************************************************/
@@ -167,15 +211,31 @@
 	#define _EWL_ASSERT_DISPLAYS_FUNC	0
 #endif
 
+#ifndef _EMBEDDED_WARRIOR_HAS_NO_LOCALE
+	#define _EMBEDDED_WARRIOR_HAS_NO_LOCALE	1
+#endif
+
 #ifndef _EWL_C_LOCALE_ONLY
 	#define _EWL_C_LOCALE_ONLY	1
+#endif
+
+#ifndef _EMBEDDED_WARRIOR_MALLOC
+	#define _EMBEDDED_WARRIOR_MALLOC		1	/* 1: for reduced code and data size by reducing EWL functionality */
 #endif
 
 #ifndef _EWL_C99
 	#define _EWL_C99	0
 #endif
 
-#if !_EWL_C99 && !_EWL_C_LOCALE_ONLY
+#ifndef _EWL_ACCURATE_BUT_LARGE_ANSI_FP
+    #define _EWL_ACCURATE_BUT_LARGE_ANSI_FP	0
+#endif
+
+#ifndef __EWL_ROUND_DECIMAL_ANSI_FP__
+	#define __EWL_ROUND_DECIMAL_ANSI_FP__ 	1
+#endif
+
+#if !_EWL_C99 && !_EWL_C_LOCALE_ONLY && !_EMBEDDED_WARRIOR_HAS_NO_LOCALE
 	#error _EWL_C_LOCALE_ONLY must be turned on if _EWL_C99 is off
 #endif
 
@@ -183,9 +243,19 @@
 	#define _EWL_FLOATING_POINT_IO	0
 #endif
 
+#ifndef _EWL_C_HAS_CPP_EXTENSIONS
+	#define _EWL_C_HAS_CPP_EXTENSIONS 		1
+#endif
+
 #ifndef _EWL_C99_PRINTF_SCANF
 	#define _EWL_C99_PRINTF_SCANF 			0
 #endif
+
+#ifndef _EWL_FLOATING_POINT_PRINTF_SCANF
+	#define _EWL_FLOATING_POINT_PRINTF_SCANF			0	/* 0: for reduced code and data size by reducing EWL functionality */
+#endif
+
+#define _EWL_C99_MATH_LEAK                  1
 
 #ifndef _EWL_USES_EXIT_PROCESS
 	#define _EWL_USES_EXIT_PROCESS 1
@@ -194,6 +264,8 @@
 #ifndef _EWL_FLT_EVAL_METHOD
 	#define _EWL_FLT_EVAL_METHOD  0
 #endif
+
+#define _EWL_FLOAT_HEX 						0
 
 #if defined(__cplusplus)
     #define _EWL_USING_NAMESPACE
@@ -215,6 +287,10 @@
 	typedef long long __int64;
 #endif
 
+#if __GNUC__
+#define _EWL_DOUBLE_SIZE	(__SIZEOF_DOUBLE__ * 8)
+#else
 #define _EWL_DOUBLE_SIZE 			64
+#endif
 
 #endif /*	__ansi_prefix__	  */

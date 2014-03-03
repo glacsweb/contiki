@@ -1,8 +1,8 @@
 /* EWL
  * Copyright © 1995-2009 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2010/04/20 09:07:30 $
- * $Revision: 1.2 $
+ * $Date: 2012/06/01 15:39:39 $
+ * $Revision: 1.1 $
  */
 
 #ifndef _EWL_THREAD_LOCAL_DATA_PTHREADS_H

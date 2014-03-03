@@ -1,8 +1,8 @@
 /* EWL
  * Copyright © 1995-2007 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2010/03/25 12:34:39 $
- * $Revision: 1.2 $
+ * $Date: 2012/06/01 15:40:17 $
+ * $Revision: 1.1 $
  */
 
 /* mandatory portatibility declaration C Library ABI for ARM architecture section 5.1.1 */

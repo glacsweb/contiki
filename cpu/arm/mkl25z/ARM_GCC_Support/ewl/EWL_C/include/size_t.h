@@ -1,7 +1,7 @@
 /* EWL
  * Copyright © 1995-2009 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2009/05/14 16:55:26 $
+ * $Date: 2012/06/01 15:39:39 $
  * $Revision: 1.1 $
  */
 
@@ -24,6 +24,10 @@ _EWL_BEGIN_EXTERN_C
 
 _EWL_END_EXTERN_C
 _EWL_END_NAMESPACE_STD
+
+#if __cplusplus
+using std::size_t;
+#endif
 
 #endif /* _EWL_SIZE_T_H */
 

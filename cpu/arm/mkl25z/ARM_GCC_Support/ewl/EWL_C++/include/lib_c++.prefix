@@ -1,7 +1,0 @@
-
-/*
-** Prefix file for std C++
-*/
-#define __EWL_C++__ 1
-#include <lib_c99.prefix>
-

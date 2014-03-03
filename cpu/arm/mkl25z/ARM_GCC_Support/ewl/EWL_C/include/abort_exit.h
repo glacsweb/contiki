@@ -1,8 +1,8 @@
 /* EWL
  * Copyright © 1995-2009 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2010/01/06 13:38:52 $
- * $Revision: 1.3 $
+ * $Date: 2012/06/01 15:39:37 $
+ * $Revision: 1.1 $
  */
 
 #ifndef _EWL_ABORT_EXIT_H
@@ -30,7 +30,7 @@ _EWL_BEGIN_EXTERN_C
     #endif
 
     #if _EWL_USES_EXIT_PROCESS
-        _EWL_IMP_EXP_C void _EWL_CDECL _ExitProcess(void) _EWL_CANT_THROW;
+        _EWL_IMP_EXP_C void _EWL_CDECL _ExitProcess(int status) _EWL_CANT_THROW;
     #endif
 
 _EWL_END_EXTERN_C

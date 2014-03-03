@@ -1,8 +1,8 @@
 /* EWL
  * Copyright © 1995-2009 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2009/12/21 12:33:27 $
- * $Revision: 1.4 $
+ * $Date: 2012/06/01 15:39:38 $
+ * $Revision: 1.1 $
  */
 
 #ifndef _EWL_GLOBALS_H
@@ -16,7 +16,7 @@
     #include <pa/ansi_prefix.PA_EABI.bare.h>    /* Embedded Power Architecture */
 #elif defined(__m56800E__) || defined(__m56800__)
     #include <dsp/ansi_prefix.dsp.h>            /* Hawk DSP */
-#elif defined (__arm)
+#elif defined (__arm) || defined(__arm__)
 	#include <arm/ansi_prefix.ARM.h>			/* ARM */
 #elif defined (_ENTERPRISE_C_) || defined (__STARCORE__)
 	#include <sc/ansi_prefix_StarCore.h>		/* StarCore */

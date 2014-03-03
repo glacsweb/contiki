@@ -1,11 +1,11 @@
 /* EWL
  * Copyright © 1995-2007 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2010/05/28 07:52:11 $
- * $Revision: 1.4 $
+ * $Date: 2012/06/01 15:47:06 $
+ * $Revision: 1.1 $
  */
 
-/* $Id: fenv_arm.c,v 1.4 2010/05/28 07:52:11 mviisor1 Exp $ */
+/* $Id: fenv_arm.c,v 1.1 2012/06/01 15:47:06 b11883 Exp $ */
 
 #include <fenv.h>
 #include <signal.h>
@@ -13,10 +13,6 @@
 #if _EWL_C99
 
 _EWL_BEGIN_EXTERN_C
-
-#if _USE_AEABI_PRIVATE_ && (!_lint)
-#define __ieee_status __FSL__ieee_status
-#endif
 
 #if _EWL_C99_TC2_FENV
 #define RESULT	int
@@ -54,7 +50,7 @@ RESULT fegetexceptflag(fexcept_t *flagp, int_t iexcepts)
   
   /* save the sticky flags and the exception enable flags */
   excepts &= FE_ALL_EXCEPT;  
-  flagp->statusword = __ieee_status(0u,0u) & ( excepts | (excepts << 8u) ); 
+  flagp->statusword = PREFIX(__ieee_status)(0u,0u) & ( excepts | (excepts << 8u) ); 
   
   /* save the exception enable flags */
   crtEnv = __rt_fp_env_addr();
@@ -83,7 +79,7 @@ RESULT fesetexceptflag(const fexcept_t *flagp, int_t iexcepts)
 
   excepts &= FE_ALL_EXCEPT;  
   excepts |= (excepts << 8u); /* Restore both sticky and exception enable flags */
-  (void)__ieee_status(excepts, flagp->statusword & excepts); 
+  (void)PREFIX(__ieee_status)(excepts, flagp->statusword & excepts); 
   
   /* restore the exception enable flags */
   crtEnv = __rt_fp_env_addr();
@@ -102,7 +98,7 @@ DESCRIPTION:The feclearexcept function clears the supported floating-point
 */
 RESULT feclearexcept(int_t excepts)
   {
-  (void)__ieee_status((uint_t)excepts & FE_ALL_EXCEPT,0u);
+  (void)PREFIX(__ieee_status)((uint_t)excepts & FE_ALL_EXCEPT,0u);
   RETURN
   }
 
@@ -192,7 +188,7 @@ RESULT feraiseexcept(int_t iexcepts)
   excepts &= FE_ALL_EXCEPT;  
 
   /* Set the sticky flags, retrieve the exception enable bits, invoke handlers */
-  raiseEnabledExceptions( __ieee_status(excepts, excepts) & (excepts << 8) );
+  raiseEnabledExceptions( PREFIX(__ieee_status)(excepts, excepts) & (excepts << 8) );
   RETURN
   }
 
@@ -205,7 +201,7 @@ DESCRIPTION: The fetestexcept function determines which of a specified subset of
 int_t fetestexcept(int_t iexcepts)
   {
   uint_t excepts = (uint_t)iexcepts;
-  uint_t temp = __ieee_status(0u,0u) & excepts & FE_ALL_EXCEPT;
+  uint_t temp = PREFIX(__ieee_status)(0u,0u) & excepts & FE_ALL_EXCEPT;
   return (int_t)temp;
   }
 
@@ -222,7 +218,7 @@ DESCRIPTION:The fegetround function returns the value of the rounding direction
 */  
 int_t fegetround(void)
   {
-  uint_t temp = __ieee_status(0u,0u) & FE_IEEE_ROUND_MASK;
+  uint_t temp = PREFIX(__ieee_status)(0u,0u) & FE_IEEE_ROUND_MASK;
   return (int_t)temp;
   }
 
@@ -235,8 +231,8 @@ DESCRIPTION:fesetround function establishes the rounding direction represented
 int_t fesetround(int_t round)
   {
   uint_t temp;
-  (void)__ieee_status(FE_IEEE_ROUND_MASK, (uint_t)round & FE_IEEE_ROUND_MASK);
-  temp = __ieee_status(0u,0u) & FE_IEEE_ROUND_MASK;
+  (void)PREFIX(__ieee_status)(FE_IEEE_ROUND_MASK, (uint_t)round & FE_IEEE_ROUND_MASK);
+  temp = PREFIX(__ieee_status)(0u,0u) & FE_IEEE_ROUND_MASK;
   return round != (int_t)temp;
   }
 
@@ -254,7 +250,7 @@ RESULT fegetenv(fenv_t *envp)
   fenv_t * crtEnv;
 
   crtEnv = __rt_fp_env_addr();
-  envp -> statusword = __ieee_status(0u,0u);
+  envp -> statusword = PREFIX(__ieee_status)(0u,0u);
   envp -> inexact_handler   = crtEnv->inexact_handler;
   envp -> overflow_handler  = crtEnv->overflow_handler;
   envp -> underflow_handler = crtEnv->underflow_handler;
@@ -277,7 +273,7 @@ RESULT fesetenv(const fenv_t *envp)
   fenv_t * crtEnv;
 
   crtEnv = __rt_fp_env_addr();
-  (void)__ieee_status(0xFFFFFFFF, envp -> statusword);
+  (void)PREFIX(__ieee_status)(0xFFFFFFFF, envp -> statusword);
   crtEnv->inexact_handler   = envp -> inexact_handler;  
   crtEnv->overflow_handler  = envp -> overflow_handler;
   crtEnv->underflow_handler = envp -> underflow_handler;
@@ -300,7 +296,7 @@ int_t feholdexcept(fenv_t *envp)
   fenv_t * crtEnv;
 
   crtEnv = __rt_fp_env_addr();
-  envp -> statusword = __ieee_status(FE_IEEE_MASK_ALL_EXCEPT | FE_IEEE_ALL_EXCEPT,0u);
+  envp -> statusword = PREFIX(__ieee_status)(FE_IEEE_MASK_ALL_EXCEPT | FE_IEEE_ALL_EXCEPT,0u);
   envp -> inexact_handler   = crtEnv->inexact_handler;
   envp -> overflow_handler  = crtEnv->overflow_handler;
   envp -> underflow_handler = crtEnv->underflow_handler;
@@ -327,7 +323,7 @@ RESULT feupdateenv(const fenv_t *envp)
   crtEnv->underflow_handler = envp -> underflow_handler;
   crtEnv->invalid_handler   = envp -> invalid_handler;
   crtEnv->divbyzero_handler = envp -> divbyzero_handler;        
-  raiseEnabledExceptions((envp->statusword & __ieee_status(0xFFFFFFFF, envp->statusword)) << 8);
+  raiseEnabledExceptions((envp->statusword & PREFIX(__ieee_status)(0xFFFFFFFF, envp->statusword)) << 8);
   RETURN
   }
 

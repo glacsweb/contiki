@@ -1,11 +1,11 @@
 /* EWL
  * Copyright © 1995-2007 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2010/05/28 07:52:11 $
- * $Revision: 1.3 $
+ * $Date: 2012/06/01 15:47:07 $
+ * $Revision: 1.1 $
  */
 
-/* $Id: math_ARM.c,v 1.3 2010/05/28 07:52:11 mviisor1 Exp $ */
+/* $Id: math_ARM.c,v 1.1 2012/06/01 15:47:07 b11883 Exp $ */
 
 #include <ewl_misra_types.h>
 
@@ -18,6 +18,8 @@ _MISRA_EXCEPTION_RULE_19_6()
 #define _EWL_USE_INLINE 	1
 #if _lint
 #define _EWL_INLINE
+#elif __GNUC__
+#define _EWL_INLINE 		_EWL_IMP_EXP_C __attribute__((__noinline__))
 #else
 #define _EWL_INLINE 		_EWL_IMP_EXP_C __declspec(weak)
 #endif /* _lint */
@@ -58,7 +60,6 @@ MISRA_QUIET_UNUSED_ARGS()
 _EWL_IMP_EXP_C  f64_t      _EWL_MATH_CDECL nan(const char_t* x)
 {
 	#pragma unused(x)
-	return NAN;															/*- hh 010411 -*/		
 }
 
 #endif /* _EWL_C99 */

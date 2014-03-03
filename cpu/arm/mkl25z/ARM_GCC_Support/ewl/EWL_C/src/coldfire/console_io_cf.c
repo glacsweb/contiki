@@ -110,6 +110,11 @@ typedef enum MessageCommandID
  *
  **************************************************************************/
 
+#if defined(__GNUC__)
+static unsigned char TRKAccessFile(long command, unsigned long file_handle, unsigned long *length_ptr, char *buffer_ptr)
+{ return 1;
+}
+#else
 static asm __declspec(register_abi) unsigned char TRKAccessFile(long command, unsigned long file_handle, unsigned long *length_ptr, char *buffer_ptr)
 {
     move.l    D3,-(a7)
@@ -122,6 +127,7 @@ static asm __declspec(register_abi) unsigned char TRKAccessFile(long command, un
     move.l    (A7)+,D3
     rts
 }
+#endif /* defined(__GNUC__) */
 
 /****************************************************************************/
 /*

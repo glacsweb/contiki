@@ -1,8 +1,8 @@
 /* EWL
  * Copyright © 1995-2009 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2009/11/05 19:15:37 $
- * $Revision: 1.2 $
+ * $Date: 2012/06/01 15:39:37 $
+ * $Revision: 1.1 $
  */
 
 #ifndef _EWL_CSTDINT
@@ -10,7 +10,7 @@
 
 #include <ansi_parms.h>
 
-#if !_EWL_USING_MW_C_HEADERS
+#if !_EWL_USING_CW_C_HEADERS_
 	#include <stdint.h>
 
 	#if _EWL_PUT_THIRD_PARTY_C_IN_STD
@@ -119,11 +119,11 @@ typedef uint32_t uintptr_t;
 _EWL_END_EXTERN_C
 _EWL_END_NAMESPACE_STD
 
-#endif /* !_EWL_USING_MW_C_HEADERS */
+#endif /* !_EWL_USING_CW_C_HEADERS_ */
 
 #endif /* _EWL_CSTDINT */
 
-#if _EWL_USING_MW_C_HEADERS
+#if _EWL_USING_CW_C_HEADERS_
 
 /*
  * 7.18.2 Limits of specified-width integer types
@@ -280,4 +280,4 @@ _EWL_END_NAMESPACE_STD
 
 #endif /* INT8_C */
 #endif /* (!defined(__cplusplus)) || defined(__STDC_CONSTANT_MACROS) */
-#endif /* _EWL_USING_MW_C_HEADERS */
+#endif /* _EWL_USING_CW_C_HEADERS_ */

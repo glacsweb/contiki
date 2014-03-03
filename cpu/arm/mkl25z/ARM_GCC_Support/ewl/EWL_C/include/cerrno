@@ -1,8 +1,8 @@
 /* EWL
  * Copyright © 1995-2009 Freescale Corporation.  All rights reserved.
  *
- * $Date: 2010/11/25 13:12:08 $
- * $Revision: 1.7 $
+ * $Date: 2012/06/01 15:39:37 $
+ * $Revision: 1.1 $
  */
 
 #ifndef _EWL_CERRNO
@@ -10,7 +10,7 @@
 
 #include <ansi_parms.h>
 
-#if !_EWL_USING_MW_C_HEADERS
+#if !_EWL_USING_CW_C_HEADERS_
 	#include <errno.h>
 #else
 
@@ -210,12 +210,12 @@
 					#ifndef __STARCORE__
 					#pragma errno_name ...	/* not accessible via global */
 					#endif
-				#endif /* __MWERKS >= 0x3200 */
+				#endif /* __CWCC__ >= 0x3200 */
 			#endif /* __CWCC__ */
 		#else
 			_EWL_IMP_EXP_C extern int errno;
 			#ifdef __cplusplus
-			#define errno errno
+				#define errno errno
 			#endif
 			#ifdef __CWCC__
 				#if __CWCC__ >= 0x3200
@@ -234,6 +234,6 @@
 #include <errno.h>
 #endif /*  defined(_EWL_EXPORT_CNAMES) && defined(__cplusplus) && defined(_EWL_USING_NAMESPACE) */
 
-#endif /* _EWL_USING_MW_C_HEADERS */
+#endif /* _EWL_USING_CW_C_HEADERS_ */
 
 #endif /* _EWL_CERRNO */
