@@ -80,7 +80,7 @@ S19      = $(CP) -O srec
 XSLTPROC=xsltproc
 
 PROJECT_OBJECTFILES += ${addprefix $(OBJECTDIR)/,$(CONTIKI_TARGET_MAIN:.c=.o)}
-PROJECT_OBJECTFILES2 = $(OBJECTDIR)/*.o
+PROJECT_OBJECTFILES2 = ${addprefix -I, $(PROJECT_OBJECTFILES)}
 #${addprefix -I ,$(PROJECT_OBJECTFILES)}
 
 LINKERSCRIPT = $(CONTIKI_CPU)/MKL25Z128_flash.ld
@@ -159,7 +159,7 @@ CUSTOM_RULE_C_TO_CE=yes
 	$(STRIP) -K _init -K _fini --strip-unneeded -g -x $@
 	
 %.ce2: %.o
-	$(CC) $(PROJECT_OBJECTFILES2) -I $(STARTUP) $(LDFLAGS) $< -o $@
+	$(CC) -I $(PROJECT_OBJECTFILES2) -I $(STARTUP) $(LDFLAGS) $< -o $@
 	$(STRIP) -K _init -K _fini --strip-unneeded -g -x $@
 
 CUSTOM_RULE_LINK=yes
