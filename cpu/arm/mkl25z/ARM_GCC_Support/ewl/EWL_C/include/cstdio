@@ -1,0 +1,205 @@
+/* EWL
+ * Copyright © 1995-2009 Freescale Corporation.  All rights reserved.
+ *
+ * $Date: 2010/04/01 13:27:13 $
+ * $Revision: 1.4 $
+ */
+
+#ifndef _EWL_CSTDIO
+#define _EWL_CSTDIO
+
+#include <ansi_parms.h>
+
+#if !_EWL_USING_MW_C_HEADERS
+	#include <stdio.h>
+
+	#if _EWL_PUT_THIRD_PARTY_C_IN_STD
+		#include <ewl_cpp_std_stdio.h>
+	#endif
+#else
+
+#include <stddef.h>
+#include <null.h>
+#include <eof.h>
+#include <va_list.h>
+#include <ewl_lib_ext1.h>
+#include <ewl_rsize_t.h>
+#include <file_struc.h>
+#include <stdio_api.h>
+
+#if _EWL_POSIX
+	#include <stdio.posix.h>
+#endif
+
+#pragma options align=native
+
+_EWL_BEGIN_NAMESPACE_STD
+_EWL_BEGIN_EXTERN_C
+
+_EWL_IMP_EXP_C void _EWL_CDECL			setbuf(FILE * _EWL_RESTRICT, char * _EWL_RESTRICT) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C int _EWL_CDECL			setvbuf(FILE * _EWL_RESTRICT, char * _EWL_RESTRICT, int, size_t) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C int _EWL_CDECL			fclose(FILE *) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C int _EWL_CDECL			fflush(FILE *) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C int _EWL_CDECL			fscanf(FILE * _EWL_RESTRICT, const char * _EWL_RESTRICT, ...) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C int _EWL_CDECL			scanf(const char * _EWL_RESTRICT, ...) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C int _EWL_CDECL			sprintf(char * _EWL_RESTRICT, const char * _EWL_RESTRICT, ...) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C int _EWL_CDECL			snprintf(char * _EWL_RESTRICT, size_t, const char * _EWL_RESTRICT, ...) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C int _EWL_CDECL			sscanf(const char * _EWL_RESTRICT, const char * _EWL_RESTRICT, ...) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C int _EWL_CDECL			vfscanf(FILE * _EWL_RESTRICT, const char * _EWL_RESTRICT, va_list) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C int _EWL_CDECL			vsscanf(const char * _EWL_RESTRICT, const char * _EWL_RESTRICT, va_list) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C int _EWL_CDECL			vscanf(const char * _EWL_RESTRICT, va_list) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C int _EWL_CDECL			vfprintf(FILE * _EWL_RESTRICT, const char * _EWL_RESTRICT, va_list) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C int _EWL_CDECL			vprintf(const char * _EWL_RESTRICT, va_list) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C int _EWL_CDECL			vsprintf(char * _EWL_RESTRICT, const char * _EWL_RESTRICT, va_list) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C int _EWL_CDECL			vsnprintf(char * _EWL_RESTRICT, size_t, const char * _EWL_RESTRICT, va_list) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C int _EWL_CDECL			fgetc(FILE *) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C char * _EWL_CDECL	    fgets(char * _EWL_RESTRICT, int, FILE * _EWL_RESTRICT) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C int _EWL_CDECL			fputc(int, FILE *) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C int _EWL_CDECL			fputs(const char * _EWL_RESTRICT, FILE * _EWL_RESTRICT) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C char * _EWL_CDECL	    gets(char *) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C int _EWL_CDECL			puts(const char *) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C int _EWL_CDECL			ungetc(int, FILE *) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C size_t _EWL_CDECL	    fread(void * _EWL_RESTRICT, size_t, size_t, FILE * _EWL_RESTRICT) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C size_t _EWL_CDECL	    fwrite(const void * _EWL_RESTRICT, size_t, size_t, FILE * _EWL_RESTRICT) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C int _EWL_CDECL			fgetpos(FILE * _EWL_RESTRICT, fpos_t * _EWL_RESTRICT) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C long _EWL_CDECL			ftell(FILE *) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C int _EWL_CDECL			fsetpos(FILE *, const fpos_t *) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C int _EWL_CDECL			fseek(FILE *, long, int) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C void	_EWL_CDECL			rewind(FILE *) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C void	_EWL_CDECL  		clearerr(FILE *) _EWL_CANT_THROW;
+
+#if _EWL_OS_DISK_FILE_SUPPORT
+_EWL_IMP_EXP_C void	_EWL_CDECL  		perror(const char *) _EWL_CANT_THROW;
+#endif /* _EWL_OS_DISK_FILE_SUPPORT */
+
+#if defined(__STDC_WANT_LIB_EXT1__) && __STDC_WANT_LIB_EXT1__
+	_EWL_IMP_EXP_C int _EWL_CDECL		fprintf_s(FILE * _EWL_RESTRICT, const char * _EWL_RESTRICT, ...) _EWL_CANT_THROW;
+	_EWL_IMP_EXP_C int _EWL_CDECL		fscanf_s(FILE * _EWL_RESTRICT, const char * _EWL_RESTRICT, ...) _EWL_CANT_THROW;
+	_EWL_IMP_EXP_C int _EWL_CDECL		scanf_s(const char * _EWL_RESTRICT, ...) _EWL_CANT_THROW;
+	_EWL_IMP_EXP_C int _EWL_CDECL		snprintf_s(char * _EWL_RESTRICT, rsize_t, const char * _EWL_RESTRICT, ...) _EWL_CANT_THROW;
+	_EWL_IMP_EXP_C int _EWL_CDECL		sprintf_s(char * _EWL_RESTRICT, rsize_t, const char * _EWL_RESTRICT, ...) _EWL_CANT_THROW;
+	_EWL_IMP_EXP_C int _EWL_CDECL		sscanf_s(const char * _EWL_RESTRICT, const char * _EWL_RESTRICT, ...) _EWL_CANT_THROW;
+	_EWL_IMP_EXP_C int _EWL_CDECL		vfprintf_s(FILE * _EWL_RESTRICT, const char * _EWL_RESTRICT, va_list) _EWL_CANT_THROW;
+	_EWL_IMP_EXP_C int _EWL_CDECL		vfscanf_s(FILE * _EWL_RESTRICT, const char * _EWL_RESTRICT, va_list) _EWL_CANT_THROW;
+	_EWL_IMP_EXP_C int _EWL_CDECL		vprintf_s(const char * _EWL_RESTRICT, va_list) _EWL_CANT_THROW;
+	_EWL_IMP_EXP_C int _EWL_CDECL		vsnprintf_s(char * _EWL_RESTRICT, rsize_t, const char * _EWL_RESTRICT, va_list) _EWL_CANT_THROW;
+	_EWL_IMP_EXP_C int _EWL_CDECL		vsprintf_s(char * _EWL_RESTRICT, rsize_t, const char * _EWL_RESTRICT, va_list) _EWL_CANT_THROW;
+	_EWL_IMP_EXP_C int _EWL_CDECL		vsscanf_s(const char * _EWL_RESTRICT, const char * _EWL_RESTRICT, va_list) _EWL_CANT_THROW;
+	_EWL_IMP_EXP_C char * _EWL_CDECL	gets_s(char *, rsize_t) _EWL_CANT_THROW;
+#endif /* __STDC_WANT_LIB_EXT1__ */
+
+#if _EWL_OS_DISK_FILE_SUPPORT
+	_EWL_IMP_EXP_C int _EWL_CDECL		remove(const char *) _EWL_CANT_THROW;
+	_EWL_IMP_EXP_C int _EWL_CDECL		rename(const char *, const char *) _EWL_CANT_THROW;
+	_EWL_IMP_EXP_C char * _EWL_CDECL	tmpnam(char *) _EWL_CANT_THROW;
+	_EWL_IMP_EXP_C FILE * _EWL_CDECL	tmpfile(void) _EWL_CANT_THROW;
+	_EWL_IMP_EXP_C int _EWL_CDECL		fprintf(FILE * _EWL_RESTRICT, const char * _EWL_RESTRICT, ...) _EWL_CANT_THROW;
+
+	_EWL_IMP_EXP_C FILE * _EWL_CDECL	fopen(const char * _EWL_RESTRICT, const char * _EWL_RESTRICT) _EWL_CANT_THROW;
+	_EWL_IMP_EXP_C FILE * _EWL_CDECL	freopen(const char * _EWL_RESTRICT, const char * _EWL_RESTRICT, FILE * _EWL_RESTRICT) _EWL_CANT_THROW;
+#if defined(__STDC_WANT_LIB_EXT1__) && __STDC_WANT_LIB_EXT1__
+	_EWL_IMP_EXP_C errno_t _EWL_CDECL	fopen_s(FILE * _EWL_RESTRICT * _EWL_RESTRICT, const char * _EWL_RESTRICT, const char * _EWL_RESTRICT) _EWL_CANT_THROW;
+	_EWL_IMP_EXP_C errno_t _EWL_CDECL	freopen_s(FILE * _EWL_RESTRICT * _EWL_RESTRICT, const char * _EWL_RESTRICT, const char * _EWL_RESTRICT, FILE * _EWL_RESTRICT) _EWL_CANT_THROW;
+	_EWL_IMP_EXP_C errno_t _EWL_CDECL	tmpfile_s(FILE **) _EWL_CANT_THROW;
+	_EWL_IMP_EXP_C errno_t _EWL_CDECL	tmpnam_s(char *, rsize_t) _EWL_CANT_THROW;
+#endif /* __STDC_WANT_LIB_EXT1__ */
+#if _EWL_WFILEIO_AVAILABLE
+	_EWL_IMP_EXP_C int _EWL_CDECL		_wremove(const wchar_t *) _EWL_CANT_THROW;
+	_EWL_IMP_EXP_C int _EWL_CDECL		_wrename(const wchar_t *, const wchar_t *) _EWL_CANT_THROW;
+	_EWL_IMP_EXP_C wchar_t * _EWL_CDECL	_wtmpnam(wchar_t *) _EWL_CANT_THROW;
+	_EWL_IMP_EXP_C FILE * _EWL_CDECL	_wfopen(const wchar_t * _EWL_RESTRICT, const wchar_t * _EWL_RESTRICT) _EWL_CANT_THROW;
+	_EWL_IMP_EXP_C FILE * _EWL_CDECL	_wfreopen(const wchar_t * _EWL_RESTRICT, const wchar_t * _EWL_RESTRICT, FILE * _EWL_RESTRICT) _EWL_CANT_THROW;
+#if defined(__STDC_WANT_LIB_EXT1__) && __STDC_WANT_LIB_EXT1__
+	_EWL_IMP_EXP_C errno_t _EWL_CDECL	_wfopen_s(FILE * _EWL_RESTRICT * _EWL_RESTRICT, const wchar_t * _EWL_RESTRICT, const wchar_t * _EWL_RESTRICT) _EWL_CANT_THROW;
+	_EWL_IMP_EXP_C errno_t _EWL_CDECL	_wfreopen_s(FILE * _EWL_RESTRICT * _EWL_RESTRICT, const wchar_t * _EWL_RESTRICT, const wchar_t * _EWL_RESTRICT, FILE * _EWL_RESTRICT) _EWL_CANT_THROW;
+	_EWL_IMP_EXP_C errno_t _EWL_CDECL	_wtmpnam_s(wchar_t *, rsize_t) _EWL_CANT_THROW;
+#endif /* __STDC_WANT_LIB_EXT1__ */
+#endif /* _EWL_WFILEIO_AVAILABLE */
+#endif /* _EWL_OS_DISK_FILE_SUPPORT */
+
+
+#if _EWL_CONSOLE_SUPPORT
+#if __dest_os == __n64_os
+	extern void	_EWL_CDECL printf(const char * _EWL_RESTRICT, ...) _EWL_CANT_THROW;
+#if defined(__STDC_WANT_LIB_EXT1__) && __STDC_WANT_LIB_EXT1__
+	extern void	_EWL_CDECL printf_s(const char * _EWL_RESTRICT, ...) _EWL_CANT_THROW;
+#endif /* __STDC_WANT_LIB_EXT1__ */
+#else
+	_EWL_IMP_EXP_C int _EWL_CDECL printf(const char * _EWL_RESTRICT, ...) _EWL_CANT_THROW;
+#if defined(__STDC_WANT_LIB_EXT1__) && __STDC_WANT_LIB_EXT1__
+	_EWL_IMP_EXP_C int _EWL_CDECL printf_s(const char * _EWL_RESTRICT, ...) _EWL_CANT_THROW;
+#endif /* __STDC_WANT_LIB_EXT1__ */
+#endif /* __dest_os == __n64_os */
+#endif /* _EWL_CONSOLE_SUPPORT */
+
+#ifdef __cplusplus
+
+#if _EWL_THREADSAFE || defined(_AEABI_PORTABILITY_LEVEL) && (_AEABI_PORTABILITY_LEVEL == 0)
+
+	_EWL_IMP_EXP_C int _EWL_CDECL		getc(FILE *);
+	_EWL_IMP_EXP_C int _EWL_CDECL		putc(int c, FILE *);
+
+	_EWL_END_EXTERN_C
+#else
+	_EWL_END_EXTERN_C
+
+	inline int _EWL_CDECL getc(FILE * file) _EWL_CANT_THROW
+		{ return __getc(file); }
+
+	inline int _EWL_CDECL putc(int c, FILE *file) _EWL_CANT_THROW
+		{ return __putc(c, file); }
+#endif /* _EWL_THREADSAFE */
+
+	inline int _EWL_CDECL getchar() _EWL_CANT_THROW
+		{ return getc(stdin); }
+
+	inline int _EWL_CDECL putchar(int c) _EWL_CANT_THROW
+		{ return putc(c, stdout); }
+
+#if !defined(_AEABI_PORTABILITY_LEVEL) || (_AEABI_PORTABILITY_LEVEL == 0)
+	inline int _EWL_CDECL feof(FILE * file) _EWL_CANT_THROW
+		{ return file->state.eof; }
+
+	inline int _EWL_CDECL ferror(FILE * file) _EWL_CANT_THROW
+		{ return file->state.error; }
+#endif /* #if !defined(_AEABI_PORTABILITY_LEVEL) || == _AEABI_PORTABILITY_LEVEL == 0 */
+
+#else
+
+	_EWL_IMP_EXP_C int _EWL_CDECL		getc(FILE *);
+	_EWL_IMP_EXP_C int _EWL_CDECL		putc(int c, FILE *);
+
+#if !defined(_AEABI_PORTABILITY_LEVEL) || (_AEABI_PORTABILITY_LEVEL == 0)
+#if !_EWL_THREADSAFE
+	#define getc(file) __getc(file)
+	#define putc(c, file) __putc(c, file)
+#endif /* _EWL_THREADSAFE */
+#endif /* #if !defined(_AEABI_PORTABILITY_LEVEL) || == _AEABI_PORTABILITY_LEVEL == 0 */
+
+	_EWL_IMP_EXP_C int _EWL_CDECL		getchar(void);
+	_EWL_IMP_EXP_C int _EWL_CDECL		putchar(int c);
+
+    #define getchar()					__std(getc)(stdin)
+    #define putchar(c)					__std(putc)(c, stdout)
+
+	_EWL_IMP_EXP_C int _EWL_CDECL		feof  (FILE *);
+	_EWL_IMP_EXP_C int _EWL_CDECL		ferror(FILE *);
+
+#if !defined(_AEABI_PORTABILITY_LEVEL) || (_AEABI_PORTABILITY_LEVEL == 0)
+	#define feof(file)					((file)->state.eof)
+	#define ferror(file)				((file)->state.error)
+#endif /* #if !defined(_AEABI_PORTABILITY_LEVEL) || == _AEABI_PORTABILITY_LEVEL == 0 */
+
+#endif /* __cplusplus */
+
+_EWL_END_NAMESPACE_STD
+
+#pragma options align=reset
+
+#if defined(_EWL_EXPORT_CNAMES) && defined(__cplusplus) && defined(_EWL_USING_NAMESPACE)
+#include <stdio.h>
+#endif /*  defined(_EWL_EXPORT_CNAMES) && defined(__cplusplus) && defined(_EWL_USING_NAMESPACE) */
+
+#endif /* _EWL_USING_MW_C_HEADERS */
+
+#endif /* _EWL_CSTDIO */

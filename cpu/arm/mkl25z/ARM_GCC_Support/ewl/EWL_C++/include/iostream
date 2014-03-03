@@ -1,0 +1,36 @@
+/* EWL
+ * Copyright © 1995-2009 Freescale Corporation.  All rights reserved.
+ *
+ * $Date: 2009/05/14 17:13:34 $
+ * $Revision: 1.1 $
+ */
+
+#ifndef _IOSTREAM
+#define _IOSTREAM
+
+/*  iostream synopsys
+
+namespace std
+{
+extern istream cin;
+extern ostream cout;
+extern ostream cerr;
+extern ostream clog;
+
+extern wistream wcin;
+extern wostream wcout;
+extern wostream wcerr;
+extern wostream wclog;
+}  // std
+*/
+
+#include <ewlconfig>
+
+#ifndef _EWL_NO_IO
+
+#include <niostream>
+#include <wiostream>
+
+#endif // _EWL_NO_IO
+
+#endif  // _IOSTREAM

@@ -1,0 +1,175 @@
+/* EWL
+ * Copyright © 1995-2009 Freescale Corporation.  All rights reserved.
+ *
+ * $Date: 2009/05/14 17:13:37 $
+ * $Revision: 1.1 $
+ */
+
+#ifndef _NEW
+#define _NEW
+
+#ifdef __CWCC__
+#pragma warn_undefmacro off
+#endif
+
+/*  new synopsis
+
+namespace std
+{
+
+class bad_alloc
+	: public exception
+{
+public:
+	bad_alloc() throw();
+	bad_alloc(const bad_alloc&) throw();
+	bad_alloc& operator=(const bad_alloc&) throw();
+	virtual ~bad_alloc() throw();
+	virtual const char* what() const throw();
+};
+
+struct nothrow_t {};
+extern const nothrow_t nothrow;
+
+typedef void (*new_handler)();
+new_handler set_new_handler(new_handler new_p) throw();
+
+}  // std
+
+void* operator new(std::size_t size) throw(std::bad_alloc);
+void* operator new(std::size_t size, const std::nothrow_t&) throw();
+
+void  operator delete(void* ptr) throw();
+void  operator delete(void* ptr, const std::nothrow_t&) throw();
+
+void* operator new[](std::size_t size) throw(std::bad_alloc);
+void* operator new[](std::size_t size, const std::nothrow_t&) throw();
+
+void  operator delete[](void* ptr) throw();
+void  operator delete[](void* ptr, const std::nothrow_t&) throw();
+
+void* operator new  (std::size_t size, void* ptr) throw();
+void* operator new[](std::size_t size, void* ptr) throw();
+
+void  operator delete  (void* ptr, void*) throw();
+void  operator delete[](void* ptr, void*) throw();
+
+*/
+
+#include <ewlconfig>
+#include <cstddef>
+#include <exception> 
+
+#ifdef __CWCC__
+#pragma options align=native
+#endif
+
+#ifdef _EWL_FORCE_ENUMS_ALWAYS_INT
+	#if _EWL_FORCE_ENUMS_ALWAYS_INT
+		#pragma enumsalwaysint on
+	#else
+		#pragma enumsalwaysint off
+	#endif
+#endif  // _EWL_FORCE_ENUMS_ALWAYS_INT
+
+#ifdef _EWL_FORCE_ENABLE_BOOL_SUPPORT
+	#if _EWL_FORCE_ENABLE_BOOL_SUPPORT
+		#pragma bool on
+	#else
+		#pragma bool off
+	#endif
+#endif  // _EWL_FORCE_ENABLE_BOOL_SUPPORT
+
+#ifndef _EWL_NO_CPP_NAMESPACE  // MW-mm 960213b
+	namespace std {
+#endif
+
+	class bad_alloc : public exception {  // hh 971226 rewrite
+	public:
+		bad_alloc () _EWL_NO_THROW {}
+		bad_alloc (const bad_alloc&) _EWL_NO_THROW {}
+		bad_alloc& operator= (const bad_alloc&) _EWL_NO_THROW {return *this;}
+		virtual ~bad_alloc () _EWL_NO_THROW {};
+		virtual const char* what () const _EWL_NO_THROW {return "bad_alloc";}
+	};
+
+	struct nothrow_t {};                           //970415 bkoz
+	extern _EWL_IMP_EXP_RUNTIME nothrow_t nothrow; //990405 blc
+
+	typedef void (*new_handler)();
+
+	_EWL_IMP_EXP_RUNTIME new_handler set_new_handler(new_handler new_p) _EWL_NO_THROW;
+
+#ifndef _EWL_NO_CPP_NAMESPACE // MW-mm 960213b
+	} // namespace std
+#endif
+
+#if __INTEL__ && __dest_os == __win32_os
+// EJS: the compiler generates calls to these functions directly;
+// we must ensure they can be found with any options
+#pragma calling_convention(__cdecl)
+#endif  // __INTEL__ && __dest_os == __win32_os
+
+#ifndef _EWL_NO_THROW_SPECS
+	_EWL_IMP_EXP_RUNTIME void* operator new(_CSTD::size_t size) throw(_STD::bad_alloc);
+#else
+	_EWL_IMP_EXP_RUNTIME void* operator new(_CSTD::size_t size);
+#endif
+_EWL_IMP_EXP_RUNTIME void* operator new(_CSTD::size_t size, const _STD::nothrow_t&) _EWL_NO_THROW;
+inline void* operator new(_CSTD::size_t, void* ptr) _EWL_NO_THROW {return ptr;}
+_EWL_IMP_EXP_RUNTIME void  operator delete(void* ptr) _EWL_NO_THROW;
+#if __CWCC__ >= 0x2020 || defined (__GNUC__)
+	#if __CWCC__ >= 0x2400
+	_EWL_IMP_EXP_RUNTIME void  operator delete(void* ptr, const _STD::nothrow_t&) _EWL_NO_THROW;
+	inline void  operator delete  (void*, void*) _EWL_NO_THROW {}
+	#endif  // __CWCC__ >= 0x2400
+	#ifndef _EWL_NO_THROW_SPECS
+		_EWL_IMP_EXP_RUNTIME void* operator new[](_CSTD::size_t size) throw(_STD::bad_alloc);
+	#else
+		_EWL_IMP_EXP_RUNTIME void* operator new[](_CSTD::size_t size);
+	#endif
+	_EWL_IMP_EXP_RUNTIME void* operator new[](_CSTD::size_t size, const _STD::nothrow_t&) _EWL_NO_THROW;
+	inline void* operator new[](_CSTD::size_t, void* ptr) _EWL_NO_THROW {return ptr;}
+	_EWL_IMP_EXP_RUNTIME void  operator delete[](void* ptr) _EWL_NO_THROW;
+	#if __CWCC__ >= 0x2400
+	_EWL_IMP_EXP_RUNTIME void  operator delete[](void* ptr, const _STD::nothrow_t&) _EWL_NO_THROW;
+	inline void  operator delete[](void*, void*) _EWL_NO_THROW {}
+	#endif  // __CWCC__ >= 0x2400
+#endif  // __CWCC__ >= 0x2020 || defined (__GNUC__)
+
+#if __INTEL__ && __dest_os == __win32_os
+#pragma calling_convention(reset)
+#endif
+
+#ifndef _EWL_NO_CPP_NAMESPACE   // hh 971206  put this stuff in std::
+	namespace std {
+#endif
+
+//	non-standard functions
+extern char __throws_bad_alloc;
+extern void __throw_bad_alloc();
+extern void _set_newpoolsize(size_t);       //  default: 0x00010000L
+extern void _set_newnonptrmax(size_t);      //  default: 0x00001000L
+extern char _prealloc_newpool(size_t);      //  preallocte a new buffer
+
+#ifndef _EWL_NO_CPP_NAMESPACE
+	}
+#endif
+
+#ifdef _EWL_FORCE_ENUMS_ALWAYS_INT
+	#pragma enumsalwaysint reset
+#endif
+
+#ifdef _EWL_FORCE_ENABLE_BOOL_SUPPORT
+	#pragma bool reset
+#endif
+
+#ifdef __CWCC__
+#pragma options align=reset
+#endif
+
+#ifdef __CWCC__
+#pragma warn_undefmacro reset
+#endif
+
+#endif // _NEW

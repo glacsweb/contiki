@@ -1,0 +1,138 @@
+#
+# Makefile.RVDS.ARMv7M - This target only runs in Thumb(2) mode
+#
+# Make libraries using RVDS tools (requires mods to all assembly
+# files). Mods should be compatible with CW tools with -ads flag
+# when Thumb2 assembly is supported. 
+#
+# .asm file is pre-processed into a .asm2 file (in $OBJDATA_ROOT/$TARGET/asm2 dir)
+# and then assembled into a .o file (in $OBJDATA_ROOT/$TARGET/obj dir). Lib
+# is placed in ../lib
+#
+# JRusso - Oct 16, 2009
+# First version is based on B_MATHLIB_DS2.0 branch .s sources, changes are 
+# necessary to bring this up-to-date wrt to the mainline .s sources. But these
+# should do for now.
+#
+
+CC = armcc.exe
+AS = armasm.exe
+ARMAR = armar.exe 
+
+OBJDATA_ROOT = RVDS_ARMv7M_Data
+OBJOUT = obj
+A2OUT = asm2
+LIBSUFFIX = .a
+LIBOUT = ../../../lib
+
+SOURCES = _d_add.asm _d_sub.asm _d_mul.asm _d_neg.asm _d_dtof.asm \
+  _d_dtoq.asm _d_itod.asm _f_cmp.asm _f_ftod.asm \
+  _f_itof.asm _f_lltof.asm _f_neg.asm \
+  _ll_div.asm _ll_mul.asm _ll_sll.asm \
+  _ll_sra.asm _ull_srl.asm _s32_div.asm _s32_div_f.asm \
+  _u32_div.asm _u32_div_f.asm \
+  _f_ftoi.asm _f_ftoi_r.asm _f_ftou.asm _f_ftou_r.asm \
+  _d_dtoi.asm _d_dtoi_r.asm _d_dtou.asm _d_dtou_r.asm \
+  _f_ftoll.asm _f_ftoll_r.asm  _f_ftoull.asm _f_ftoull_r.asm \
+  _d_dtoll.asm _d_dtoll_r.asm  _d_dtoull.asm _d_dtoull_r.asm \
+  _d_sqrt.asm _f_sqrt.asm _f_rem.asm _d_rem.asm \
+  _f_rnd.asm _d_rnd.asm _f_mul.asm _f_add.asm _f_sub.asm \
+  _f_div.asm _d_div.asm _d_div_xm.asm _div32_common_f.asm ieee_status.asm \
+  memory_readwrite.asm _ll_cmp.asm _ll_lasr.asm \
+  memclr.asm memmove.asm memset.asm memcpy.asm
+
+  
+OBJECTS = $(SOURCES:%.asm=%.o)
+
+# Define EXPLICIT_FCMP for Nitro mathlibs to ensure compatibility with ARM2.0 compiler
+#
+XPREPFLAGS = -DUSING_ARMASM -DEXPLICIT_FCMP -DTHUMB 
+XASFLAGS = --thumb --cpu Cortex-M3 
+
+# ARMv7M, CortexM3 Libs
+#
+T24 = FP_flush0_Thumb_LE_v7M
+$(join $(T24),ASFLAGS) = $(XASFLAGS)
+$(join $(T24),EFLAGS) = -DIEEE_STD $(XPREPFLAGS)
+
+T25 = FP_flush0_Thumb_BE_v7M
+$(join $(T25),EFLAGS) = -DIEEE_STD -DBIG_ENDIAN $(XPREPFLAGS)
+$(join $(T25),ASFLAGS) =  --bigend $(XASFLAGS)
+
+T26 = FP_fastI_Thumb_LE_v7M
+$(join $(T26),EFLAGS) = $(XPREPFLAGS)
+$(join $(T26),ASFLAGS) =  $(XASFLAGS) 
+
+T27 = FP_fastI_Thumb_BE_v7M
+$(join $(T27),EFLAGS) = -DBIG_ENDIAN $(XPREPFLAGS)
+$(join $(T27),ASFLAGS) =  --bigend $(XASFLAGS)
+
+T28 = FP_fixedI_Thumb_LE_v7M
+$(join $(T28),EFLAGS) = -DIEEE_FIXED $(XPREPFLAGS) 
+$(join $(T28),ASFLAGS) = $(XASFLAGS) 
+
+T29 = FP_fixedI_Thumb_BE_v7M
+$(join $(T29),EFLAGS) = -DIEEE_FIXED -DBIG_ENDIAN $(XPREPFLAGS)
+$(join $(T29),ASFLAGS) = --bigend $(XASFLAGS) 
+
+T30 = FP_fullI_Thumb_LE_v7M
+$(join $(T30),EFLAGS) = -DIEEE_FULL $(XPREPFLAGS)
+$(join $(T30),ASFLAGS) = $(XASFLAGS) 
+
+T31 = FP_fullI_Thumb_BE_v7M
+$(join $(T31),EFLAGS) = -DIEEE_FULL $(XPREPFLAGS)
+$(join $(T31),ASFLAGS) = --bigend $(XASFLAGS)
+
+
+# Size libs
+#
+# TBD
+
+TARGETS = $(T24) $(T25) $(T26) $(T27) $(T28) $(T29) $(T30) $(T31)
+
+
+ALL_TARGETS = $(TARGETS)
+
+
+# Cancel implicit rules
+%.o : %.s
+
+
+BASEOBJECTS = $(basename $(OBJECTS))
+AOBJECTS = $(addprefix $(OBJDATA_ROOT)/$(TARGET)/$(OBJOUT)/, $(OBJECTS))
+A2SRCS = $(addprefix $(OBJDATA_ROOT)/$(TARGET)/$(A2OUT)/, $(addsuffix  .asm2,$(BASEOBJECTS)))
+
+TARGET_MAK = Makefile.RVDS.ARMv7M
+
+
+ifndef TARGET
+all : $(ALL_TARGETS)
+
+$(ALL_TARGETS) :
+	@echo "Making $@"
+	make -f $(TARGET_MAK) TARGET=$@
+endif
+
+
+
+
+$(LIBOUT)/$(TARGET)$(LIBSUFFIX) : $(AOBJECTS)
+	mkdir -p $(LIBOUT) 
+	$(ARMAR) -r $@ $(AOBJECTS)
+
+
+$(A2SRCS) : $(OBJDATA_ROOT)/$(TARGET)/$(A2OUT)/%.asm2 : %.asm ARMsfpe.pre.asm
+	mkdir -p $(OBJDATA_ROOT)/$(TARGET)/$(A2OUT)
+	$(CC) -E $($(TARGET)EFLAGS) "$<" -o $@
+
+$(AOBJECTS) : $(OBJDATA_ROOT)/$(TARGET)/$(OBJOUT)/%.o : $(OBJDATA_ROOT)/$(TARGET)/$(A2OUT)/%.asm2
+	mkdir -p $(OBJDATA_ROOT)/$(TARGET)/$(OBJOUT)
+	$(AS) $($(TARGET)ASFLAGS) -c -o $@ "$<"
+  	
+cleanobj:
+	@rm -f $(AOBJECTS) $(A2SRCS) 
+
+clean:
+	@rm -rf $(OBJDATA_ROOT) 
+	@rm -f $(LIBOUT)/FP_*.a
+

@@ -1,0 +1,23 @@
+ifndef TARGET
+all : $(ALL_TARGETS)
+
+$(ALL_TARGETS) :
+	@echo "Making $@"
+	@rm -f *.o
+	make -f $(TARGET_MAK) TARGET=$@
+endif
+
+
+lib/$(TARGET) : $(OBJECTS)
+	mkdir -p lib 
+	$(ARMAR) -library -nodefaults -o $@ $(OBJECTS)
+
+%.o: %.s
+	$(AS) $(ASFLAGS) -c -o $@ $^
+  	
+cleanobj:
+	@rm -f *.o
+clean:
+	@rm -f *.o
+	@rm -f lib/*.a
+

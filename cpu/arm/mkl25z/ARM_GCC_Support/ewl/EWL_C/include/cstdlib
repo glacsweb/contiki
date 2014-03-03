@@ -1,0 +1,286 @@
+/* EWL
+ * Copyright © 1995-2009 Freescale Corporation.  All rights reserved.
+ *
+ * $Date: 2010/07/02 13:31:40 $
+ * $Revision: 1.7 $
+ */
+
+#ifndef _EWL_CSTDLIB
+#define _EWL_CSTDLIB
+
+#ifdef __STARCORE__
+#pragma reject_floats off 
+#endif 
+
+#include <ansi_parms.h>
+
+#if !_EWL_USING_MW_C_HEADERS
+  #include <stdlib.h>
+
+  #if _EWL_PUT_THIRD_PARTY_C_IN_STD
+    #include <ewl_cpp_std_stdlib.h>
+  #endif
+#else
+
+#include <div_t.h>
+#include <null.h>
+#include <size_t.h>
+#include <ewl_lib_ext1.h>
+#include <ewl_rsize_t.h>
+
+#if _EWL_WIDE_CHAR
+  #include <wchar_t.h>
+#endif
+
+#if _EWL_NEEDS_EXTRAS
+  #include <extras_stdlib.h>
+#endif
+
+
+_EWL_BEGIN_NAMESPACE_STD
+_EWL_BEGIN_EXTERN_C
+
+#define RAND_MAX        32767
+
+#if defined(__STDC_WANT_LIB_EXT1__) && __STDC_WANT_LIB_EXT1__
+  #define RAND_MAX_S      32767
+#endif /* __STDC_WANT_LIB_EXT1__ */
+
+#if _AEABI_PORTABILITY_LEVEL
+
+  extern int __aeabi_MB_CUR_MAX(void);
+  #define _EWL_MB_CUR_MAX __aeabi_MB_CUR_MAX()
+
+  /* mandatory portatibility declaration C Library ABI for ARM architecture section 5.1.1 */
+  #define _AEABI_PORTABLE 1
+
+#endif /* _AEABI_PORTABILITY_LEVEL */
+
+#ifndef _EWL_MB_CUR_MAX
+  #define _EWL_MB_CUR_MAX 3
+#endif
+
+#define MB_CUR_MAX          _EWL_MB_CUR_MAX
+
+#define EXIT_SUCCESS      0
+#define EXIT_FAILURE      1
+
+#define _MAX_PATH        1024
+
+#if defined(__STDC_WANT_LIB_EXT1__) && __STDC_WANT_LIB_EXT1__
+  typedef void  (*constraint_handler_t)(const char * _EWL_RESTRICT, void * _EWL_RESTRICT, errno_t);
+
+  void _EWL_CDECL                  __ewl_runtime_constraint_violation_s(const char * _EWL_RESTRICT, void * _EWL_RESTRICT, errno_t) _EWL_CANT_THROW;
+
+  _EWL_IMP_EXP_C constraint_handler_t _EWL_CDECL  set_constraint_handler_s(constraint_handler_t) _EWL_CANT_THROW;
+  _EWL_IMP_EXP_C void _EWL_CDECL          abort_handler_s(const char * _EWL_RESTRICT, void * _EWL_RESTRICT, errno_t) _EWL_CANT_THROW;
+  _EWL_IMP_EXP_C void _EWL_CDECL          ignore_handler_s(const char * _EWL_RESTRICT, void * _EWL_RESTRICT, errno_t) _EWL_CANT_THROW;
+  _EWL_IMP_EXP_C void _EWL_CDECL          strict_handler_s(const char * _EWL_RESTRICT, void * _EWL_RESTRICT, errno_t) _EWL_CANT_THROW;
+#endif /* __STDC_WANT_LIB_EXT1__ */
+
+#if _EWL_FLOATING_POINT
+  _EWL_IMP_EXP_C double _EWL_CDECL        atof(const char *) _EWL_CANT_THROW;
+  _EWL_IMP_EXP_C double _EWL_CDECL        strtod(const char * _EWL_RESTRICT, char ** _EWL_RESTRICT) _EWL_CANT_THROW;
+  _EWL_IMP_EXP_C long double _EWL_CDECL      strtold(const char * _EWL_RESTRICT, char ** _EWL_RESTRICT) _EWL_CANT_THROW;
+#if _EWL_C99
+  _EWL_IMP_EXP_C float _EWL_CDECL          strtof(const char * _EWL_RESTRICT, char ** _EWL_RESTRICT) _EWL_CANT_THROW;
+#endif /* _EWL_C99 */
+#endif /* _EWL_FLOATING_POINT */
+
+_EWL_IMP_EXP_C int _EWL_CDECL            atoi(const char *) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C long  _EWL_CDECL            atol(const char *) _EWL_CANT_THROW;
+
+#if _EWL_LONGLONG
+_EWL_IMP_EXP_C long  long _EWL_CDECL          atoll(const char *) _EWL_CANT_THROW;
+#endif /* _EWL_LONGLONG */
+
+_EWL_IMP_EXP_C long  _EWL_CDECL            strtol(const char * _EWL_RESTRICT, char ** _EWL_RESTRICT, int) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C unsigned long _EWL_CDECL        strtoul(const char * _EWL_RESTRICT, char ** _EWL_RESTRICT, int) _EWL_CANT_THROW;
+
+#if _EWL_LONGLONG
+  _EWL_IMP_EXP_C long long _EWL_CDECL        strtoll(const char * _EWL_RESTRICT, char ** _EWL_RESTRICT, int) _EWL_CANT_THROW;
+  _EWL_IMP_EXP_C unsigned long long _EWL_CDECL  strtoull(const char * _EWL_RESTRICT, char ** _EWL_RESTRICT, int) _EWL_CANT_THROW;
+#endif /* _EWL_LONGLONG */
+
+_EWL_IMP_EXP_C int _EWL_CDECL            rand(void) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C void _EWL_CDECL            srand(unsigned int) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C void * _EWL_CDECL          calloc(size_t , size_t) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C void _EWL_CDECL            free(void *) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C void * _EWL_CDECL          malloc(size_t) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C void * _EWL_CDECL          realloc(void *, size_t) _EWL_CANT_THROW;
+#if !_EMBEDDED_WARRIOR_MALLOC
+_EWL_IMP_EXP_C size_t _EWL_CDECL          __msize(void *) _EWL_CANT_THROW;
+#endif /* _EMBEDDED_WARRIOR_MALLOC */
+
+#if !_EMBEDDED_WARRIOR_MALLOC && !_EWL_CLASSIC_MALLOC
+
+#ifndef _EWL_ALLOCATE_SIZE
+  #define _EWL_ALLOCATE_SIZE __allocate_size
+#endif
+
+#ifndef _EWL_ALLOCATE
+  #define _EWL_ALLOCATE __allocate
+#endif
+
+#ifndef _EWL_ALLOCATE_RESIZE
+  #define _EWL_ALLOCATE_RESIZE __allocate_resize
+#endif
+
+#ifndef _EWL_ALLOCATE_EXPAND
+  #define _EWL_ALLOCATE_EXPAND __allocate_expand
+#endif
+
+_EWL_IMP_EXP_C size_t _EWL_CDECL _EWL_ALLOCATE_SIZE(void*) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C void* _EWL_CDECL _EWL_ALLOCATE(size_t, size_t*) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C int _EWL_CDECL _EWL_ALLOCATE_RESIZE(void*, size_t, size_t*) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C int _EWL_CDECL _EWL_ALLOCATE_EXPAND(void*, size_t, size_t, size_t*) _EWL_CANT_THROW;
+
+#endif /* !_EMBEDDED_WARRIOR_MALLOC && !_EWL_CLASSIC_MALLOC */
+
+#ifdef __VEC__
+  /* AltiVec memory-related routines which 16-byte align the blocks. */
+  _EWL_IMP_EXP_C void * _EWL_CDECL  vec_calloc(size_t, size_t) _EWL_CANT_THROW;
+  _EWL_IMP_EXP_C void    _EWL_CDECL  vec_free(void *) _EWL_CANT_THROW;
+  _EWL_IMP_EXP_C void * _EWL_CDECL  vec_malloc(size_t) _EWL_CANT_THROW;
+  _EWL_IMP_EXP_C void * _EWL_CDECL  vec_realloc(void *, size_t) _EWL_CANT_THROW;
+
+  #if _EWL_USE_INLINE && _EWL_MALLOC_IS_ALTIVEC_ALIGNED
+    _EWL_INLINE void * _EWL_CDECL  vec_calloc(size_t _nmemb, size_t _size) _EWL_CANT_THROW { return calloc(_nmemb, _size); }
+    _EWL_INLINE void _EWL_CDECL    vec_free(void* _ptr) _EWL_CANT_THROW { free(_ptr); }
+    _EWL_INLINE void * _EWL_CDECL   vec_malloc(size_t _size) _EWL_CANT_THROW { return malloc(_size); }
+    _EWL_INLINE void * _EWL_CDECL   vec_realloc(void* _ptr, size_t _size) _EWL_CANT_THROW { return realloc(_ptr, _size); }
+  #endif /* _EWL_USE_INLINE && _EWL_MALLOC_IS_ALTIVEC_ALIGNED */
+#endif /* __VEC__ */
+
+  _EWL_IMP_EXP_C void _EWL_CDECL    abort(void) _EWL_CANT_THROW;
+  _EWL_IMP_EXP_C int  _EWL_CDECL    atexit(void (_EWL_CDECL *func)(void)) _EWL_CANT_THROW;
+  _EWL_IMP_EXP_C void _EWL_CDECL    exit(int);
+
+#if _EWL_C99
+  _EWL_IMP_EXP_C void _EWL_CDECL    _Exit(int) _EWL_CANT_THROW;
+#endif /* _EWL_C99 */
+
+#if defined(__cplusplus) && __CWCC__ >= 0x4200
+   #if __option(ANSI_strict)
+    extern "C" typedef void (_EWL_CDECL *__C_ATEXIT_FUNCTION_POINTER)(void);
+    extern "C++" inline int atexit(void (_EWL_CDECL *func)(void)) _EWL_CANT_THROW
+    {  /*  this code assumes that there is no difference between an */
+      /*  'extern "C" void f(void)' and an 'extern "C++" void f(void)' function pointer call. */
+      return atexit(reinterpret_cast<__C_ATEXIT_FUNCTION_POINTER>(func));
+    }
+   #endif
+#endif  /* defined(__cplusplus) && __CWCC__ >= 0x4200 */
+
+_EWL_IMP_EXP_C char * _EWL_CDECL	getenv(const char *) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C int _EWL_CDECL		system(const char *) _EWL_CANT_THROW;
+
+typedef int (*_compare_function)(const void*, const void*);
+
+_EWL_IMP_EXP_C void * _EWL_CDECL	bsearch(const void *, const void *, size_t, size_t, _compare_function);
+_EWL_IMP_EXP_C void _EWL_CDECL		qsort(void *, size_t, size_t, _compare_function);
+#if defined(__cplusplus) && __CWCC__ >= 0x4200
+	#if __option(ANSI_strict)
+		extern "C" typedef int (*_Ccompare_function)(const void*, const void*);
+		extern "C++" inline void *bsearch(const void *__a, const void *__b, size_t __c, size_t __d, int (*__e)(const void*, const void*))
+		{	/*  this code assumes that there is no difference between an */
+			/*  'extern "C" and an 'extern "C++" function pointer call. */
+			return bsearch(__a, __b, __c, __d, reinterpret_cast<_Ccompare_function>(__e));
+		}
+		extern "C++" inline void qsort(void *__a, size_t __b, size_t __c,  int (*__d)(const void*, const void*))
+		{	/*  this code assumes that there is no difference between an */
+			/*  'extern "C" and an 'extern "C++" function pointer call. */
+			qsort(__a, __b, __c, reinterpret_cast<_Ccompare_function>(__d));
+		}
+	#endif
+#endif  /* defined(__cplusplus) && __CWCC__ >= 0x4200 */
+
+#if defined(__STDC_WANT_LIB_EXT1__) && __STDC_WANT_LIB_EXT1__
+  _EWL_IMP_EXP_C errno_t _EWL_CDECL        getenv_s(size_t * _EWL_RESTRICT, char * _EWL_RESTRICT, rsize_t, const char * _EWL_RESTRICT) _EWL_CANT_THROW;
+
+  typedef int (*_compare_function_s)(const void*, const void*, void*);
+
+  _EWL_IMP_EXP_C void * _EWL_CDECL	bsearch_s(const void *, const void *, rsize_t, rsize_t, _compare_function_s, void *);
+  _EWL_IMP_EXP_C void _EWL_CDECL	qsort_s(void *, rsize_t, rsize_t, _compare_function_s, void *);
+
+  #if _EWL_WIDE_CHAR
+    _EWL_IMP_EXP_C int _EWL_CDECL        wctomb_s(int * _EWL_RESTRICT, char * _EWL_RESTRICT, rsize_t, wchar_t) _EWL_CANT_THROW;
+    _EWL_IMP_EXP_C errno_t _EWL_CDECL      wcstombs_s(size_t * _EWL_RESTRICT, char * _EWL_RESTRICT, rsize_t, const wchar_t * _EWL_RESTRICT, rsize_t) _EWL_CANT_THROW;
+    _EWL_IMP_EXP_C errno_t _EWL_CDECL      mbstowcs_s(size_t * _EWL_RESTRICT, wchar_t * _EWL_RESTRICT, rsize_t, const char * _EWL_RESTRICT, rsize_t) _EWL_CANT_THROW;
+  #endif /* _EWL_WIDE_CHAR */
+#endif /* __STDC_WANT_LIB_EXT1__ */
+
+_EWL_IMP_EXP_C int _EWL_CDECL            abs(int) _EWL_CANT_THROW;
+
+_EWL_IMP_EXP_C long  _EWL_CDECL            labs(long) _EWL_CANT_THROW;
+
+#if _EWL_LONGLONG
+#if (_EWL_C99 || defined( __cplusplus))
+  _EWL_IMP_EXP_C long long _EWL_CDECL        llabs(long long) _EWL_CANT_THROW;
+#endif /* _EWL_C99 */
+#endif /* _EWL_LONGLONG */
+
+#ifdef __POWERPC__
+
+  #ifndef __cplusplus
+    #if !__MOTO__ && !__MRC__
+      #define abs(n)  __abs(n)
+      #define labs(n)  __labs(n)
+    #endif
+  #endif
+
+#endif /* __POWERPC__ */
+
+_EWL_IMP_EXP_C div_t _EWL_CDECL            div(int,int) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C ldiv_t _EWL_CDECL          ldiv(long,long) _EWL_CANT_THROW;
+
+#if _EWL_LONGLONG
+#if (_EWL_C99 || defined(__cplusplus))
+  _EWL_IMP_EXP_C lldiv_t _EWL_CDECL        lldiv(long long,long long) _EWL_CANT_THROW;
+#endif /* _EWL_C99 */
+#endif /* _EWL_LONGLONG */
+
+#ifdef __cplusplus
+  _EWL_END_EXTERN_C
+
+  extern "C++" {
+
+    inline long _EWL_CDECL abs(long n) _EWL_CANT_THROW
+      {return labs(n);}
+    inline ldiv_t _EWL_CDECL div(long numerator, long denominator) _EWL_CANT_THROW
+      {return ldiv(numerator, denominator);}
+
+    #if _EWL_LONGLONG && ! _EWL_C99
+      inline long long _EWL_CDECL abs(long long n) _EWL_CANT_THROW
+        {return llabs(n);}
+      inline lldiv_t _EWL_CDECL div(long long numerator, long long denominator) _EWL_CANT_THROW
+        {return lldiv(numerator, denominator);}
+    #endif /*_EWL_LONGLONG*/
+
+  } /* extern "C" */
+
+  _EWL_BEGIN_EXTERN_C
+#endif /* __cplusplus */
+
+
+#if _EWL_WIDE_CHAR
+  _EWL_IMP_EXP_C int _EWL_CDECL          mblen(const char *, size_t) _EWL_CANT_THROW;
+   _EWL_IMP_EXP_C int _EWL_CDECL          mbtowc(wchar_t * _EWL_RESTRICT, const char * _EWL_RESTRICT, size_t) _EWL_CANT_THROW;
+  _EWL_IMP_EXP_C int _EWL_CDECL          wctomb(char *, wchar_t) _EWL_CANT_THROW;
+  _EWL_IMP_EXP_C size_t _EWL_CDECL          mbstowcs(wchar_t * _EWL_RESTRICT, const char * _EWL_RESTRICT, size_t) _EWL_CANT_THROW;
+  _EWL_IMP_EXP_C size_t _EWL_CDECL           wcstombs(char * _EWL_RESTRICT, const wchar_t * _EWL_RESTRICT, size_t) _EWL_CANT_THROW;
+#endif /* _EWL_WIDE_CHAR */
+
+_EWL_END_EXTERN_C
+_EWL_END_NAMESPACE_STD
+
+#if defined(_EWL_EXPORT_CNAMES) && defined(__cplusplus) && defined(_EWL_USING_NAMESPACE)
+#include <stdlib.h>
+#endif /*  defined(_EWL_EXPORT_CNAMES) && defined(__cplusplus) && defined(_EWL_USING_NAMESPACE) */
+
+#endif /* _EWL_USING_MW_C_HEADERS || __PALMOS_TRAPS__ */
+
+#ifdef __STARCORE__
+#pragma reject_floats reset
+#endif 
+
+#endif /* _EWL_CSTDLIB */

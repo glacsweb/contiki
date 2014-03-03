@@ -1,0 +1,93 @@
+/* EWL
+ * Copyright © 1995-2009 Freescale Corporation.  All rights reserved.
+ *
+ * $Date: 2010/03/25 12:37:52 $
+ * $Revision: 1.3 $
+ */
+
+#ifndef _EWL_CSIGNAL
+#define _EWL_CSIGNAL
+
+#include <ansi_parms.h>
+
+#if !_EWL_USING_MW_C_HEADERS
+	#include <signal.h>
+
+	#if _EWL_PUT_THIRD_PARTY_C_IN_STD
+		#include <ewl_cpp_std_signal.h>
+	#endif
+#else
+
+#if _AEABI_PORTABILITY_LEVEL
+	#include <arm/csignal_aeabi>
+#endif
+
+#if __dest_os == __starcore
+
+#include <sc/csignal_StarCore.h>
+
+#else
+
+_EWL_BEGIN_NAMESPACE_STD
+_EWL_BEGIN_EXTERN_C
+
+	typedef int sig_atomic_t;
+	typedef void (*__signal_func_ptr)(int);
+
+	_EWL_IMP_EXP_C __signal_func_ptr _EWL_CDECL	signal(int, __signal_func_ptr) _EWL_CANT_THROW;
+	_EWL_IMP_EXP_C int _EWL_CDECL raise(int) _EWL_CANT_THROW;
+
+	#ifndef SIG_DFL
+		#define SIG_DFL	((__std(__signal_func_ptr)) 0)
+	#endif
+
+	#ifndef SIG_IGN
+		#define SIG_IGN	((__std(__signal_func_ptr)) 1)
+	#endif
+
+	#ifndef SIG_ERR
+		#define SIG_ERR	((__std(__signal_func_ptr)) -1)
+	#endif
+
+_EWL_END_EXTERN_C
+_EWL_END_NAMESPACE_STD
+
+#ifndef SIGABRT
+#define SIGABRT		1
+#endif
+
+#ifndef SIGFPE
+#define SIGFPE		2
+#endif
+
+#ifndef SIGILL
+#define SIGILL		3
+#endif
+
+#ifndef SIGINT
+#define SIGINT		4
+#endif
+
+#ifndef SIGSEGV
+#define SIGSEGV		5
+#endif
+
+#ifndef SIGTERM
+#define SIGTERM		6
+#endif
+
+#ifndef SIGBREAK
+#define SIGBREAK	7
+#endif
+
+#define __ewl_signal_max 7
+
+#endif /* dest_os */
+
+#if defined(_EWL_EXPORT_CNAMES) && defined(__cplusplus) && defined(_EWL_USING_NAMESPACE)
+#include <signal.h>
+#endif /*  defined(_EWL_EXPORT_CNAMES) && defined(__cplusplus) && defined(_EWL_USING_NAMESPACE) */
+
+#endif /* _EWL_USING_MW_C_HEADERS */
+
+#endif /* _EWL_CSIGNAL */

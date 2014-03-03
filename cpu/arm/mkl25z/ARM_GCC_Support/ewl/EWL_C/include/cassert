@@ -1,0 +1,59 @@
+/* EWL
+ * Copyright © 1995-2009 Freescale Corporation.  All rights reserved.
+ *
+ * $Date: 2010/03/25 12:37:51 $
+ * $Revision: 1.3 $
+ */
+
+#ifndef _EWL_CASSERT
+#define _EWL_CASSERT
+
+#ifdef __CWCC__
+	#if __CWCC__ >= 0x3000
+		#pragma notonce
+	#endif /* __CWCC__ >= 0x3000 */
+#endif /* __CWCC__ */
+
+#include <ansi_parms.h>
+
+#if !_EWL_USING_MW_C_HEADERS
+	#include <assert.h>
+#elif _AEABI_PORTABILITY_LEVEL
+	#include <arm/cassert_aeabi>
+#else
+
+#ifdef assert
+	#undef assert
+#endif
+
+#ifdef NDEBUG
+	#define assert(ignore) ((void) 0)
+#else
+	#include <assert_api.h>
+
+	#if (__dest_os == __win32_os) && defined(UNICODE)
+		#define __T(x)      L ## x
+	#endif
+
+	#if _EWL_ASSERT_DISPLAYS_FUNC
+		#if (__dest_os == __win32_os) && defined(UNICODE)
+			#define assert(condition) ((condition) ? ((void) 0) : __ewl_wchar_assertion_failed(__T(#condition), __FILE__, __func__, __LINE__))
+		#else
+			#define assert(condition) ((condition) ? ((void) 0) : __ewl_assertion_failed(#condition, __FILE__, __func__, __LINE__))
+		#endif /* UNICODE */
+	#else
+		#if (__dest_os == __win32_os) && defined(UNICODE)
+			#define assert(condition) ((condition) ? ((void) 0) : __ewl_wchar_assertion_failed(__T(#condition), __FILE__, 0, __LINE__))
+		#else
+			#define assert(condition) ((condition) ? ((void) 0) : __ewl_assertion_failed(#condition, __FILE__, 0, __LINE__))
+		#endif /* UNICODE */
+	#endif /* _EWL_ASSERT_DISPLAYS_FUNC */
+#endif /* def NDEBUG */
+
+#if defined(_EWL_EXPORT_CNAMES) && defined(__cplusplus) && defined(_EWL_USING_NAMESPACE)
+#include <assert.h>
+#endif /*  defined(_EWL_EXPORT_CNAMES) && defined(__cplusplus) && defined(_EWL_USING_NAMESPACE) */
+
+#endif /* _EWL_USING_MW_C_HEADERS */
+
+#endif /* _EWL_CASSERT */

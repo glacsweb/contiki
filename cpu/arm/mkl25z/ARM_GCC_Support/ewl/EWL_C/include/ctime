@@ -1,0 +1,139 @@
+/* EWL
+ * Copyright © 1995-2009 Freescale Corporation.  All rights reserved.
+ *
+ * $Date: 2010/03/25 12:37:52 $
+ * $Revision: 1.5 $
+ */
+
+#ifndef _EWL_CTIME
+#define _EWL_CTIME
+
+#ifdef __STARCORE__
+#pragma reject_floats off 
+#endif 
+
+#include <ansi_parms.h>
+
+#if !_EWL_USING_MW_C_HEADERS
+	#include <time.h>
+
+	#if _EWL_PUT_THIRD_PARTY_C_IN_STD
+		#include <ewl_cpp_std_time.h>
+	#endif
+
+#else
+
+#include <null.h>
+#include <size_t.h>
+#include <ewl_lib_ext1.h>
+#include <ewl_rsize_t.h>
+
+#if (__dest_os == __win32_os || __dest_os == __wince_os)
+	#include <x86/time.win32.h>
+#elif defined(__m56800__) || defined(__m56800E__)
+	#include <time.56800.h>
+#elif __dest_os == __ppc_eabi && _EWL_OS_TIME_SUPPORT
+	#include <time.PPCEABI.h>
+#elif (__dest_os == __n64_os)
+	#include <time.n64.h>
+#elif (__dest_os == __dolphin_os)
+	#include <time.dolphin.h>
+#elif _AEABI_PORTABILITY_LEVEL
+	#include <arm/ctime_aeabi>
+#endif
+
+#pragma options align=native
+
+_EWL_BEGIN_NAMESPACE_STD
+_EWL_BEGIN_EXTERN_C
+
+
+#if _EWL_CLOCK_T_AVAILABLE
+	#ifndef _EWL_CLOCKS_PER_SEC
+		#define _EWL_CLOCKS_PER_SEC 60
+	#endif
+
+	#ifndef _EWL_CLOCK_T
+		#define _EWL_CLOCK_T unsigned long
+	#endif
+
+	#define CLOCKS_PER_SEC _EWL_CLOCKS_PER_SEC
+
+	#ifndef  _EWL_CLOCK_T_DEFINED
+		typedef _EWL_CLOCK_T clock_t;
+		#define _EWL_CLOCK_T_DEFINED
+	#endif
+#endif /* _EWL_CLOCK_T_AVAILABLE */
+
+#if _EWL_TIME_T_AVAILABLE
+
+	#ifndef _EWL_TIME_T
+		#define _EWL_TIME_T long
+	#endif
+
+	#ifndef _EWL_TIME_T_DEFINED
+		typedef _EWL_TIME_T time_t;
+		#define _EWL_TIME_T_DEFINED
+	#endif
+#endif /* _EWL_TIME_T_AVAILABLE */
+
+#if _EWL_TM_STRUCT_AVAILABLE
+	struct tm
+	{
+		int	tm_sec;
+		int	tm_min;
+		int	tm_hour;
+		int	tm_mday;
+		int	tm_mon;
+		int	tm_year;
+		int	tm_wday;
+		int	tm_yday;
+		int	tm_isdst;
+	};
+#endif /* _EWL_TM_STRUCT_AVAILABLE */
+
+#if _EWL_OS_TIME_SUPPORT
+
+_EWL_IMP_EXP_C clock_t _EWL_CDECL 		clock(void) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C time_t _EWL_CDECL		time(time_t *) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C struct tm * _EWL_CDECL	gmtime(const time_t *) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C time_t _EWL_CDECL		mktime(struct tm *) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C char * _EWL_CDECL		asctime(const struct tm *) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C char * _EWL_CDECL		ctime(const time_t *) _EWL_CANT_THROW;
+_EWL_IMP_EXP_C struct tm * _EWL_CDECL	localtime(const time_t *) _EWL_CANT_THROW;
+
+#if defined(__STDC_WANT_LIB_EXT1__) && __STDC_WANT_LIB_EXT1__
+	_EWL_IMP_EXP_C errno_t _EWL_CDECL		asctime_s(char *, rsize_t, const struct tm *) _EWL_CANT_THROW;
+	_EWL_IMP_EXP_C errno_t _EWL_CDECL		ctime_s(char *, rsize_t, const time_t *) _EWL_CANT_THROW;
+	_EWL_IMP_EXP_C struct tm * _EWL_CDECL	gmtime_s(const time_t * _EWL_RESTRICT, struct tm * _EWL_RESTRICT) _EWL_CANT_THROW;
+	_EWL_IMP_EXP_C struct tm * _EWL_CDECL	localtime_s(const time_t * _EWL_RESTRICT, struct tm * _EWL_RESTRICT) _EWL_CANT_THROW;
+#endif /* __STDC_WANT_LIB_EXT1__ */
+
+_EWL_IMP_EXP_C size_t _EWL_CDECL		strftime(char * _EWL_RESTRICT, size_t, const char * _EWL_RESTRICT, const struct tm * _EWL_RESTRICT) _EWL_CANT_THROW;
+
+#endif /* _EWL_OS_TIME_SUPPORT */
+
+#if _EWL_FLOATING_POINT && _EWL_TIME_T_AVAILABLE
+	_EWL_IMP_EXP_C double _EWL_CDECL	difftime(time_t, time_t) _EWL_CANT_THROW;
+#endif /* _EWL_FLOATING_POINT */
+
+_EWL_END_EXTERN_C
+_EWL_END_NAMESPACE_STD
+
+#pragma options align=reset
+
+#if _EWL_NEEDS_EXTRAS
+	#include <extras_time.h>
+#endif
+
+#if defined(_EWL_EXPORT_CNAMES) && defined(__cplusplus) && defined(_EWL_USING_NAMESPACE)
+#include <time.h>
+#endif /*  defined(_EWL_EXPORT_CNAMES) && defined(__cplusplus) && defined(_EWL_USING_NAMESPACE) */
+
+#endif /* _EWL_USING_MW_C_HEADERS */
+
+#ifdef __STARCORE__
+#pragma reject_floats reset
+#endif 
+
+#endif /* _EWL_CTIME */
