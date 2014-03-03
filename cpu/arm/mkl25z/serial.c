@@ -140,7 +140,7 @@ void UART0_init(uint32_t baudrate) 		/* Initialise UART0.			*/
 		UART0_MA2 = 0x00;									/* Clear UART0_MA2: Match Address Register 2, only used if MAEN2 in UART0_C4, Page 736. MA=0. */
 		
 		//Configure Baud Rate, 8 data bits, no parity and 1 stop bit
-		bauddiv = MCGFLLCLK / ((UART0_OSR + 1) * baudrate);						/* Calculate Baud Rate divisor.  BR = BCLK / ((OSR +1) * BRD).  Page 726. */
+		bauddiv = CORECLK / ((UART0_OSR + 1) * baudrate);						/* Calculate Baud Rate divisor.  BR = BCLK / ((OSR +1) * BRD).  Page 726. */
 		UART0_BDL = (uint8_t)(bauddiv & 0x00FF);								/* Set UART0_BDL: lower Baud Rate Divisor. Page 725. */
 		UART0_BDH |= (uint8_t)((bauddiv >> 8) & 0x001F);						/* Set UART0_BDH: upper Baud Rate Divisor. Page 725. */
 		UART0_C4 = (UART0_C4 & ~UART0_C4_OSR_MASK) | ((UART0_OSR) & 0x1F);		/* Set UART0_C4: oversampling rate. Page 736. */

@@ -89,6 +89,6 @@ void NVIC_CLEAR_PENDING(uint32_t IRQ);
 
 void NVIC_Set_Priority(uint32_t IRQ, uint8_t priority);
 
-void NVIC_SET_SYSTICK_PRI(priority);
+void NVIC_SET_SYSTICK_PRI(uint8_t priority);
 
 #endif /* NVIC_H_MKL25Z__ */

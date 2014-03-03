@@ -37,7 +37,7 @@ clock_init()
 {
   NVIC_SET_SYSTICK_PRI(8);				/* Set Systick priority. */
   SYST_RVR = CORECLK/16/CLOCK_SECOND;		/* Set reload value.  SysTick->LOAD in CMSIS. */
-  SYST_CSR = 	SYST_SysTick_CSR_ENABLE_MASK | 	/* Enable SysTick. */
+  SYST_CSR = 	SysTick_CSR_ENABLE_MASK | 	/* Enable SysTick. */
 				SysTick_CSR_TICKINT_MASK; 		/* Enable tick interrupt. */	
   /* Leave clock source as "external" clock.  This is core clock / 16, so 48/16 = 3MHz. */
   /* In CMSIS, this would be: SysTick->CTRL = SysTick_CTRL_ENABLE | SysTick_CTRL_TICKINT; */

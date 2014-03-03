@@ -38,7 +38,6 @@
 	#define CORECLK			20971520
 	#define BUSCLK			20971520
 #else
-	#define 
 	#define CORECLK			48000000
 	#define BUSCLK			24000000
 #endif 

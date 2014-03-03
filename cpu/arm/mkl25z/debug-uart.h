@@ -6,7 +6,7 @@
 #endif
 
 void
-dbg_setup_uart();
+dbg_setup_uart(void);
 
 void
 dbg_set_input_handler(void* DBG_Callback_Ptr);
@@ -22,6 +22,6 @@ void
 dbg_blocking_putchar(const char ch);
 
 void
-dbg_drain();
+dbg_drain(void);
 
 #endif /* DEBUG_UART_H_MKL25Z__ */

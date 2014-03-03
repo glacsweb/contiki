@@ -16,16 +16,16 @@ dbg_set_input_handler(void* DBG_Callback_Ptr){
 void
 dbg_setup_uart_default()
 {
-	UART0_init(DBG_UART_BAUD)
+	UART0_init(DBG_UART_BAUD);
 }
    
 unsigned int
 dbg_send_bytes(const unsigned char *seq, unsigned int len)
 {
   unsigned int i=0;
-	while(s && *s!=0) {
+	while(seq && *seq!=0) {
 		if( i >= len) { break; }
-		dbg_putchar(*s++); i++;
+		dbg_putchar(*seq++); i++;
 	}
 	return i;
 }

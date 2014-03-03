@@ -185,7 +185,7 @@ void NVIC_Set_Priority(uint32_t IRQ, uint8_t priority)
 *
 * Set the priority of the SYSTICK interrupt. 
 */
-void NVIC_SET_SYSTICK_PRI(priority)
+void NVIC_SET_SYSTICK_PRI(uint8_t priority)
 {
 	/* Set SysTick priority after clearing any existing priority. */
 	SCB_SHPR2 &= ~(0xff << 24);

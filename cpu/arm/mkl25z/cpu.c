@@ -3,7 +3,7 @@
  *	
  *	Initialisation & Interrupt handler for CPU on the Freescale FRDM-KL25z Freedom Board
  *	
- *	Author: Graeme Bragg
+ *	Author: Graeme Bragg    
  * 			ARM-ECS / Pervasive Systems Centre
  * 			School of Electronics & Computer Science
  * 			University of Southampton
@@ -59,7 +59,7 @@ void port_enable(uint8_t PortMask)		/* Enable clock to used ports.  This is requ
 
 void cpu_init(void)
 {
-	/* These two functions happen in 
+	/* These two functions happen in startup code so not needed. */
 	//SCB_VTOR = (uint32_t)(&__vect_table); 		/* Set the interrupt vector table position */
 	//SIM_COPC = 0x00;							/* disable watchdog. */
 	
@@ -128,7 +128,8 @@ void cpu_init(void)
 	MCG_C2 = (MCG_C2_RANGE0(0x02) | MCG_C2_EREFS0_MASK);						/* Set Freq range to VHF & enable 8MHz oscillator. */
 	MCG_C5 = MCG_C5_PRDIV0(0x01);  												/* Set PLL Ext Ref Divider to divide factor of 2. */
 	MCG_C6 = MCG_C6_PLLS_MASK;													/* Select PLL. */
-	while((MCG_S & 0x0CU) != 0x0CU) {    										/* Wait until output of the PLL is selected */
+	while((MCG_S & 0x0CU) != 0x0CU) {   										/* Wait until output of the PLL is selected */
+	}
 #endif
 
 	/* Setup the internal oscillator for MCGIRCLK. */
@@ -245,5 +246,5 @@ void cpu_stop(Type_StopMode StopMode)		/* Place core into one of the STOP modes.
 
 void NMI_Handler(void)		/* NMI Interrupt Handler.  Required as NMI fires during init and default causes a break.		*/
 {
-	
+	;
 }
