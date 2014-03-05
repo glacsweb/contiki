@@ -150,31 +150,31 @@ all: $(OBJS) $(FULL_PRJ).elf $(FULL_PRJ).hex $(FULL_PRJ).bin
 	$(TRGT)size $(PROJECT)_flash.elf
  
 %o: %c
-$(CC) -c $(CPFLAGS) -I . $(INCDIR) $< -o $@
+	$(CC) -c $(CPFLAGS) -I . $(INCDIR) $< -o $@
 
 %o: %S
-$(AS) -c $(ASFLAGS) $< -o $@
+	$(AS) -c $(ASFLAGS) $< -o $@
 
 %elf: $(OBJS)
-$(CC) $(OBJS) $(LDFLAGS) $(LIBS) -o $@
+	$(CC) $(OBJS) $(LDFLAGS) $(LIBS) -o $@
 
 %hex: %elf
-$(HEX) $< $@
+	$(HEX) $< $@
 
 %bin: %elf
-$(BIN) $< $@
+	$(BIN) $< $@
 
 clean:
-rm $(OBJS)
-rm $(FULL_PRJ).elf
-rm $(FULL_PRJ).map
-rm $(FULL_PRJ).hex
-rm $(FULL_PRJ).bin
-# rm $(SRC:.c=.c.bak)
-rm $(SRC:.c=.lst)
-# del $(ASRC:.S=.S.bak)
-rm $(ASRC:.S=.lst)
-rm -rf .dep
+	rm $(OBJS)
+	rm $(FULL_PRJ).elf
+	rm $(FULL_PRJ).map
+	rm $(FULL_PRJ).hex
+	rm $(FULL_PRJ).bin
+	# rm $(SRC:.c=.c.bak)
+	rm $(SRC:.c=.lst)
+	# del $(ASRC:.S=.S.bak)
+	rm $(ASRC:.S=.lst)
+	rm -rf .dep
     
     
 #
