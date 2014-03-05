@@ -71,9 +71,13 @@ CONTIKI_SOURCEFILES        += $(CONTIKI_TARGET_SOURCEFILES)
 MKL25Z_ASRC     = startup.S
 
 # List all user directories here
-UINCDIR = -I. -I$(CONTIKI)/core -I$(CONTIKI_CPU) -I$(CONTIKI_CPU)/dbg-io \
-           -I$(CONTIKI)/platform/$(TARGET) ${addprefix -I,$(APPDIRS)} \
-           -DWITH_UIP -DWITH_ASCII -DMCK=$(MCK) 
+UINCDIR = . $(CONTIKI)/core $(CONTIKI_CPU) $(CONTIKI_CPU)/dbg-io $(CONTIKI)/platform/$(TARGET) $(APPDIRS) 
+           
+
+
+#UINCDIR = -I. -I$(CONTIKI)/core -I$(CONTIKI_CPU) -I$(CONTIKI_CPU)/dbg-io \
+#           -I$(CONTIKI)/platform/$(TARGET) ${addprefix -I,$(APPDIRS)} \
+#           -DWITH_UIP -DWITH_ASCII -DMCK=$(MCK) 
 
 # List the user directory to look for the libraries here
 ULIBDIR =
@@ -108,7 +112,7 @@ OBJS = ${addprefix $(OBJECTDIR)/, $(PROJECT_OBJECTFILES)}
 
 MCFLAGS = -mcpu=$(MCU)
 
-CPFLAGS = $(MCFLAGS) $(OPT) -gdwarf-2 -mthumb -fomit-frame-pointer -Wall -Wstrict-prototypes -fverbose-asm -Wa,-ahlms=$(<:.c=.lst) $(DEFS)
+CPFLAGS = $(MCFLAGS) $(OPT) -gdwarf-2 -mthumb -fomit-frame-pointer -Wall -Wstrict-prototypes -fverbose-asm -DWITH_UIP -DWITH_ASCII -DMCK=$(MCK) -Wa,-ahlms=$(<:.c=.lst) $(DEFS)
 ASFLAGS = $(MCFLAGS) -g -gdwarf-2 -mthumb -Wa,-amhls=$(<:.S=.lst) $(ADEFS)
 LDFLAGS = $(MCFLAGS) -mthumb -nostartfiles -T$(LDSCRIPT) -Wl,-Map=$(FULL_PRJ) .map,--cref,--no-warn-mismatch $(LIBDIR)
 
