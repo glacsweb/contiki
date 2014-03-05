@@ -149,19 +149,19 @@ OPENOCD_FLAGS += -c "reset halt;sleep 250;flash probe 0; sleep 500;flash write_b
 all: $(OBJS) $(FULL_PRJ).elf $(FULL_PRJ).hex $(FULL_PRJ).bin
 	$(TRGT)size $(PROJECT)_flash.elf
  
-%o: %c
+%.o: %.c
 	$(CC) -c $(CPFLAGS) -I . $(INCDIR) $< -o $@
 
-%o: %S
+%.o: %.S
 	$(AS) -c $(ASFLAGS) $< -o $@
 
-%elf: $(OBJS)
+%.elf: $(OBJS)
 	$(CC) $(OBJS) $(LDFLAGS) $(LIBS) -o $@
 
-%hex: %elf
+%.hex: %.elf
 	$(HEX) $< $@
 
-%bin: %elf
+%.bin: %.elf
 	$(BIN) $< $@
 
 clean:
