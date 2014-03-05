@@ -71,7 +71,7 @@ CONTIKI_SOURCEFILES        += $(CONTIKI_TARGET_SOURCEFILES)
 MKL25Z_ASRC     = startup.S
 
 # List all user directories here
-UINCDIR = . $(CONTIKI)/core $(CONTIKI_CPU) $(CONTIKI_CPU)/dbg-io $(CONTIKI)/platform/$(TARGET) $(APPDIRS) 
+UINCDIR = $(CONTIKI)/core $(CONTIKI_CPU) $(CONTIKI_CPU)/dbg-io $(CONTIKI)/platform/$(TARGET) $(APPDIRS) 
            
 
 
@@ -112,9 +112,11 @@ OBJS = ${addprefix $(OBJECTDIR)/, $(PROJECT_OBJECTFILES)}
 
 MCFLAGS = -mcpu=$(MCU)
 
-CPFLAGS = $(MCFLAGS) $(OPT) -gdwarf-2 -mthumb -fomit-frame-pointer -Wall -Wstrict-prototypes -fverbose-asm -DWITH_UIP -DWITH_ASCII -DMCK=$(MCK) -Wa,-ahlms=$(<:.c=.lst) $(DEFS)
+CPFLAGS = $(CFLAGS)
+CPFLAGS += $(MCFLAGS) -O -DRUN_AS_SYSTEM -DROM_RUN -gdwarf-2 -mthumb -fomit-frame-pointer -Wall -Wstrict-prototypes -fverbose-asm -DWITH_UIP -DWITH_ASCII -DMCK=$(MCK) -Wa,-ahlms=$(<:.c=.lst) $(DEFS) 
+
 ASFLAGS = $(MCFLAGS) -g -gdwarf-2 -mthumb -Wa,-amhls=$(<:.S=.lst) $(ADEFS)
-LDFLAGS = $(MCFLAGS) -mthumb -nostartfiles -T$(LDSCRIPT) -Wl,-Map=$(FULL_PRJ) .map,--cref,--no-warn-mismatch $(LIBDIR)
+LDFLAGS = $(MCFLAGS) -mthumb -L$(CONTIKI_CPU) -nostartfiles -T$(LDSCRIPT) -Wl,-Map=$(FULL_PRJ) .map,--cref,--no-warn-mismatch $(LIBDIR)
 
 # Generate dependency information
 CPFLAGS += -MD -MP -MF .dep/$(@F).d
@@ -154,7 +156,7 @@ all: $(OBJS) $(FULL_PRJ).elf $(FULL_PRJ).hex $(FULL_PRJ).bin
 	$(TRGT)size $(PROJECT)_flash.elf
  
 %.o: %.c
-	$(CC) -c $(CPFLAGS) -I . $(INCDIR) $< -o $@
+	$(CC) -I . $(INCDIR) -c $(CPFLAGS)  $< -o $@
 
 %.o: %.S
 	$(AS) -c $(ASFLAGS) $< -o $@
