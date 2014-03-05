@@ -156,7 +156,7 @@ all: $(OBJS) $(FULL_PRJ).elf $(FULL_PRJ).hex $(FULL_PRJ).bin
 	$(TRGT)size $(PROJECT)_flash.elf
  
 %.o: %.c
-	$(CC) -I . $(INCDIR) -c $(CPFLAGS)  $< -o $@
+	$(CC) -I. $(INCDIR) -c $(CPFLAGS)  $< -o $@
 
 %.o: %.S
 	$(AS) -c $(ASFLAGS) $< -o $@
