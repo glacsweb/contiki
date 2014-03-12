@@ -2,12 +2,14 @@ MKL25ZRF =
 
 #CODEPROP_SOURCES = codeprop-otf.c ram-segments.c
 
-CONTIKI_PLATFORM=$(CONTIKI)/platform/frdm-kl25z-rf
-CONTIKI_TARGET_MAIN = ${addprefix $(OBJECTDIR)/,contiki-main.o}
+#CONTIKI_PLATFORM=$(CONTIKI)/platform/frdm-kl25z-rf
+#CONTIKI_TARGET_MAIN = ${addprefix $(OBJECTDIR)/,contiki-main.o}
 
-CONTIKI_TARGET_DIRS += . $(CONTIKI_PLATFORM)
+CONTIKI_TARGET_DIRS = . 
+#$(CONTIKI_PLATFORM) $(CONTIKI_CPU)
 # Master clock frequency
 MCK = 48000000
+CFLAGS+=-DAUTOSTART_ENABLE
 
 ifndef CONTIKI_TARGET_MAIN
 CONTIKI_TARGET_MAIN = contiki-main.c
