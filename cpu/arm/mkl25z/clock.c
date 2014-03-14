@@ -1,3 +1,4 @@
+#include <contiki.h>
 #include <sys/clock.h>
 #include <sys/cc.h>
 #include <sys/etimer.h>

@@ -27,7 +27,7 @@ rtimer_arch_init(void)
 	
 	LPTMR0_CSR |= LPTMR_CSR_TIE_MASK | LPTMR_CSR_TEN_MASK ;				/* Enable timer and interrupt. */
 	
-	PRINTF("rtimer_arch_init: Done\n");
+	//PRINTF("rtimer_arch_init: Done\n");
 }
 
 void

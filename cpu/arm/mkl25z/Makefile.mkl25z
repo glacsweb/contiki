@@ -1,5 +1,10 @@
 # Adapted from Makefile.msp430
 
+GCC_PATH = /home/glacsweb/arm-gcc/bin/
+EWL_SUPPORT_PATH = /home/glacsweb/arm-gcc/ARM_GCC_Support/ewl/
+EABI_LIB = /home/glacsweb/arm-gcc/lib/gcc/arm-none-eabi/4.8.3/
+EABI_INCLUDE = /home/glacsweb/arm-gcc/arm-none-eabi/
+
 ### Code common for all ARM CPUs
 
 CONTIKI_CPU_ARM=$(CONTIKI)/cpu/arm
@@ -7,10 +12,6 @@ CONTIKI_CPU_ARM_COMMON=$(CONTIKI_CPU_ARM)/common
 
 ### Define the CPU directory
 CONTIKI_CPU=$(CONTIKI_CPU_ARM)/mkl25z
-
-EWL_PATH = C:\GNUARM\ARM_GCC_Support\ewl\EWL_C\include
-EWL_RUNTIME_PATH = C:\GNUARM\ARM_GCC_Support\ewl\EWL_Runtime\include
-EWL_LIB_PATH = C:\GNUARM\ARM_GCC_Support\ewl\lib\armv6-m
 
 MCU = cortex-m0plus
 
@@ -55,8 +56,7 @@ MKL25Z     = clock.c debug-uart.c rtimer-arch.c serial.c nvic.c cpu.c clock.c __
 
 TARGETLIBS = random.c dbg-printf.c dbg-puts.c dbg-putchar.c dbg-sprintf.c dbg-snprintf.c strformat.c
 
-CONTIKI_TARGET_SOURCEFILES += $(MKL25Z) $(SYSAPPS) $(ELFLOADER) \
-			$(TARGETLIBS) $(UIPDRIVERS) $(USB)
+CONTIKI_TARGET_SOURCEFILES += $(MKL25Z) $(SYSAPPS) $(ELFLOADER) $(TARGETLIBS) $(UIPDRIVERS) $(USB) 
 
 CONTIKI_SOURCEFILES        += $(CONTIKI_TARGET_SOURCEFILES)
 
@@ -64,14 +64,15 @@ CONTIKI_SOURCEFILES        += $(CONTIKI_TARGET_SOURCEFILES)
 THREADS =
 
 ### Compiler definitions
-CC       = arm-none-eabi-gcc
-CP       = arm-none-eabi-objcopy
-LD       = arm-none-eabi-ld
-AS       = arm-none-eabi-as
-AR       = arm-none-eabi-ar
-NM       = arm-none-eabi-nm
-OBJCOPY  = arm-none-eabi-objcopy
-STRIP    = arm-none-eabi-strip
+### Compiler definitions
+CC       = $(GCC_PATH)arm-none-eabi-gcc
+CP       = $(GCC_PATH)arm-none-eabi-objcopy
+LD       = $(GCC_PATH)arm-none-eabi-ld
+AS       = $(GCC_PATH)arm-none-eabi-as
+AR       = $(GCC_PATH)arm-none-eabi-ar
+NM       = $(GCC_PATH)arm-none-eabi-nm
+OBJCOPY  = $(GCC_PATH)arm-none-eabi-objcopy
+STRIP    = $(GCC_PATH)arm-none-eabi-strip
 HEX      = $(CP) -O ihex
 BIN      = $(CP) -O binary -S
 S19      = $(CP) -O srec
@@ -80,7 +81,7 @@ S19      = $(CP) -O srec
 XSLTPROC=xsltproc
 
 PROJECT_OBJECTFILES += ${addprefix $(OBJECTDIR)/,$(CONTIKI_TARGET_MAIN:.c=.o)}
-PROJECT_OBJECTFILES2 = $(OBJECTDIR)/*.o
+PROJECT_OBJECTFILES += ${addprefix $(OBJECTDIR)/,$(CONTIKI_TARGET_SOURCEFILES:.c=.o)}
 #${addprefix -I ,$(PROJECT_OBJECTFILES)}
 
 LINKERSCRIPT = $(CONTIKI_CPU)/MKL25Z128_flash.ld
@@ -106,13 +107,17 @@ CPFLAGS = -gdwarf-2 -fomit-frame-pointer -Wall -Wstrict-prototypes -fverbose-asm
 DEFS = $(DDEFS) $(UDEFS)
 ADEFS = $(DADEFS) $(UADEFS)
 OBJS = $(ASRC:.S=.o) $(SRC:.c=.o)
-LIBS = $(DLIBS) $(ULIBS)
 
-
-CFLAGSNO = -I. -I$(CONTIKI)/core -I$(CONTIKI_CPU) -I$(CONTIKI_CPU)/loader \
-	   -I$(CONTIKI_CPU)/dbg-io \
-           -I$(CONTIKI)/platform/$(TARGET) -I$(EWL_PATH) -I$(EWL_RUNTIME_PATH)\
-           ${addprefix -I,$(APPDIRS)} \
+CFLAGSNO = -I. -L$(CONTIKI)/core -I$(CONTIKI_CPU) -I$(CONTIKI_CPU)/loader \
+			-I$(CONTIKI_CPU)/dbg-io \
+			-I$(CONTIKI)/platform/$(TARGET) -L$(CONTIKI)/core \
+			-I$(EWL_SUPPORT_PATH)EWL_C/include \
+			-L$(EWL_SUPPORT_PATH)lib/armv6-m \
+			-I$(EWL_SUPPORT_PATH)EWL_Runtime/include \
+			-I$(EABI_LIB)include \
+			-I$(EABI_LIB)include-fixed \
+			-I$(EABI_INCLUDE)include
+			${addprefix -I,$(APPDIRS)} \
            -DWITH_UIP -DWITH_ASCII -DMCK=$(MCK) \
            -g
 		   
@@ -150,70 +155,78 @@ $(OBJECTDIR)/%.o: %.S | $(OBJECTDIR)
 CUSTOM_RULE_C_TO_CO=yes
 
 %.co: %.c
+	@echo $(CONTIKI_TARGET_SOURCEFILES)
+	@echo "&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
+	@echo $(CONTIKIFILES)
+	@echo "&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
+	@echo $(PROJECT_OBJECTFILES)
+	@echo "&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
+	@echo $(LIBS)
+	@echo "&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
 	$(CC) $(CFLAGS) $< -c -o $@
 
 CUSTOM_RULE_C_TO_CE=yes
 
 %.ce: %.o
 	$(LD) $(LDFLAGS) --relocatable $< -o $@
-	$(STRIP) -K _init -K _fini --strip-unneeded -g -x $@
+	#$(STRIP) -K _init -K _fini --strip-unneeded -g -x $@
 	
-%.ce2: %.o
-	$(CC) $(PROJECT_OBJECTFILES2) -I $(STARTUP) $(LDFLAGS) $< -o $@
-	$(STRIP) -K _init -K _fini --strip-unneeded -g -x $@
 
 CUSTOM_RULE_LINK=yes
 
-%-stripped.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
-	$(STRIP) --strip-unneeded -g -x $@
+#%-stripped.o: %.c
+#	$(CC) $(CFLAGS) -c $< -o $@
+#	$(STRIP) --strip-unneeded -g -x $@
 
-%-stripped.o: %.o
-	$(STRIP) --strip-unneeded -g -x -o $@ $<
+#%-stripped.o: %.o
+#	$(STRIP) --strip-unneeded -g -x -o $@ $<
 
-%.o: ${CONTIKI_TARGET}/loader/%.S
-	$(AS) -o $(notdir $(<:.S=.o)) $<
+#%.o: ${CONTIKI_TARGET}/loader/%.S
+#	$(AS) -o $(notdir $(<:.S=.o)) $<
 
-%-nosyms.$(TARGET): %.co $(PROJECT_OBJECTFILES) contiki-$(TARGET).a $(STARTUP) # $(OBJECTDIR)/empty-symbols.o
+#%-nosyms.$(TARGET): 
+%.$(TARGET): %.co $(PROJECT_OBJECTFILES) contiki-$(TARGET).a $(STARTUP) # $(OBJECTDIR)/empty-symbols.o
 	$(CC) $(LDFLAGS) $(CFLAGS) -nostartfiles -o $@ $(filter-out %.a,$^) $(filter %.a,$^) -lc $(filter %.a,$^)
+	$(CC) $(LDFLAGS) $(CFLAGS) -nostartfiles -o contiki-$(TARGET).elf $(filter-out %.a,$^) $(filter %.a,$^) -lc $(filter %.a,$^)
+	$(S19) contiki-$(TARGET).elf contiki-$(TARGET).srec
+	$(HEX) contiki-$(TARGET).elf contiki-$(TARGET).hex
 
+#%.ihex: %.$(TARGET)
+#	$(OBJCOPY) $^ -O ihex $@
 
-%.ihex: %.$(TARGET)
-	$(OBJCOPY) $^ -O ihex $@
-
-%.bin: %.$(TARGET)
-	$(OBJCOPY) -O binary -S $< $@
+#%.bin: %.$(TARGET)
+#	$(OBJCOPY) -O binary -S $< $@
  
-.PHONY: symbols.c
-ifdef CORE
-%.$(TARGET): %.co $(PROJECT_OBJECTFILES) contiki-$(TARGET).a $(STARTUP) $(OBJECTDIR)/symbols.o
-	$(CC) $(LDFLAGS) $(CFLAGS) -nostartfiles -o $@ $(filter-out %.a,$^) $(filter %.a,$^) -lc $(filter %.a,$^)
+#.PHONY: symbols.c
+#ifdef CORE
+#%.$(TARGET): %.co $(PROJECT_OBJECTFILES) contiki-$(TARGET).a $(STARTUP) $(OBJECTDIR)/symbols.o
+#	$(CC) $(LDFLAGS) $(CFLAGS) -nostartfiles -o $@ $(filter-out %.a,$^) $(filter %.a,$^) -lc $(filter %.a,$^)
 
-symbols.c: $(CORE)
-	$(NM) $< | awk -f $(CONTIKI_CPU)/builtins.awk -f ../../tools/mknmlist > symbols.c
+#symbols.c: $(CORE)
+#	$(NM) $< | awk -f $(CONTIKI_CPU)/builtins.awk -f ../../tools/mknmlist > symbols.c
 
-else
-%.$(TARGET): %-nosyms.$(TARGET)
-	ln -sf $< $@
-endif
+#else
+#%.$(TARGET): %-nosyms.$(TARGET)
+#	ln -sf $< $@
+#endif
 
-empty-symbols.c:
-	cp ${CONTIKI}/tools/empty-symbols.c symbols.c
-	cp ${CONTIKI}/tools/empty-symbols.h symbols.h
+#empty-symbols.c:
+#	cp ${CONTIKI}/tools/empty-symbols.c symbols.c
+#	cp ${CONTIKI}/tools/empty-symbols.h symbols.h
 
 
 
-%.u: %.bin
+#%.u: %.bin
 	# Clear lock bits
-	$(OPENOCD) -s $(OPENOCD_DIR) -f $(OPENOCD_CFG) $(OPENOCD_FLAGS)
-	$(S19) $< $@
+#	$(OPENOCD) -s $(OPENOCD_DIR) -f $(OPENOCD_CFG) $(OPENOCD_FLAGS)
+#	$(S19) $< $@
 
-ocd_reset:
-	$(OPENOCD) -s $(OPENOCD_DIR) -f $(OPENOCD_CFG) -c init -c "reset halt;resume" -c exit
+#ocd_reset:
+#	$(OPENOCD) -s $(OPENOCD_DIR) -f $(OPENOCD_CFG) -c init -c "reset halt;resume" -c exit
 
 # Don't use core/loader/elfloader.c, use elfloader-otf.c instead
-$(OBJECTDIR)/elfloader.o: | $(OBJECTDIR)
-	echo -n >$@
+#$(OBJECTDIR)/elfloader.o: | $(OBJECTDIR)
+#	echo -n >$@
 
 clean: clean_cpu
 
@@ -221,5 +234,6 @@ clean: clean_cpu
 
 clean_cpu:
 	-rm -rf $(BUILTSRCDIR)
+	-rm -rf $(CONTIKI_PROJECT)-nosyms.$(TARGET) $(CONTIKI_PROJECT).$(TARGET) contiki-$(TARGET).elf contiki-$(TARGET).srec contiki-$(TARGET).hex
 
-.PRECIOUS: %-nosyms.$(TARGET)
+.PRECIOUS: %.$(TARGET)
