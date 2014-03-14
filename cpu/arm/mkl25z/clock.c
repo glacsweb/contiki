@@ -18,30 +18,29 @@ static unsigned int second_countdown = CLOCK_SECOND;
 void
 SysTick_handler(void)
 {
-  (void)SYST_CSR;						/* Dummy read CSR register to clear Count flag. SysTick->CTRL in CMSIS */
-  SCB_ICSR = SCB_ICSR_PENDSTCLR_MASK;	/* Clear pending interrupt in SCB. */
-  current_clock++;						/* Increment current clock. */
-  if(etimer_pending() && etimer_next_expiration_time() <= current_clock) {
-    etimer_request_poll();
-    /* printf("%d,%d\n", clock_time(),etimer_next_expiration_time  	()); */
-
-  }
-  if (--second_countdown == 0) {
-    current_seconds++;
-    second_countdown = CLOCK_SECOND;
-  }
+	(void)SYST_CSR;						/* Dummy read CSR register to clear Count flag. SysTick->CTRL in CMSIS */
+	//SCB_ICSR = SCB_ICSR_PENDSTCLR_MASK;	/* Clear pending interrupt in SCB. */
+	current_clock++;						/* Increment current clock. */
+	if(etimer_pending() && etimer_next_expiration_time() >= current_clock) {
+		etimer_request_poll();
+		/* printf("%d,%d\n", clock_time(),etimer_next_expiration_time  	()); */
+	}
+	if (--second_countdown == 0) {
+		current_seconds++;
+		second_countdown = CLOCK_SECOND;
+	}
 }
 
 
 void
 clock_init()
 {
-  NVIC_SET_SYSTICK_PRI(8);				/* Set Systick priority. */
-  SYST_RVR = CORECLK/16/CLOCK_SECOND;		/* Set reload value.  SysTick->LOAD in CMSIS. */
-  SYST_CSR = 	SysTick_CSR_ENABLE_MASK | 	/* Enable SysTick. */
+	NVIC_SET_SYSTICK_PRI(8);				/* Set Systick priority. */
+	SYST_RVR = CORECLK/16/CLOCK_SECOND;		/* Set reload value.  SysTick->LOAD in CMSIS. */
+	SYST_CSR = 	SysTick_CSR_ENABLE_MASK | 	/* Enable SysTick. */
 				SysTick_CSR_TICKINT_MASK; 		/* Enable tick interrupt. */	
-  /* Leave clock source as "external" clock.  This is core clock / 16, so 48/16 = 3MHz. */
-  /* In CMSIS, this would be: SysTick->CTRL = SysTick_CTRL_ENABLE | SysTick_CTRL_TICKINT; */
+	/* Leave clock source as "external" clock.  This is core clock / 16, so 48/16 = 3MHz. */
+	/* In CMSIS, this would be: SysTick->CTRL = SysTick_CTRL_ENABLE | SysTick_CTRL_TICKINT; */
 }
 
 clock_time_t
@@ -50,25 +49,15 @@ clock_time(void)
   return current_clock;
 }
 
-#if 0
-/* The inner loop takes 4 cycles. The outer 5+SPIN_COUNT*4. */
-
-#define SPIN_TIME 2 /* us */
-#define SPIN_COUNT (((CORECLK*SPIN_TIME/1000000)-5)/4)
-
-#ifndef __MAKING_DEPS__
-
 void
 clock_delay(unsigned int t)
 {
-#ifdef __THUMBEL__ 
-  asm volatile("1: mov r1,%2\n2:\tsub r1,#1\n\tbne 2b\n\tsub %0,#1\n\tbne 1b\n":"=l"(t):"0"(t),"l"(SPIN_COUNT));
-#else
-#error Must be compiled in thumb mode
-#endif
+	volatile byte i;
+	for(i=0; i<(t*1.25); i++) {
+		/* NOTE: this is not really accurate, as not sure yet about the cycle counts. Assuming 0.75 cycle for a NOP */
+		asm("nop \n\t");
+	} /* just something to wait, NOT the requested cycles */
 }
-#endif
-#endif /* __MAKING_DEPS__ */
 
 unsigned long
 clock_seconds(void)
