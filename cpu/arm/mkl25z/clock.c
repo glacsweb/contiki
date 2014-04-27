@@ -15,7 +15,7 @@ static unsigned int second_countdown = CLOCK_SECOND;
 //SysTick_handler(void) __attribute__ ((interrupt));
 
 void
-SysTick_handler(void)
+SysTick_Handler(void)
 {
   (void)SYST_CSR;						/* Dummy read CSR register to clear Count flag. SysTick->CTRL in CMSIS */
   SCB_ICSR = SCB_ICSR_PENDSTCLR_MASK;	/* Clear pending interrupt in SCB. */
