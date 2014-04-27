@@ -16,7 +16,7 @@ static unsigned int second_countdown = CLOCK_SECOND;
 //SysTick_handler(void) __attribute__ ((interrupt));
 
 void
-SysTick_handler(void)
+SysTick_Handler(void)
 {
 	(void)SYST_CSR;						/* Dummy read CSR register to clear Count flag. SysTick->CTRL in CMSIS */
 	//SCB_ICSR = SCB_ICSR_PENDSTCLR_MASK;	/* Clear pending interrupt in SCB. */
@@ -52,7 +52,7 @@ clock_time(void)
 void
 clock_delay(unsigned int t)
 {
-	volatile byte i;
+	volatile uint8_t i;
 	for(i=0; i<(t*1.25); i++) {
 		/* NOTE: this is not really accurate, as not sure yet about the cycle counts. Assuming 0.75 cycle for a NOP */
 		asm("nop \n\t");
