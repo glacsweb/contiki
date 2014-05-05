@@ -43,7 +43,7 @@ CONTIKI_CPU_DIRS = . ../common/dbg-io loader
 
 
 
-MKL25Z     = clock.c debug-uart.c rtimer-arch.c serial.c nvic.c cpu.c clock.c __arm_start.c __arm_end.c kinetis_sysinit.c
+MKL25Z     = clock.c debug-uart.c rtimer-arch.c serial.c spi.c nvic.c cpu.c clock.c __arm_start.c __arm_end.c kinetis_sysinit.c
 
 # SYSAPPS = codeprop-otf.c
 # APPDIRS += $(CONTIKI)/cpu/at91sam7s/loader
