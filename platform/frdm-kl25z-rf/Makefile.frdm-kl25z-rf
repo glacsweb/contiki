@@ -5,7 +5,7 @@ MKL25ZRF =
 #CONTIKI_PLATFORM=$(CONTIKI)/platform/frdm-kl25z-rf
 #CONTIKI_TARGET_MAIN = ${addprefix $(OBJECTDIR)/,contiki-main.o}
 
-CONTIKI_TARGET_DIRS = . $(CONTIKI)/dev/cc1120 $(CONTIKI)/core/net
+CONTIKI_TARGET_DIRS = . dev apps net $(CONTIKI)/dev/cc1120 $(CONTIKI)/core/net
 #$(CONTIKI_PLATFORM) $(CONTIKI_CPU)
 # Master clock frequency
 

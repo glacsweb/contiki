@@ -15,8 +15,10 @@
 #define NETSTACK_CONF_RADIO   cc11xx_driver
 #define NETSTACK_CONF_NETWORK     sicslowpan_driver
 #define NETSTACK_RADIO_MAX_PAYLOAD_LEN 125
-#define NULLRDC_CONF_802154_AUTOACK 1
 #define NETSTACK_CONF_FRAMER  framer_802154
+#define NETSTACK_CONF_MAC     csma_driver
+#define NETSTACK_CONF_RDC     contikimac_driver
+
 #define RIMESTATS_CONF_ENABLED                      1
 #define RIMESTATS_CONF_ON 
 #define RIMEADDR_CONF_SIZE              8
