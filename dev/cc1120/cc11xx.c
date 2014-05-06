@@ -39,6 +39,7 @@
  */
 
 #include "contiki.h"
+#include "contiki-conf.h"
 
 /* Radio type sanity check */
 #if !CC11xx_CC1101 && !CC11xx_CC1120
@@ -60,7 +61,7 @@
 #include "cc1120-config.h"
 #endif /* CC11xx_CC1120 */
 
-#include "dev/leds.h"
+//#include "dev/leds.h"
 
 #include "net/packetbuf.h"
 #include "net/rime/rimestats.h"
@@ -107,7 +108,7 @@ static int request_set_channel = -1;
 /* If set, all packets are received, even those not intended for us */
 static char promiscuous_mode = 0;
 
-#define PERFORM_MANUAL_CALIBRATION 1 /* Manual calibration at init() */
+#define PERFORM_MANUAL_CALIBRATION 0 /* Manual calibration at init() */
 #if PERFORM_MANUAL_CALIBRATION
 static void calibrate_manual(void);
 #endif /* PERFORM_MANUAL_CALIBRATION */
@@ -828,7 +829,7 @@ cc11xx_rx_interrupt(void)
 #endif /* DEBUG */
       flushrx();
       process_poll(&cc11xx_process);
-      leds_off(LEDS_GREEN);
+      //leds_off(LEDS_GREEN);
       return 1;
     }
 #elif CC11xx_CC1120 /* CC11xx_CC1101 */
@@ -838,7 +839,7 @@ cc11xx_rx_interrupt(void)
 #endif /* DEBUG */
       flushrx();
       process_poll(&cc11xx_process);
-      leds_off(LEDS_GREEN);
+      //leds_off(LEDS_GREEN);
       return 1;
     }
 #endif /* CC11xx_CC1101 */
@@ -1057,7 +1058,7 @@ on(void)
 
   ENERGEST_ON(ENERGEST_TYPE_LISTEN);
 
-  leds_on(LEDS_RED);
+  //leds_on(LEDS_RED);
   return 1;
 }
 /*---------------------------------------------------------------------------*/
@@ -1075,7 +1076,7 @@ off(void)
   RELEASE_SPI();
 
   ENERGEST_OFF(ENERGEST_TYPE_LISTEN);
-  leds_off(LEDS_RED);
+  //leds_off(LEDS_RED);
 
   return 1;
 }

@@ -55,6 +55,8 @@
 
 #include "spi.h"
 
+#include <stdlib.h>
+
 void SPI0_init(void)
 {
   port_enable(PORTD_EN_MASK | PORTC_EN_MASK); 				/* Make sure that clocks are enable to Port D and Port C */
@@ -104,32 +106,29 @@ void SPI0_csn_high(void)
 /* Single SPI Send/Recieve. */
 uint8_t SPI_single_tx_rx(uint8_t in, uint8_t module) {
 	
-	bool i = TRUE;
+	uint8_t i = 1;
 	uint8_t tmp;
 	
-	taskENTER_CRITICAL();
 	while(i){
 		tmp = SPI0_S;
 		tmp &= SPI_S_SPTEF_MASK;
 		
 		if (tmp == SPI_S_SPTEF_MASK) {
 			SPI0_D = in;
-			i = FALSE;
+			i = 0;
 		}
 	}
 	
-	i = TRUE;
+	i = 1;
 	while(i) {
 		tmp = SPI0_S;
 		tmp &= SPI_S_SPRF_MASK;
 		
 		if (tmp == SPI_S_SPRF_MASK) {
 			tmp = SPI0_D;
-			i = FALSE;
+			i = 0;
 		}
 	}
-	
-	taskEXIT_CRITICAL();
 	
 	return (tmp);
 }
@@ -138,7 +137,7 @@ uint8_t SPI_single_tx_rx(uint8_t in, uint8_t module) {
 uint8_t SPI_tx_and_rx(uint8_t addr, uint8_t value, uint8_t module) {
 
 	uint8_t result;
-	(void)_single_tx_rx_spi_transaction(addr); //Throw away the first received byte
-	result = _single_tx_rx_spi_transaction(value);
+	(void)SPI_single_tx_rx(addr,0); //Throw away the first received byte
+	result = SPI_single_tx_rx(value,0);
 	return result;
 }

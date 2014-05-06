@@ -43,7 +43,7 @@ CONTIKI_CPU_DIRS = . ../common/dbg-io loader
 
 
 
-MKL25Z     = clock.c debug-uart.c rtimer-arch.c serial.c spi.c nvic.c cpu.c clock.c __arm_start.c __arm_end.c kinetis_sysinit.c
+MKL25Z     = __arm_start.c kinetis_sysinit.c clock.c debug-uart.c rtimer-arch.c serial.c spi.c nvic.c cpu.c clock.c __arm_end.c kinetis_sysinit.c
 
 # SYSAPPS = codeprop-otf.c
 # APPDIRS += $(CONTIKI)/cpu/at91sam7s/loader
@@ -56,7 +56,7 @@ MKL25Z     = clock.c debug-uart.c rtimer-arch.c serial.c spi.c nvic.c cpu.c cloc
 
 TARGETLIBS = random.c dbg-printf.c dbg-puts.c dbg-putchar.c dbg-sprintf.c dbg-snprintf.c strformat.c
 
-CONTIKI_TARGET_SOURCEFILES += $(MKL25Z) $(SYSAPPS) $(ELFLOADER) $(TARGETLIBS) $(UIPDRIVERS) $(USB) 
+CONTIKI_TARGET_SOURCEFILES += $(MKL25Z) $(SYSAPPS) $(ELFLOADER) $(TARGETLIBS) $(UIPDRIVERS) $(USB) $(PLATFORM_SOURCEFILES)
 
 CONTIKI_SOURCEFILES        += $(CONTIKI_TARGET_SOURCEFILES)
 
@@ -109,22 +109,23 @@ ADEFS = $(DADEFS) $(UADEFS)
 OBJS = $(ASRC:.S=.o) $(SRC:.c=.o)
 
 CFLAGSNO = -I. -L$(CONTIKI)/core -I$(CONTIKI_CPU) -I$(CONTIKI_CPU)/loader \
-			-I$(CONTIKI_CPU)/dbg-io \
+			-I$(CONTIKI_CPU)/dbg-io -I$(CONTIKI)/dev \
 			-I$(CONTIKI)/platform/$(TARGET) -L$(CONTIKI)/core \
 			-I$(EWL_SUPPORT_PATH)EWL_C/include \
 			-L$(EWL_SUPPORT_PATH)lib/armv6-m \
 			-I$(EWL_SUPPORT_PATH)EWL_Runtime/include \
 			-I$(EABI_LIB)include \
 			-I$(EABI_LIB)include-fixed \
-			-I$(EABI_INCLUDE)include
-			${addprefix -I,$(APPDIRS)} \
-           -DWITH_UIP -DWITH_ASCII -DMCK=$(MCK) \
+			-I$(EABI_INCLUDE)include ${addprefix -I,$(APPDIRS)} \
+            -DWITH_UIP -DWITH_ASCII -DMCK=$(MCK) \
            -g
+
+LDFLAGSNO = -L$(CONTIKI_CPU) -L$(EWL_SUPPORT_PATH)lib/armv6-m
 		   
  
 ASFLAGS = $(MCFLAGS) $(ARCH_FLAGS) -g -gdwarf-2 -Wa,-amhls=$(<:.S=.lst) $(ADEFS)		   
-CFLAGS  += $(MCFLAGS) $(OPT) $(CPFLAGS) $(ARCH_FLAGS) $(CFLAGSNO) -O -DRUN_AS_SYSTEM -DROM_RUN -Wa,-ahlms=$(<:.c=.lst) $(DEFS)
-LDFLAGS += $(MCFLAGS) $(ARCH_FLAGS) -L $(CONTIKI_CPU) -L $(EWL_LIB_PATH) -nostartfiles -T $(LINKERSCRIPT) -Xlinker --gc-sections -Wl,-Map=$(FULL_PRJ).map,-cref,-no-warn-mismatch -n -specs=ewl_c.specs -Xlinker --undefined=__pformatter_ -Xlinker --defsym=__pformatter=__pformatter_ -Xlinker --undefined=__sformatter -Xlinker --defsym=__sformatter=__sformatter -mcpu=cortex-m0 -mthumb -mfloat-abi=soft -g3 -gdwarf-2 -gstrict-dwarf
+CFLAGS  += $(MCFLAGS) $(OPT) $(CPFLAGS) $(ARCH_FLAGS) $(CFLAGSNO) $(CPLATFLAGS) -O -DRUN_AS_SYSTEM -DROM_RUN -Wa,-ahlms=$(<:.c=.lst) $(DEFS)
+LDFLAGS += $(MCFLAGS) $(ARCH_FLAGS) $(LDFLAGSNO) -nostartfiles -T $(LINKERSCRIPT) -Xlinker --gc-sections -Wl,-Map=$(FULL_PRJ).map,-cref,-no-warn-mismatch -n -specs=ewl_c.specs -Xlinker --undefined=__pformatter_ -Xlinker --defsym=__pformatter=__pformatter_ -Xlinker --undefined=__sformatter -Xlinker --defsym=__sformatter=__sformatter -mcpu=cortex-m0 -mthumb -mfloat-abi=soft -g3 -gdwarf-2 -gstrict-dwarf
 
 CDEPFLAGS = $(CFLAGS) -D __MAKING_DEPS__
 
@@ -138,7 +139,7 @@ CUSTOM_RULE_C_TO_OBJECTDIR_O=yes
 CUSTOM_RULE_C_TO_O=yes
 
 %.o: %.c
-	$(CC) $(CFLAGS) $< -c 
+	$(CC) $(CFLAGS) $< -c
 
 $(OBJECTDIR)/%.o: %.c | $(OBJECTDIR)
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -151,7 +152,29 @@ CUSTOM_RULE_S_TO_OBJECTDIR_O = yes
 $(OBJECTDIR)/%.o: %.S | $(OBJECTDIR)
 	$(CC) $(CFLAGS) $< -c  -o $@
 
+%.out: $^
+	: | awk -f ../../tools/mknmlist > $ <at> _tmp.c && mv $ <at> _tmp.c $ <at> _nm.c
+	$(CC) $(LDFLAGS) $(CFLAGS) -o $ <at>  $^ $(LIBC) $ <at> _nm.c
+	$(NM) $ <at>  | awk -f ../../tools/mknmlist > $ <at> _tmp.c && mv $ <at> _tmp.c $ <at> _nm.c
+	$(CC) $(LDFLAGS) $(CFLAGS) -o $ <at>  $^ $(LIBC) $ <at> _nm.c
+	
+.PHONY: symbols.c
+ifdef CORE
+%.$(TARGET): %.co $(PROJECT_OBJECTFILES) contiki-$(TARGET).a $(STARTUP) $(OBJECTDIR)/symbols.o
+	$(CC) $(LDFLAGS) $(CFLAGS) -nostartfiles -o $@ $(filter-out %.a,$^) $(filter %.a,$^) -lc $(filter %.a,$^)
 
+symbols.c: $(CORE)
+	$(NM) $< | awk -f $(CONTIKI_CPU)/builtins.awk -f ../../tools/mknmlist > symbols.c
+
+else
+%.$(TARGET): %-nosyms.$(TARGET)
+	ln -sf $< $@
+endif
+
+empty-symbols.c:
+	cp ${CONTIKI}/tools/empty-symbols.c symbols.c
+	cp ${CONTIKI}/tools/empty-symbols.h symbols.h
+	
 CUSTOM_RULE_C_TO_CO=yes
 
 %.co: %.c

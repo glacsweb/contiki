@@ -105,6 +105,9 @@
 
 #include "contiki.h"
 #include "contiki-net.h"
+#include <cc1120-config.h>
+#include <cc11xx.h>
+#include <cc11xx-arch.h>
 
 #include <MKL25Z4.h>                   /* I/O map for MKL25Z128VLK4 */
 #include "cpu.h"
@@ -122,7 +125,7 @@ void
 cc1120_arch_spi_enable(void)
 {
   /* Set CSn to low (0) */
-  SPI0_csn_low;
+  SPI0_csn_low();
 
   /* The MISO pin should go high before chip is fully enabled. */
   while (cc1120_csn_check());
@@ -132,7 +135,7 @@ void
 cc1120_arch_spi_disable(void)
 {
   /* Set CSn to high (1) */
-  SPI0_csn_high;
+  SPI0_csn_high();
 }
 /*---------------------------------------------------------------------------*/
 int
@@ -158,7 +161,7 @@ cc1120_arch_spi_rw(unsigned char *inBuf, unsigned char *outBuf, int len)
     }
   } else {
     for(i = 0; i < len; i++) {
-      inBuf[i] = SPI_single_tx_rx(outBuf[i]);
+      inBuf[i] = SPI_single_tx_rx(outBuf[i],0);
     }
   }
   return 0;
@@ -172,13 +175,13 @@ cc1120_arch_init(void)
   /* Configure CC1120 CSn Sense pin - Port C, Pin 17. */
   GPIOD_PDDR &= ~GPIO_PDDR_PDD(0x020000); 					/* Set pin as Input. */                                                  
                                          
-  PORTC_PCR17 &= ~(PORT_PCR_ISF_MASK | PORT_PCR_MUX_MASK;	/* Clear PCR Multiplex and Interrupt flag. */
+  PORTC_PCR17 &= ~(PORT_PCR_ISF_MASK | PORT_PCR_MUX_MASK);	/* Clear PCR Multiplex and Interrupt flag. */
   PORTC_PCR17 |= PORT_PCR_MUX(0x01);						/* Set mux to be basic pin. */
    
    
   /* Configure CC1120 Reset pin. */
-  GPIOB_PDDR &= ~(GPIO_PDDR_PDD(0x0100); 					/* Set pin as Input initially for HiZ. */                                                  
-  GPIOB_PDOR &= ~(GPIO_PDOR_PDO(0x0100));   				/* Set initialisation value on 1 */                                           
+  GPIOB_PDDR &= ~GPIO_PDDR_PDD(0x0100); 					/* Set pin as Input initially for HiZ. */                                                  
+  GPIOB_PDOR &= ~GPIO_PDOR_PDO(0x0100);   					/* Set initialisation value on 1 */                                           
 
   PORTB_PCR8 &= ~(PORT_PCR_MUX_MASK);						/* Clear PCR Multiplex. */
   PORTB_PCR8 |= PORT_PCR_ISF_MASK | PORT_PCR_MUX(0x01);		/* Clear ISF & Set mux to be basic pin. */
@@ -189,7 +192,7 @@ cc1120_arch_init(void)
    * Configure pin to have rising-edge interrupt with the 
    * pull-down resistor enabled. Clear ISF flag & set MUX
    * to GPIO. */
-  PORTA_PCR5 = PORT_PCR_ISF_MASK | PORT_PCR_IRQC(0x09) | PORT_PCR_MUX(0x01) | PORT_PCR_PE_MASK
+  PORTA_PCR5 = PORT_PCR_ISF_MASK | PORT_PCR_IRQC(0x09) | PORT_PCR_MUX(0x01) | PORT_PCR_PE_MASK;
   GPIOA_PDDR &= ~GPIO_PDDR_PDD(0x3020);						/* Set pins as Input. */
   
   NVIC_Set_Priority(IRQ_PORTA, 1);							/* Set Interrupt priority. */
@@ -239,9 +242,9 @@ cc1120_reset(void)
 	cc1120_arch_spi_disable();
 	
 	/*Reset CC1120. */
-	GPIOB_PDDR |= (GPIO_PDDR_PDD(0x0100);
+	GPIOB_PDDR |= GPIO_PDDR_PDD(0x0100);
 	clock_delay(600);
-	GPIOB_PDDR &= ~(GPIO_PDDR_PDD(0x0100);
+	GPIOB_PDDR &= ~GPIO_PDDR_PDD(0x0100);
 }
 
 
