@@ -34,7 +34,8 @@
 
 #include "contiki.h"
 //#include "dev/cc2420.h"
-#include "cc1120.h"
+#include "cc11xx.h"
+#include "cc11xx-arch.h"
 #include "dev/leds.h"
 #include "dev/serial-line.h"
 #include "dev/slip.h"
@@ -273,7 +274,8 @@ main(int argc, char **argv)
 
   set_rime_addr();
 
-  cc2420_init();
+  cc11xx_arch_init();
+  //cc2420_init();
   accm_init();
 
   {
@@ -288,9 +290,10 @@ main(int argc, char **argv)
            longaddr[0], longaddr[1], longaddr[2], longaddr[3],
            longaddr[4], longaddr[5], longaddr[6], longaddr[7]);
     
-    cc2420_set_pan_addr(IEEE802154_PANID, shortaddr, longaddr);
+    //cc2420_set_pan_addr(IEEE802154_PANID, shortaddr, longaddr);
   }
-  cc2420_set_channel(RF_CHANNEL);
+  //cc2420_set_channel(RF_CHANNEL);
+  cc11xx_channel_set(RF_CHANNEL);
 
   leds_off(LEDS_ALL);
 

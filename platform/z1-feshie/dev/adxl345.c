@@ -42,7 +42,9 @@
 #include <stdio.h>
 #include "contiki.h"
 #include "adxl345.h"
-#include "cc2420.h"
+//#include "cc2420.h"
+#include <cc11xx.h>
+#include <cc11xx-arch.h>
 #include "i2cmaster.h"
 #include "isr_compat.h"
 
