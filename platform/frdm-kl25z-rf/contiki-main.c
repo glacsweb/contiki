@@ -14,6 +14,8 @@
 #include "debug-uart.h"
 #include "cpu.h"
 
+#include <cc11xx.h>
+
 
 unsigned int idle_count = 0;
 
@@ -30,6 +32,7 @@ main(void)
   clock_init();
   process_init();
   process_start(&etimer_process, NULL);
+  cc11xx_arch_init();
   autostart_start(autostart_processes);
   printf("Processes running\n");
   while(1) {

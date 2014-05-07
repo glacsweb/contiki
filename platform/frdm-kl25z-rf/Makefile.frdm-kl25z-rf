@@ -18,7 +18,7 @@ CPLATFLAGS += -DAUTOSTART_ENABLE -DCC11xx_CC1120=1 -I$(CONTIKI)/dev/cc1120 -DUIP
 #PCFLAGS += -I$(CONTIKI)/dev/cc1120 -DCC11xx_CC1120=1 
 
 ifndef CONTIKI_TARGET_MAIN
-CONTIKI_TARGET_MAIN = contiki-main.c cc1120-mkl25z-rf-arch.c cc11xx.c sicslowpan.c
+CONTIKI_TARGET_MAIN = contiki-main.c cc1120-mkl25z-rf-arch.c cc11xx.c
 endif
 
 CONTIKI_TARGET_SOURCEFILES += $(SENSORS) $(STEPPER_ROBOT) \
