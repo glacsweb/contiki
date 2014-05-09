@@ -33,6 +33,8 @@
 #include "contiki.h"
 #include "contiki-net.h"
 
+#include "platform-conf.h"
+
 /*#include "dev/cc11xx-arch.h"*/
 #include "dev/spi.h"
 #include "dev/leds.h"
@@ -40,23 +42,15 @@
 #include "isr_compat.h"
 #include <stdio.h>
 
-#define CC1120_GDO0_PORT(type) P1##type
-#define CC1120_GDO0_PIN        7
 
-#define CC1120_GDO2_PORT(type) P1##type
-#define CC1120_GDO2_PIN        3
 
-#define CC1120_GDO3_PORT(type) P8##type
-#define CC1120_GDO3_PIN        1
+//#define CC1120_GDO2_PORT(type) P1##type
+//#define CC1120_GDO2_PIN        3
 
-#define CC1120_SPI_CSN_PORT(type)  P3##type
-#define CC1120_SPI_CSN_PIN     0
-#define CC1120_SPI_MOSI_PORT(type)  P3##type
-#define CC1120_SPI_MOSI_PIN    1
-#define CC1120_SPI_MISO_PORT(type)  P3##type
-#define CC1120_SPI_MISO_PIN    2
-#define CC1120_SPI_SCLK_PORT(type)  P3##type
-#define CC1120_SPI_SCLK_PIN    3
+//#define CC1120_GDO3_PORT(type) P8##type
+//#define CC1120_GDO3_PIN        1
+
+
 
 int cc11xx_rx_interrupt(void);
 /*---------------------------------------------------------------------------*/
@@ -130,11 +124,11 @@ cc1120_arch_init(void)
   CC1120_GDO0_PORT(SEL) &= ~BV(CC1120_GDO0_PIN);
   CC1120_GDO0_PORT(DIR) &= ~BV(CC1120_GDO0_PIN);
 
-  CC1120_GDO2_PORT(SEL) &= ~BV(CC1120_GDO2_PIN);
-  CC1120_GDO2_PORT(DIR) &= ~BV(CC1120_GDO2_PIN);
+  //CC1120_GDO2_PORT(SEL) &= ~BV(CC1120_GDO2_PIN);
+  //CC1120_GDO2_PORT(DIR) &= ~BV(CC1120_GDO2_PIN);
 
-  CC1120_GDO3_PORT(SEL) &= ~BV(CC1120_GDO3_PIN);
-  CC1120_GDO3_PORT(DIR) &= ~BV(CC1120_GDO3_PIN);
+  //CC1120_GDO3_PORT(SEL) &= ~BV(CC1120_GDO3_PIN);
+  //CC1120_GDO3_PORT(DIR) &= ~BV(CC1120_GDO3_PIN);
 
   /* Reset procedure */
   CC1120_SPI_SCLK_PORT(OUT) |= BV(CC1120_SPI_SCLK_PIN);
@@ -148,8 +142,9 @@ cc1120_arch_init(void)
   /* Rising edge interrupt; note that GPIO-pins are hardwired to 0/1/tristate
    * (depending on settings) when cc1120 is in SLEEP state (SPWD strobe). See
    * CC1120 datasheet, GPIO section.
+   * Interrupt is configured in adxl345.c as it is shared.
    */
-  CC1120_GDO0_PORT(IES) &= ~BV(CC1120_GDO0_PIN);
+  //CC1120_GDO0_PORT(IES) &= ~BV(CC1120_GDO0_PIN);
   //CC1120_GDO2_PORT(IES) &= ~BV(CC1120_GDO2_PIN);
   //CC1120_GDO3_PORT(IES) &= ~BV(CC1120_GDO3_PIN);
 
@@ -177,21 +172,22 @@ clock_delay_usec(uint16_t usec)
   clock_delay(usec / 100);
 }
 /*---------------------------------------------------------------------------*/
-ISR(PORT1, cc1120_port1_interrupt)
-{
-  ENERGEST_ON(ENERGEST_TYPE_IRQ);
+/* Handled in axdl345.c. */
+//ISR(PORT1, cc1120_port1_interrupt)
+//{
+//  ENERGEST_ON(ENERGEST_TYPE_IRQ);
 
-  if(CC1120_GDO0_PORT(IFG) & BV(CC1120_GDO0_PIN)) {
-    if(cc11xx_rx_interrupt()) {
-      LPM4_EXIT;
-    }
-  }
+//  if(CC1120_GDO0_PORT(IFG) & BV(CC1120_GDO0_PIN)) {
+//    if(cc11xx_rx_interrupt()) {
+//      LPM4_EXIT;
+//    }
+//  }
 
   /* Reset interrupt trigger */
-  CC1120_GDO0_PORT(IFG) &= ~BV(CC1120_GDO0_PIN);
+//  CC1120_GDO0_PORT(IFG) &= ~BV(CC1120_GDO0_PIN);
   //CC1120_GDO2_PORT(IFG) &= ~BV(CC1120_GDO2_PIN);
   //CC1120_GDO3_PORT(IFG) &= ~BV(CC1120_GDO3_PIN);
-  ENERGEST_OFF(ENERGEST_TYPE_IRQ);
-}
+//  ENERGEST_OFF(ENERGEST_TYPE_IRQ);
+//}
 /*---------------------------------------------------------------------------*/
 

@@ -43,6 +43,7 @@
 #include "contiki.h"
 #include "adxl345.h"
 //#include "cc2420.h"
+#include "platform-conf.h"
 #include <cc11xx.h>
 #include <cc11xx-arch.h>
 #include "i2cmaster.h"
@@ -372,7 +373,7 @@ PROCESS_THREAD(accmeter_process, ev, data) {
 }
 
 /*---------------------------------------------------------------------------*/
-/* XXX This interrupt vector is shared with the interrupts from CC2420, so that
+/* XXX This interrupt vector is shared with the interrupts from CC1120, so that
   was moved here but should find a better home. XXX */
 
 #if 1
@@ -382,7 +383,7 @@ ISR(PORT1, port1_isr)
 {
   ENERGEST_ON(ENERGEST_TYPE_IRQ);
   /* ADXL345_IFG.x goes high when interrupt occurs, use to check what interrupted */
-  if ((ADXL345_IFG & ADXL345_INT1_PIN) && !(ADXL345_IFG & BV(CC2420_FIFOP_PIN))){
+  if ((ADXL345_IFG & ADXL345_INT1_PIN) && !(ADXL345_IFG & BV(CC1120_GDO0_PIN))){
     /* Check if this should be suppressed or not */
     if(timer_expired(&suppressTimer1)) {
       timer_set(&suppressTimer1, SUPPRESS_TIME_INT1);
@@ -390,7 +391,7 @@ ISR(PORT1, port1_isr)
       process_poll(&accmeter_process);
       LPM4_EXIT;
     }
-  } else if ((ADXL345_IFG & ADXL345_INT2_PIN) && !(ADXL345_IFG & BV(CC2420_FIFOP_PIN))){
+  } else if ((ADXL345_IFG & ADXL345_INT2_PIN) && !(ADXL345_IFG & BV(CC1120_GDO0_PIN))){
     /* Check if this should be suppressed or not */
     if(timer_expired(&suppressTimer2)) {
       timer_set(&suppressTimer2, SUPPRESS_TIME_INT2);
@@ -399,8 +400,8 @@ ISR(PORT1, port1_isr)
       LPM4_EXIT;
     }
   } else {
-    /* CC2420 interrupt */
-    if(cc2420_interrupt()) {
+    /* CC1120 interrupt */
+    if(cc11xx_rx_interrupt()) {
       LPM4_EXIT;
     }
   }
