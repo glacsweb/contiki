@@ -312,7 +312,7 @@ main(int argc, char **argv)
 /*   sicslowpan_init(sicslowmac_init(&cc2420_driver)); */
 /*   printf(" %s channel %u\n", sicslowmac_driver.name, RF_CHANNEL); */
 
-  sicslowpan_init(sicslowmac_init(&cc11xx_driver));
+  //sicslowpan_init(sicslowmac_init(&cc11xx_driver));
   //printf(" %s channel %u\n", sicslowmac_driver.name, RF_CHANNEL);
 
 
