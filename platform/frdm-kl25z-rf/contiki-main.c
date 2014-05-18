@@ -15,6 +15,7 @@
 #include "cpu.h"
 
 #include <cc11xx.h>
+#include "contiki-conf.h"
 
 
 unsigned int idle_count = 0;
