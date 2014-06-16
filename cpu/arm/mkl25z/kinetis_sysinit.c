@@ -9,6 +9,7 @@
  
 #include "kinetis_sysinit.h"
 #include "derivative.h"
+#include <stdlib.h>
 
 /**
  **===========================================================================
@@ -33,181 +34,217 @@ extern void __thumb_startup( void );
  */
 void Default_Handler()
 {
+	printf("Default Handler - BREAKPOINT");
 	__asm("bkpt");
 }
 
 void Default_Handler_NMI()
 {
+	printf("NMI Handler - BREAKPOINT");
 	__asm("bkpt");
 }
 
 void Default_Handler_HardFault()
 {
+	printf("HardFault Handler - BREAKPOINT");
 	__asm("bkpt");
 }
 
 void Default_Handler_SVC()
 {
+	printf("SVC Handler - BREAKPOINT");
 	__asm("bkpt");
 }
 
 void Default_Handler_PendSV()
 {
+	printf("PendSV Handler - BREAKPOINT");
 	__asm("bkpt");
 }
 
 void Default_Handler_SysTick()
 {
+	printf("Systick Handler - BREAKPOINT");
 	__asm("bkpt");
 }
 
 void Default_Handler_DMA0()
 {
+	printf("DMA0 Handler - BREAKPOINT");
 	__asm("bkpt");
 }
 
 void Default_Handler_DMA1()
 {
+	printf("DMA1 Handler - BREAKPOINT");
 	__asm("bkpt");
 }
 
 void Default_Handler_DMA2()
 {
+	printf("DMA2 Handler - BREAKPOINT");
 	__asm("bkpt");
 }
 
 void Default_Handler_DMA3()
 {
+	printf("DMA3 Handler - BREAKPOINT");
 	__asm("bkpt");
 }
 
 void Default_Handler_MCM()
 {
+	printf("MCM Handler - BREAKPOINT");
 	__asm("bkpt");
 }
 
 void Default_Handler_FTFL()
 {
+	printf("FTFL Handler - BREAKPOINT");
 	__asm("bkpt");
 }
 
 void Default_Handler_PMC()
 {
+	printf("PMC Handler - BREAKPOINT");
 	__asm("bkpt");
 }
 
 void Default_Handler_LLW()
 {
+	printf("LLW Handler - BREAKPOINT");
 	__asm("bkpt");
 }
 
 void Default_Handler_I2C0()
 {
+	printf("I2C0 Handler - BREAKPOINT");
 	__asm("bkpt");
 }
 
 void Default_Handler_I2C1()
 {
+	printf("I2C1 Handler - BREAKPOINT");
 	__asm("bkpt");
 }
 
 void Default_Handler_SPI0()
 {
+	printf("SPI0 Handler - BREAKPOINT");
 	__asm("bkpt");
 }
 
 void Default_Handler_SPI1()
 {
+	printf("SPI1 Handler - BREAKPOINT");
 	__asm("bkpt");
 }
 
 void Default_Handler_UART0()
 {
+	printf("UART0 Handler - BREAKPOINT");
 	__asm("bkpt");
 }
 
 void Default_Handler_UART1()
 {
+	printf("UART1 Handler - BREAKPOINT");
 	__asm("bkpt");
 }
 
 void Default_Handler_UART2()
 {
+	printf("UART2 Handler - BREAKPOINT");
 	__asm("bkpt");
 }
 
 void Default_Handler_ADC0()
 {
+	printf("ADC0 Handler - BREAKPOINT");
 	__asm("bkpt");
 }
 
 void Default_Handler_CMP0()
 {
+	printf("CMP0 Handler - BREAKPOINT");
 	__asm("bkpt");
 }
 
 void Default_Handler_FTM0()
 {
+	printf("FTM0 Handler - BREAKPOINT");
 	__asm("bkpt");
 }
 
 void Default_Handler_FTM1()
 {
+	printf("FTM1 Handler - BREAKPOINT");
 	__asm("bkpt");
 }
 
 void Default_Handler_FTM2()
 {
+	printf("FTM2 Handler - BREAKPOINT");
 	__asm("bkpt");
 }
 
 void Default_Handler_RTC_Alarm()
 {
+	printf("RTC Alarm Handler - BREAKPOINT");
 	__asm("bkpt");
 }
 
 void Default_Handler_RTC_Seconds()
 {
+	printf("RTC Seconds Handler - BREAKPOINT");
 	__asm("bkpt");
 }
 
 void Default_Handler_PIT()
 {
+	printf("PIT Handler - BREAKPOINT");
 	__asm("bkpt");
 }
 
 void Default_Handler_USBOTG()
 {
+	printf("USBOTG Handler - BREAKPOINT");
 	__asm("bkpt");
 }
 
 void Default_Handler_DAC0()
 {
+	printf("DAC0 Handler - BREAKPOINT");
 	__asm("bkpt");
 }
 
 void Default_Handler_TSI0()
 {
+	printf("TSI0 Handler - BREAKPOINT");
 	__asm("bkpt");
 }
 
 void Default_Handler_MCG()
 {
+	printf("MCG Handler - BREAKPOINT");
 	__asm("bkpt");
 }
 
 void Default_Handler_LPTimer()
 {
+	printf("LPTMR Handler - BREAKPOINT");
 	__asm("bkpt");
 }
 
 void Default_Handler_PORTA()
 {
+	printf("PORTA Handler - BREAKPOINT");
 	__asm("bkpt");
 }
 
 void Default_Handler_PORTD()
 {
+	printf("PORTD Handler - BREAKPOINT");
 	__asm("bkpt");
 }
 
